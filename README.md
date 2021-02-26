@@ -7,7 +7,7 @@ a web micro-framework.
 ## Team
 
 - Kevin Hlavaty
-- MEMBER2
+- Corey Urbanke
 - MEMBER3
 - MEMBER4
 
