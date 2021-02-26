@@ -8,7 +8,7 @@ a web micro-framework.
 
 - Kevin Hlavaty
 - Corey Urbanke
-- MEMBER3
+- Russell Lee
 - MEMBER4
 
 
