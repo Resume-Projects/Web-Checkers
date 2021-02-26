@@ -9,7 +9,7 @@ a web micro-framework.
 - Kevin Hlavaty
 - Corey Urbanke
 - Russell Lee
-- MEMBER4
+- Ray Lorenzo
 
 
 ## Prerequisites
