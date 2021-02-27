@@ -9,8 +9,8 @@ a web micro-framework.
 - Kevin Hlavaty
 - Corey Urbanke
 - Russell Lee
+- Ray Lorenzo
 - Danny Gardner
-- MEMBER 5
 
 
 ## Prerequisites
