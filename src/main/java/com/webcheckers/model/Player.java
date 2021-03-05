@@ -3,23 +3,23 @@ package com.webcheckers.model;
 
 public class Player implements Comparable<Player> {
 
-    private String username;
+    private final String name;
 
-    public Player(String username) {
-        this.username = username;
+    public Player(String name) {
+        this.name = name;
     }
 
-    public String getUsername() {
-        return this.username;
+    public String getName() {
+        return name;
     }
 
     @Override
     public String toString() {
-        return "Player: " + username;
+        return "Player: " + name;
     }
 
     @Override
     public int compareTo(Player other) {
-        return this.username.compareTo(other.username);
+        return this.name.compareTo(other.name);
     }
 }

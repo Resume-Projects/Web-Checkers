@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 public class PlayerLobby {
 
-    private Set<Player> activePlayers;
+    private final Set<Player> activePlayers;
 
     public PlayerLobby() {
         activePlayers = new TreeSet<>();
@@ -21,7 +21,7 @@ public class PlayerLobby {
     }
 
     public boolean isValidName(String name) {
-        return true;
+        return name.matches("[a-zA-Z0-9 ]+");
     }
 
     public boolean isNameTaken(String name) {

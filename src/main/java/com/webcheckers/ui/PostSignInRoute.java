@@ -21,17 +21,17 @@ public class PostSignInRoute implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String playerName = request.queryParams("username");
+        Map<String, Object> viewModel = new HashMap<>();
+
         if(playerLobby.isNameTaken(playerName)) {
-
+            viewModel.put("errorMessage", "That name is already taken");
         } else if(!playerLobby.isValidName(playerName)) {
-
+            viewModel.put("errorMessage", "Names must be letters, numbers, and spaces");
         } else {
-            System.out.println("HELLO");
-            Player clientPlayer = playerLobby.newPlayer(playerName);
-            request.session().attribute("clientPlayer", clientPlayer);
+            Player currentUser = playerLobby.newPlayer(playerName);
+            request.session().attribute("currentUser", currentUser);
             response.redirect("/");
         }
-        Map<String, Object> viewModel = new HashMap<>();
         return templateEngine.render(new ModelAndView(viewModel, "signin.ftl"));
     }
 }
