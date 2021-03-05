@@ -1,6 +1,10 @@
 
 package com.webcheckers.model;
 
+/**
+ * The class for a player that just holds the players name currently. Implements Comparable so it can be used
+ * in a TreeSet
+ */
 public class Player implements Comparable<Player> {
 
     private final String name;

@@ -6,6 +6,10 @@ import com.webcheckers.model.Player;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Holds all the active players in a TreeSet. There should only ever be one created (in the WebServer class). All the
+ * classes that need to access it will likely have it passed as a parameter.
+ */
 public class PlayerLobby {
 
     private final Set<Player> activePlayers;
