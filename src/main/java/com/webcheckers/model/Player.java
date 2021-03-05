@@ -1,7 +1,7 @@
 
 package com.webcheckers.model;
 
-public class Player {
+public class Player implements Comparable<Player> {
 
     private String username;
 
@@ -9,4 +9,17 @@ public class Player {
         this.username = username;
     }
 
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public String toString() {
+        return "Player: " + username;
+    }
+
+    @Override
+    public int compareTo(Player other) {
+        return this.username.compareTo(other.username);
+    }
 }

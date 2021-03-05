@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<form>
+<form action="/signin" method="POST">
     <label>
         <input type="text" name="username">
     </label>
