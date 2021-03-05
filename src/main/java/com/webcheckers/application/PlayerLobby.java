@@ -20,6 +20,10 @@ public class PlayerLobby {
         return newPlayer;
     }
 
+    public Set<Player> getActivePlayers() {
+        return activePlayers;
+    }
+
     public boolean isValidName(String name) {
         return name.matches("[a-zA-Z0-9 ]+");
     }
