@@ -16,7 +16,7 @@ public class BoardView implements Iterator {
         return false;
     }
 
-    public Iterator<Row> iterator(){
+    public Iterator<Row> iterator() {
         return null;
     }
 }

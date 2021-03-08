@@ -5,7 +5,7 @@ import java.util.Iterator;
 public class Row implements Iterator {
     private int index;
 
-    public Row (int index) {
+    public Row(int index) {
         this.index = index;
     }
 
@@ -24,7 +24,8 @@ public class Row implements Iterator {
     public boolean hasNext() {
         return false;
     }
-    public Iterator<Space> iterator () {
+
+    public Iterator<Space> iterator() {
         return null;
     }
 }

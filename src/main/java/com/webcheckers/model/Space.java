@@ -5,7 +5,7 @@ public class Space {
     private boolean isValid;
     private Piece piece;
 
-    public Space (int cellIdx) {
+    public Space(int cellIdx) {
         this.cellIdx = cellIdx;
     }
 
