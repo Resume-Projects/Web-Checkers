@@ -3,6 +3,16 @@ package com.webcheckers.model;
 import java.util.Iterator;
 
 public class Row implements Iterator {
+    private int index;
+
+    public Row (int index) {
+        this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
     public Space next() {
         return null;
     }
