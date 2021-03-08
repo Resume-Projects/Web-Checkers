@@ -2,7 +2,7 @@ package com.webcheckers.model;
 
 import java.util.Iterator;
 
-public class Row implements Iterator {
+public class Row implements Iterator<Space> {
     private int index;
 
     public Row(int index) {

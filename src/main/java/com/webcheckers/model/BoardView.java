@@ -2,7 +2,7 @@ package com.webcheckers.model;
 
 import java.util.Iterator;
 
-public class BoardView implements Iterator {
+public class BoardView implements Iterator<Row> {
 
     public Row next() {
         return null;
