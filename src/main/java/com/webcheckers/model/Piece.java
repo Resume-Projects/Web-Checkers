@@ -1,4 +1,4 @@
 package com.webcheckers.model;
 
-public class CheckersGame {
+public class Piece {
 }
