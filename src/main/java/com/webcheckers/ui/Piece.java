@@ -1,4 +1,4 @@
-package com.webcheckers.model;
+package com.webcheckers.ui;
 
 public class Piece {
     public enum Type {SINGLE, KING}
