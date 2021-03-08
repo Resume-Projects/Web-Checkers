@@ -133,8 +133,8 @@
                 <argument>jacoco:report@ui</argument>
                 <argument>surefire:test@appl</argument>
                 <argument>jacoco:report@appl</argument>
-                <argument>surefire:test@model</argument>
-                <argument>jacoco:report@model</argument>
+                <argument>surefire:test@com.webcheckers.model</argument>
+                <argument>jacoco:report@com.webcheckers.model</argument>
               </arguments>
             </configuration>
           </execution>
@@ -219,7 +219,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>model</id>
+            <id>com.webcheckers.model</id>
             <configuration>
               <properties>
                 <includeTags>Model-tier</includeTags>
@@ -271,7 +271,7 @@
             </goals>
           </execution>
           <execution>
-            <id>model</id>
+            <id>com.webcheckers.model</id>
             <configuration>
               <footer>Model Tier</footer>
               <title>WebCheckers Model Tier Test Coverage</title>

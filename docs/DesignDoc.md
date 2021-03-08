@@ -67,7 +67,7 @@ This section describes the application architecture.
 
 ### Summary
 
-The following Tiers/Layers model shows a high-level view of the webapp's architecture.
+The following Tiers/Layers com.webcheckers.model shows a high-level view of the webapp's architecture.
 
 ![The Tiers & Layers of the Architecture](architecture-tiers-and-layers.png)
 
@@ -110,7 +110,7 @@ with the WebCheckers application.
 > or you might show a statechart diagram if the Game component uses a
 > state machine to manage the game._
 
-> _If a dynamic model, such as a statechart describes a feature that is
+> _If a dynamic com.webcheckers.model, such as a statechart describes a feature that is
 > not mostly in this tier and cuts across multiple tiers, you can
 > consider placing the narrative description of that feature in a
 > separate section for describing significant features. Place this after

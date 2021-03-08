@@ -44,13 +44,13 @@ To run tests on all tiers together do this:
 
 To run tests on a single tier do this:
 
-1. Execute `mvn clean test-compile surefire:test@tier jacoco:report@tier` where `tier` is one of `ui`, `appl`, `model`
-2. Open in your browser the file at `PROJECT_HOME/target/site/jacoco/{ui, appl, model}/index.html`
+1. Execute `mvn clean test-compile surefire:test@tier jacoco:report@tier` where `tier` is one of `ui`, `appl`, `com.webcheckers.model`
+2. Open in your browser the file at `PROJECT_HOME/target/site/jacoco/{ui, appl, com.webcheckers.model}/index.html`
 
 To run tests on all the tiers in isolation do this:
 
 1. Execute `mvn exec:exec@tests-and-coverage`
-2. To view the Model tier tests open in your browser the file at `PROJECT_HOME/target/site/jacoco/model/index.html`
+2. To view the Model tier tests open in your browser the file at `PROJECT_HOME/target/site/jacoco/com.webcheckers.model/index.html`
 3. To view the Application tier tests open in your browser the file at `PROJECT_HOME/target/site/jacoco/appl/index.html`
 4. To view the UI tier tests open in your browser the file at `PROJECT_HOME/target/site/jacoco/ui/index.html`
 
