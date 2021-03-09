@@ -15,14 +15,17 @@ public class Row implements Iterator<Space> {
         return index;
     }
 
+    @Override
     public Space next() {
         return null;
     }
 
+    @Override
     public void remove() {
 
     }
 
+    @Override
     public boolean hasNext() {
         return false;
     }
