@@ -1,5 +1,7 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.model.Space;
+
 import java.util.Iterator;
 
 public class Row implements Iterator<Space> {

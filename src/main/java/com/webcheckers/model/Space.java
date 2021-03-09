@@ -1,4 +1,4 @@
-package com.webcheckers.ui;
+package com.webcheckers.model;
 
 public class Space {
     private int cellIdx;
