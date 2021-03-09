@@ -3,6 +3,7 @@ package com.webcheckers.ui;
 
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.Player;
+import com.webcheckers.util.Message;
 import spark.*;
 
 import java.util.HashMap;
@@ -10,8 +11,8 @@ import java.util.Map;
 
 public class PostSignInRoute implements Route {
 
-    private PlayerLobby playerLobby;
-    private TemplateEngine templateEngine;
+    private final PlayerLobby playerLobby;
+    private final TemplateEngine templateEngine;
 
     public PostSignInRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
         this.playerLobby = playerLobby;
@@ -25,9 +26,9 @@ public class PostSignInRoute implements Route {
         viewModel.put("title", "Sign In");
 
         if(playerLobby.isNameTaken(playerName)) {
-            viewModel.put("errorMessage", "That name is already taken");
+            viewModel.put("message", Message.error("That name is already taken"));
         } else if(!playerLobby.isValidName(playerName)) {
-            viewModel.put("errorMessage", "Names must be letters, numbers, and spaces");
+            viewModel.put("message", Message.error("Names must be letters, numbers, and spaces"));
         } else {
             Player currentUser = playerLobby.newPlayer(playerName);
             request.session().attribute("currentUser", currentUser);

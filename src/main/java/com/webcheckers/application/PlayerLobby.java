@@ -29,7 +29,8 @@ public class PlayerLobby {
     }
 
     public boolean isValidName(String name) {
-        return name.matches("[a-zA-Z0-9 ]+");
+        //Must be letters, numbers, and spaces, but not only spaces
+        return name.matches("[a-zA-Z0-9 ]+") && !name.matches(" +");
     }
 
     public boolean isNameTaken(String name) {

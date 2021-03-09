@@ -14,14 +14,10 @@
     <h2>Sign In: </h2>
 
     <form action="/signin" method="POST">
-        <#if errorMessage??>
-            <div class="ERROR">${errorMessage}</div>
-        </#if>
-        <br>
-        Your name: <label><input type="text" name="username"></label>
+        <#include "message.ftl">
+        <br>Your name: <label><input type="text" name="username"></label>
         <button type="submit">Ok</button>
-        <br>
-        <br>
     </form>
+    <br>
 </div>
 </body>
