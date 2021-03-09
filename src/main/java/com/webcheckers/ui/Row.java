@@ -11,6 +11,10 @@ public class Row implements Iterable<Space> {
         this.index = index;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
     @Override
     public Iterator<Space> iterator() {
         return null;
