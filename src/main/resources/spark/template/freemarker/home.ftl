@@ -25,8 +25,13 @@
                 spectating active games,
                 or replay archived games
         -->
-        <p>Number of players: ${numPlayers}</p>
+        <h2>Players online</h2>
         <#if activePlayers??>
+            <#if numPlayers == 2>
+                <p>There is 1 other player online</p>
+            <#else>
+                <p>There are ${numPlayers - 1} other players online</p>
+            </#if>
             <ol>
                 <#list activePlayers as player>
                     <#if currentUser != player>
@@ -34,6 +39,12 @@
                     </#if>
                 </#list>
             </ol>
+        <#else>
+            <#if numPlayers == 1>
+                <p>There is 1 other player online. Sign in to see</p>
+            <#else>
+                <p>There are ${numPlayers} other players online. Sign in to see them</p>
+            </#if>
         </#if>
 
     </div>
