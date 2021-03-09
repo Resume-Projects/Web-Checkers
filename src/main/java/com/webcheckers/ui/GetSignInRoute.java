@@ -17,6 +17,7 @@ public class GetSignInRoute implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Map<String, Object> viewModel = new HashMap<>();
+        viewModel.put("title", "Sign In");
         return templateEngine.render(new ModelAndView(viewModel, "signin.ftl"));
     }
 }

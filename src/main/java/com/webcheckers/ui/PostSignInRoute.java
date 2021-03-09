@@ -22,6 +22,7 @@ public class PostSignInRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         String playerName = request.queryParams("username");
         Map<String, Object> viewModel = new HashMap<>();
+        viewModel.put("title", "Sign In");
 
         if(playerLobby.isNameTaken(playerName)) {
             viewModel.put("errorMessage", "That name is already taken");
