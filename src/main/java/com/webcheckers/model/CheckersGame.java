@@ -14,10 +14,25 @@ public class CheckersGame {
 
     public static final int BOARD_SIZE = 8;
 
-    public CheckersGame () {
+    private Player redPlayer;
+    private Player whitePlayer;
+
+    public CheckersGame(Player redPlayer, Player whitePlayer) {
         LOG.fine("Game created");
         board = new Space[BOARD_SIZE][BOARD_SIZE];
+        this.redPlayer = redPlayer;
+        this.whitePlayer = whitePlayer;
     }
 
+    public Space[][] getBoard() {
+        return board;
+    }
 
+    public Player getRedPlayer() {
+        return redPlayer;
+    }
+
+    public Player getWhitePlayer() {
+        return whitePlayer;
+    }
 }
