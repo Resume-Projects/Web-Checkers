@@ -33,11 +33,34 @@ public class CheckersGame {
     public CheckersGame(Player redPlayer, Player whitePlayer) {
         LOG.fine("Game created");
         board = new Space[BOARD_SIZE][BOARD_SIZE];
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                board[row][col] = new Space(col, Space.State.OPEN);
+//        for (int row = 0; row < BOARD_SIZE; row++) {
+//            for (int col = 0; col < BOARD_SIZE; col++) {
+//                board[row][col] = new Space(col, Space.State.OPEN);
+//            }
+//        }
+        for (int col = 0; col < board.length; col++) {
+            if (col % 2 == 1) {
+                board[0][col] = new Space(col, Space.State.OCCUPIED);
+                board[2][col] = new Space(col, Space.State.OCCUPIED);
+                board[6][col] = new Space(col, Space.State.OCCUPIED);
+                board[1][col] = new Space(col, Space.State.INVALID);
+                board[3][col] = new Space(col, Space.State.INVALID);
+                board[5][col] = new Space(col, Space.State.INVALID);
+                board[7][col] = new Space(col, Space.State.INVALID);
+                board[4][col] = new Space(col, Space.State.OPEN);
+            } else {
+                board[1][col] = new Space(col, Space.State.OCCUPIED);
+                board[5][col] = new Space(col, Space.State.OCCUPIED);
+                board[7][col] = new Space(col, Space.State.OCCUPIED);
+                board[0][col] = new Space(col, Space.State.INVALID);
+                board[2][col] = new Space(col, Space.State.INVALID);
+                board[4][col] = new Space(col, Space.State.INVALID);
+                board[6][col] = new Space(col, Space.State.INVALID);
+                board[3][col] = new Space(col, Space.State.OPEN);
             }
         }
+
+
         GameController.initializeBoard(board);
         //board[0][0] = new Space(0, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
         boardView = new BoardView(board);
