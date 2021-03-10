@@ -9,16 +9,38 @@ import spark.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The {@code POST /SignIn} route handler.
+ */
 public class PostSignInRoute implements Route {
 
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
 
+    /**
+     * The constructor for the {@code POST /SignIn} route handler.
+     *
+     * @param playerLobby
+     *    lobby of current players
+     * @param templateEngine
+     *    template engine to use for rendering HTML page
+     */
     public PostSignInRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
         this.playerLobby = playerLobby;
         this.templateEngine = templateEngine;
     }
 
+    /**
+     * Render the WebCheckers Sign In page.
+     *
+     * @param request
+     *   the HTTP request
+     * @param response
+     *   the HTTP response
+     *
+     * @return
+     *   the rendered HTML for the Sign In page
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String playerName = request.queryParams("username");
