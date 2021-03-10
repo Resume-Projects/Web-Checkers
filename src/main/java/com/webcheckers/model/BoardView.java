@@ -9,8 +9,8 @@ public class BoardView implements Iterable<Row> {
     private Row[] rows;
 
     public BoardView(Space[][] board) {
-        rows = new Row[8];
-        for(int i = 0; i < 8; i++) {
+        rows = new Row[board.length];
+        for(int i = 0; i < rows.length; i++) {
             rows[i] = new Row(i, board[i]);
         }
     }
