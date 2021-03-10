@@ -35,7 +35,7 @@
             <ol>
                 <#list activePlayers as player>
                     <#if currentUser != player>
-                        <li>${player.name}</li>
+                        <li><a href="/game?whitePlayer=${player.name}">${player.name}</a></li>
                     </#if>
                 </#list>
             </ol>

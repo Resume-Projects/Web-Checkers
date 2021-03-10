@@ -3,6 +3,7 @@ package com.webcheckers.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import spark.ModelAndView;
@@ -27,8 +28,11 @@ public class GetGameRoute implements Route {
     static final String MESSAGE = "message";
 
     public enum playMode {PLAY, SPECTATOR, REPLAY}
+    public enum playerColor {RED, WHITE};
 
     private final TemplateEngine templateEngine;
+    private final PlayerLobby playerLobby;
+    private CheckersGame checkersGame;
 
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
@@ -36,8 +40,10 @@ public class GetGameRoute implements Route {
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetGameRoute (final TemplateEngine templateEngine) {
+    public GetGameRoute (CheckersGame checkersGame, final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
+        this.playerLobby = playerLobby;
+        this.checkersGame = checkersGame;
     }
 
     /**
@@ -55,12 +61,34 @@ public class GetGameRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         final Session session = request.session();
         Map<String, Object> vm = new HashMap<>();
-        Player currentPlayer = session.attribute("currentUser");
 
-        vm.put("currentUser", currentPlayer);
+        if(checkersGame.getRedPlayer() == null) {
+            Player redPlayer = session.attribute("currentUser");
+            Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
+            checkersGame.setRedPlayer(redPlayer);
+            checkersGame.setWhitePlayer(whitePlayer);
+        }
+
+        vm.put("title", "Game");
+        vm.put("currentUser", session.attribute("currentUser"));
         vm.put("viewMode", playMode.PLAY);
+        vm.put("redPlayer", checkersGame.getRedPlayer());
+        vm.put("whitePlayer", checkersGame.getWhitePlayer());
+        if(checkersGame.getRedPlayer().equals(session.attribute("currentUser")))
+            vm.put("activeColor", playerColor.RED);
+        else
+            vm.put("activeColor", playerColor.WHITE);
 
-        CheckersGame game = new CheckersGame(currentPlayer, null);
+        vm.put("board", checkersGame.getBoardView());
+//        Player currentPlayer = session.attribute("currentUser");
+//        Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
+//        //Things will crash, but this shows things working
+//        System.out.println(whitePlayer);
+//        System.out.println(whitePlayer);
+//        vm.put("currentUser", currentPlayer);
+//        vm.put("viewMode", playMode.PLAY);
+
+      //  CheckersGame game = new CheckersGame(currentPlayer, null);
 
 
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));

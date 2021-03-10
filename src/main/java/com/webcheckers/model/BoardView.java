@@ -1,25 +1,22 @@
+
 package com.webcheckers.model;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
-/**
- * Provides an iterable view of the checkers board
- *
- * @author Danny Gardner
- */
-public class BoardView implements Iterable<Row>{
-    private List<Row> rows;
+public class BoardView implements Iterable<Row> {
+
+    private Row[] rows;
 
     public BoardView(Space[][] board) {
-        rows = new ArrayList<>();
-        for (int i = 0; i < board.length; i++) {
-            rows.add(new Row(i, board[i]));
+        rows = new Row[8];
+        for(int i = 0; i < 8; i++) {
+            rows[i] = new Row(i, board[i]);
         }
     }
 
+    @Override
     public Iterator<Row> iterator() {
-        return rows.iterator();
+        return Arrays.stream(rows).iterator();
     }
 }

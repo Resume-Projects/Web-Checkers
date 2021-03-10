@@ -3,8 +3,9 @@ package com.webcheckers.application;
 
 import com.webcheckers.model.Player;
 
+import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 /**
  * Holds all the active players in a TreeSet. There should only ever be one created (in the WebServer class). All the
@@ -12,19 +13,19 @@ import java.util.TreeSet;
  */
 public class PlayerLobby {
 
-    private final Set<Player> activePlayers;
+    private final Map<String, Player> activePlayers;
 
     public PlayerLobby() {
-        activePlayers = new TreeSet<>();
+        activePlayers = new TreeMap<>();
     }
 
     public Player newPlayer(String name) {
         Player newPlayer = new Player(name);
-        activePlayers.add(newPlayer);
+        activePlayers.put(name, new Player(name));
         return newPlayer;
     }
 
-    public Set<Player> getActivePlayers() {
+    public Map<String, Player> getActivePlayers() {
         return activePlayers;
     }
 
@@ -34,7 +35,11 @@ public class PlayerLobby {
     }
 
     public boolean isNameTaken(String name) {
-        return activePlayers.contains(new Player(name));
+        return activePlayers.containsKey(name);
+    }
+
+    public Player getPlayerFromName(String name) {
+        return activePlayers.get(name);
     }
 
 }

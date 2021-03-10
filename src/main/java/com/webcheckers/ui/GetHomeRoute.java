@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import com.webcheckers.application.PlayerLobby;
+import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import spark.ModelAndView;
 import spark.Request;
@@ -28,14 +29,17 @@ public class GetHomeRoute implements Route {
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
 
+    private final CheckersGame checkersGame;
+
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
      *
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetHomeRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+    public GetHomeRoute(final CheckersGame checkersGame, final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
         this.playerLobby = playerLobby;
+        this.checkersGame = checkersGame;
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
         //
         LOG.config("GetHomeRoute is initialized.");
@@ -55,7 +59,15 @@ public class GetHomeRoute implements Route {
     @Override
     public Object handle(Request request, Response response) {
         LOG.finer("GetHomeRoute is invoked.");
-        //
+
+        //A game has been created
+        Player currentUser = request.session().attribute("currentUser");
+
+        if(checkersGame.getWhitePlayer() != null) {
+            if(currentUser.equals(checkersGame.getWhitePlayer()))
+                response.redirect("/game");
+        }
+
         Map<String, Object> vm = new HashMap<>();
         vm.put("title", "Welcome!");
 
@@ -64,10 +76,9 @@ public class GetHomeRoute implements Route {
 
         vm.put("numPlayers", playerLobby.getActivePlayers().size());
 
-        if(request.session().attribute("currentUser") != null) {
-            Player currentUser = request.session().attribute("currentUser");
+        if(currentUser != null) {
             vm.put("currentUser", currentUser);
-            vm.put("activePlayers", playerLobby.getActivePlayers());
+            vm.put("activePlayers", playerLobby.getActivePlayers().values());
         }
 
         // render the View
