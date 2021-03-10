@@ -28,8 +28,11 @@ public class Player implements Comparable<Player> {
      * @param other the other player
      * @return true if both players are the same, false otherwise
      */
-    public boolean equals(Player other) {
-        return this.name.equals(other.name);
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof Player))
+            return false;
+        return this.name.equals(((Player)other).name);
     }
 
     /**
@@ -43,10 +46,10 @@ public class Player implements Comparable<Player> {
     }
 
     /**
-     * Identifies if two players are the same player
+     * Identifies if two players are the same player, or the difference between the player's names
      *
      * @param other The other player
-     * @return 0 if the players are the same player, 1 otherwise
+     * @return 0 if the players are the same player, otherwise the lexicographic difference between the names
      */
     @Override
     public int compareTo(Player other) {
