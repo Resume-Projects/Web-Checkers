@@ -2,6 +2,8 @@ package com.webcheckers.model;
 
 import com.webcheckers.application.GameController;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.logging.Logger;
 
 /**
@@ -43,8 +45,21 @@ public class CheckersGame {
         return board;
     }
 
-    public BoardView getBoardView() {
-        return boardView;
+    public BoardView getWhiteBoardView() {
+        return new BoardView(board);
+    }
+
+    public BoardView getRedBoardView() {
+        Space[][] tempBoard = new Space[8][8];
+        for (int i = 0; i < board.length; i++) {
+            tempBoard[i] = Arrays.copyOf(board[i], board[i].length);
+        }
+
+        Collections.reverse(Arrays.asList(tempBoard));
+        for(int i = 0; i < 8; i++) {
+            Collections.reverse(Arrays.asList(tempBoard[i]));
+        }
+        return new BoardView(tempBoard);
     }
 
     public void setRedPlayer(Player player) {
