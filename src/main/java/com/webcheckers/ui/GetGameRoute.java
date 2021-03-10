@@ -61,14 +61,13 @@ public class GetGameRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         final Session session = request.session();
         Map<String, Object> vm = new HashMap<>();
-
+        Player currentPlayer = session.attribute("currentUser");
         if(checkersGame.getRedPlayer() == null) {
             Player redPlayer = session.attribute("currentUser");
             Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
             checkersGame.setRedPlayer(redPlayer);
             checkersGame.setWhitePlayer(whitePlayer);
         } else {
-            Player currentPlayer = session.attribute("currentUser");
             if(!currentPlayer.equals(checkersGame.getRedPlayer()) && !currentPlayer.equals(checkersGame.getWhitePlayer())) {
                 session.attribute("errorMessage", "That player is already in a game");
                 response.redirect("/");
@@ -85,17 +84,10 @@ public class GetGameRoute implements Route {
         else
             vm.put("activeColor", playerColor.WHITE);
 
-        vm.put("board", checkersGame.getBoardView());
-//        Player currentPlayer = session.attribute("currentUser");
-//        Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
-//        //Things will crash, but this shows things working
-//        System.out.println(whitePlayer);
-//        System.out.println(whitePlayer);
-//        vm.put("currentUser", currentPlayer);
-//        vm.put("viewMode", playMode.PLAY);
-
-      //  CheckersGame game = new CheckersGame(currentPlayer, null);
-
+        if(currentPlayer.equals(checkersGame.getRedPlayer()))
+            vm.put("board", checkersGame.getRedBoardView());
+        else
+            vm.put("board", checkersGame.getWhiteBoardView());
 
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
