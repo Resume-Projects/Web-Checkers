@@ -72,7 +72,10 @@ public class GetHomeRoute implements Route {
         vm.put("title", "Welcome!");
 
         // display a user message in the Home page
-        vm.put("message", WELCOME_MSG);
+        if(request.session().attribute("errorMessage") == null)
+            vm.put("message", WELCOME_MSG);
+        else
+            vm.put("message", Message.error(request.session().attribute("errorMessage")));
 
         vm.put("numPlayers", playerLobby.getActivePlayers().size());
 

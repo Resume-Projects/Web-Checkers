@@ -67,6 +67,12 @@ public class GetGameRoute implements Route {
             Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
             checkersGame.setRedPlayer(redPlayer);
             checkersGame.setWhitePlayer(whitePlayer);
+        } else {
+            Player currentPlayer = session.attribute("currentUser");
+            if(!currentPlayer.equals(checkersGame.getRedPlayer()) && !currentPlayer.equals(checkersGame.getWhitePlayer())) {
+                session.attribute("errorMessage", "That player is already in a game");
+                response.redirect("/");
+            }
         }
 
         vm.put("title", "Game");
