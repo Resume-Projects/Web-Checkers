@@ -40,10 +40,6 @@ public class Space {
 
     // Public Methods
 
-    public void setState( State state ) {
-        this.state = state;
-    }
-
     public int getCellIdx() {
         return cellIdx;
     }
