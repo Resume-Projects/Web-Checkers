@@ -61,8 +61,12 @@ public class GetHomeRoute implements Route {
         LOG.finer("GetHomeRoute is invoked.");
 
         //A game has been created
-        if(checkersGame.getRedPlayer() != null)
-            response.redirect("/game");
+        Player currentUser = request.session().attribute("currentUser");
+
+        if(checkersGame.getWhitePlayer() != null) {
+            if(currentUser.equals(checkersGame.getWhitePlayer()))
+                response.redirect("/game");
+        }
 
         Map<String, Object> vm = new HashMap<>();
         vm.put("title", "Welcome!");
@@ -72,8 +76,7 @@ public class GetHomeRoute implements Route {
 
         vm.put("numPlayers", playerLobby.getActivePlayers().size());
 
-        if(request.session().attribute("currentUser") != null) {
-            Player currentUser = request.session().attribute("currentUser");
+        if(currentUser != null) {
             vm.put("currentUser", currentUser);
             vm.put("activePlayers", playerLobby.getActivePlayers().values());
         }

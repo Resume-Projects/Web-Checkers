@@ -17,6 +17,10 @@ public class Player implements Comparable<Player> {
         return name;
     }
 
+    public boolean equals(Player other) {
+        return this.name.equals(other.name);
+    }
+
     @Override
     public String toString() {
         return "Player: " + name;
