@@ -1,6 +1,11 @@
 package com.webcheckers.model;
 
+/**
+ * Represents a Space a Piece can be placed in
+ */
 public class Space {
+
+    // Classification of the state of the given space
 
     public enum State {
         INVALID,
@@ -8,10 +13,20 @@ public class Space {
         OPEN
     }
 
+    // Space Attributes
+
     private int cellIdx;
     private State state;
     private Piece piece;
 
+    /**
+     * The constructor for the space used in a given Row
+     *
+     * @param cellIdx
+     *      The column of the space
+     * @param piece
+     *      THe piece that will sit in that space
+     */
     public Space(int cellIdx, Piece piece) {
         this.cellIdx = cellIdx;
         this.piece = piece;
@@ -22,6 +37,8 @@ public class Space {
         this.cellIdx = cellIdx;
         this.state = state;
     }
+
+    // Public Methods
 
     public int getCellIdx() {
         return cellIdx;
