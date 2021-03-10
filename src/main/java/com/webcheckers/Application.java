@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 import com.webcheckers.application.PlayerLobby;
+import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.WebServer;
 
@@ -98,7 +99,7 @@ public final class Application {
         final Gson gson = new Gson();
         final PlayerLobby playerLobby = new PlayerLobby();
         // inject the game center and freemarker engine into web server
-        final WebServer webServer = new WebServer(playerLobby, templateEngine, gson);
+        final WebServer webServer = new WebServer(null, playerLobby, templateEngine, gson);
 
         // inject web server into application
         final Application app = new Application(webServer);
