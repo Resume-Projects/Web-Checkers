@@ -42,7 +42,6 @@ public class Space {
     public void setState( State state ) {
         this.state = state;
     }
-
     /**
      * Finds the cellIdx
      *

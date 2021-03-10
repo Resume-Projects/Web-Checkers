@@ -5,6 +5,7 @@ package com.webcheckers.model;
  */
 public class Piece {
 
+    /* Enums for type and color*/
     public enum Type {SINGLE, KING}
     public enum Color {RED, WHITE}
 
@@ -21,6 +22,8 @@ public class Piece {
         this.type = type;
         this.color = color;
     }
+
+    // Get Piece Attributes
 
     /**
      * Gets the pieces type
