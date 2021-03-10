@@ -32,6 +32,12 @@ public class Row implements Iterable<Space> {
         return index;
     }
 
+    /**
+     * Get the index of this col in the board
+     *
+     * @param col the column of the board
+     * @return the column of the board
+     */
     public Space getSpace(int col) {
         return spaces[col];
     }

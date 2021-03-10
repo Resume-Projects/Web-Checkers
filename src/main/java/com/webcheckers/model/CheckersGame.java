@@ -22,6 +22,12 @@ public class CheckersGame {
     private Player redPlayer;
     private Player whitePlayer;
 
+    /**
+     * The CheckersGame data type
+     *
+     * @param redPlayer the player with the red pieces
+     * @param whitePlayer the player with the white pieces
+     */
     public CheckersGame(Player redPlayer, Player whitePlayer) {
         LOG.fine("Game created");
         board = new Space[BOARD_SIZE][BOARD_SIZE];
@@ -33,7 +39,6 @@ public class CheckersGame {
 
         GameController.initializeBoard(board);
 
-
         //board[0][0] = new Space(0, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
 
         boardView = new BoardView(board);
@@ -41,14 +46,30 @@ public class CheckersGame {
         this.whitePlayer = whitePlayer;
     }
 
+    /**
+     * Get the board of the game
+     *
+     * @return the game board
+     */
     public Space[][] getBoard() {
         return board;
     }
 
+    /**
+     * Get the board for the red player
+     *
+     * @return the game board
+     */
     public BoardView getRedBoardView() {
         return new BoardView(board);
     }
 
+    /**
+     * Get the board for the white player.
+     * This reverses the order of all the rows of the board from BoardView.
+     *
+     * @return the game board.
+     */
     public BoardView getWhiteBoardView() {
         Space[][] tempBoard = new Space[8][8];
         for (int i = 0; i < board.length; i++) {
@@ -62,18 +83,38 @@ public class CheckersGame {
         return new BoardView(tempBoard);
     }
 
+    /**
+     * Sets the board of the red player
+     *
+     * @param player the player of the red pieces
+     */
     public void setRedPlayer(Player player) {
         redPlayer = player;
     }
 
+    /**
+     * Gets the player of the red pieces
+     *
+     * @return the player of the red pieces
+     */
     public Player getRedPlayer() {
         return redPlayer;
     }
 
+    /**
+     * Sets the player of the white pieces
+     *
+     * @param player the player of the white pieces
+     */
     public void setWhitePlayer(Player player) {
         whitePlayer = player;
     }
 
+    /**
+     * Gets the player of the white pieces
+     *
+     * @return the player of the white pieces
+     */
     public Player getWhitePlayer() {
         return whitePlayer;
     }
