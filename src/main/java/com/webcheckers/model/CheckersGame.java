@@ -43,8 +43,16 @@ public class CheckersGame {
         return boardView;
     }
 
+    public void setRedPlayer(Player player) {
+        redPlayer = player;
+    }
+
     public Player getRedPlayer() {
         return redPlayer;
+    }
+
+    public void setWhitePlayer(Player player) {
+        whitePlayer = player;
     }
 
     public Player getWhitePlayer() {

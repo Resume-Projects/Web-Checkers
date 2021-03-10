@@ -60,7 +60,8 @@ public class GetHomeRoute implements Route {
     public Object handle(Request request, Response response) {
         LOG.finer("GetHomeRoute is invoked.");
 
-        if(checkersGame != null && (request.attribute("currentUser").equals(checkersGame.getRedPlayer()) || request.attribute("currentUser").equals(checkersGame.getWhitePlayer())))
+        //A game has been created
+        if(checkersGame.getRedPlayer() != null)
             response.redirect("/game");
 
         Map<String, Object> vm = new HashMap<>();

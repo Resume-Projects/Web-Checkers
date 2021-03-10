@@ -62,10 +62,11 @@ public class GetGameRoute implements Route {
         final Session session = request.session();
         Map<String, Object> vm = new HashMap<>();
 
-        if(checkersGame == null) {
+        if(checkersGame.getRedPlayer() == null) {
             Player redPlayer = session.attribute("currentUser");
             Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
-            checkersGame = new CheckersGame(redPlayer, whitePlayer);
+            checkersGame.setRedPlayer(redPlayer);
+            checkersGame.setWhitePlayer(whitePlayer);
         }
 
         vm.put("title", "Game");

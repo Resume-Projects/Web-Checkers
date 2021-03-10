@@ -99,7 +99,8 @@ public final class Application {
         final Gson gson = new Gson();
         final PlayerLobby playerLobby = new PlayerLobby();
         // inject the game center and freemarker engine into web server
-        final WebServer webServer = new WebServer(null, playerLobby, templateEngine, gson);
+        final CheckersGame checkersGame = new CheckersGame(null, null);
+        final WebServer webServer = new WebServer(checkersGame, playerLobby, templateEngine, gson);
 
         // inject web server into application
         final Application app = new Application(webServer);
