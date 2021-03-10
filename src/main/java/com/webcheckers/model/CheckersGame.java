@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
-import java.util.Iterator;
+import com.webcheckers.application.GameController;
+
 import java.util.logging.Logger;
 
 /**
@@ -22,13 +23,16 @@ public class CheckersGame {
     public CheckersGame(Player redPlayer, Player whitePlayer) {
         LOG.fine("Game created");
         board = new Space[BOARD_SIZE][BOARD_SIZE];
-        for(int row = 0; row < BOARD_SIZE; row++) {
-            for(int col = 0; col < BOARD_SIZE; col++) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 board[row][col] = new Space(col, null);
             }
         }
 
-        board[0][0] = new Space(0, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
+        GameController.initializeBoard(board);
+
+
+        //board[0][0] = new Space(0, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
 
         boardView = new BoardView(board);
         this.redPlayer = redPlayer;

@@ -21,4 +21,8 @@ public class Space {
     public Piece getPiece() {
         return piece;
     }
+
+    public void setPiece (Piece.Type type, Piece.Color color) {
+        piece = new Piece(type, color);
+    }
 }
