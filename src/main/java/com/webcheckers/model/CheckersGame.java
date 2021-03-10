@@ -28,6 +28,10 @@ public class CheckersGame {
         return board;
     }
 
+    public BoardView getBoardView() {
+        return new BoardView(board);
+    }
+
     public Player getRedPlayer() {
         return redPlayer;
     }
