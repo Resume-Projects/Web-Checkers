@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -8,17 +9,18 @@ import java.util.List;
  * The Row data type.
  */
 public class Row implements Iterable<Space> {
+
     private int index;
-    private List<Space> spaces;
+    private Space[] spaces;
 
     /**
      * The Row data type.
      *
      * @param index the row index
      */
-    public Row(int index) {
+    public Row(int index, Space[] spaces) {
         this.index = index;
-        spaces = new ArrayList<>();
+        this.spaces = spaces;
     }
 
     /**
@@ -31,7 +33,7 @@ public class Row implements Iterable<Space> {
     }
 
     public Space getSpace(int col) {
-        return spaces.get(col);
+        return spaces[col];
     }
 
     /**
@@ -41,6 +43,6 @@ public class Row implements Iterable<Space> {
      */
     @Override
     public Iterator<Space> iterator() {
-        return spaces.iterator();
+        return Arrays.stream(spaces).iterator();
     }
 }

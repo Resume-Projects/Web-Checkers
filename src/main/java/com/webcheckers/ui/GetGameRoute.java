@@ -78,6 +78,7 @@ public class GetGameRoute implements Route {
         else
             vm.put("activeColor", playerColor.WHITE);
 
+        vm.put("board", checkersGame.getBoardView());
 //        Player currentPlayer = session.attribute("currentUser");
 //        Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
 //        //Things will crash, but this shows things working
