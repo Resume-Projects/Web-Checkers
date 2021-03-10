@@ -25,7 +25,7 @@ public class CheckersGame {
         board = new Space[BOARD_SIZE][BOARD_SIZE];
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
-                board[row][col] = new Space(col, null);
+                board[row][col] = new Space(col, Space.State.OPEN);
             }
         }
 
