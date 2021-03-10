@@ -3,6 +3,7 @@ package com.webcheckers.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import spark.ModelAndView;
@@ -29,6 +30,7 @@ public class GetGameRoute implements Route {
     public enum playMode {PLAY, SPECTATOR, REPLAY}
 
     private final TemplateEngine templateEngine;
+    private final PlayerLobby playerLobby;
 
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
@@ -36,8 +38,9 @@ public class GetGameRoute implements Route {
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetGameRoute (final TemplateEngine templateEngine) {
+    public GetGameRoute (final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
+        this.playerLobby = playerLobby;
     }
 
     /**
@@ -56,7 +59,10 @@ public class GetGameRoute implements Route {
         final Session session = request.session();
         Map<String, Object> vm = new HashMap<>();
         Player currentPlayer = session.attribute("currentUser");
-
+        Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
+        //Things will crash, but this shows things working
+        System.out.println(whitePlayer);
+        System.out.println(whitePlayer);
         vm.put("currentUser", currentPlayer);
         vm.put("viewMode", playMode.PLAY);
 
