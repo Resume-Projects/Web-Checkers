@@ -25,7 +25,6 @@ public class GetHomeRoute implements Route {
     private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
     private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
-    public final String TITLE_ATTR = "title";
 
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
@@ -70,7 +69,7 @@ public class GetHomeRoute implements Route {
         }
 
         Map<String, Object> vm = new HashMap<>();
-        vm.put(TITLE_ATTR, "Welcome!");
+        vm.put("title", "Welcome!");
 
         // display a user message in the Home page
         if(request.session().attribute("errorMessage") == null)

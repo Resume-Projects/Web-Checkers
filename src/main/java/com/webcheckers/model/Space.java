@@ -58,7 +58,7 @@ public class Space {
     }
 
     /**
-     * Get the space's piece
+     * Get the piece on that space
      *
      * @return the piece on that space
      */
