@@ -1,47 +1,41 @@
 package com.webcheckers.model;
 
 /**
- * Data Type for Pieces that play in the Checkers Game
+ * The Piece data type
  */
 public class Piece {
 
-
-    // Classification for the Piece's type
-
     public enum Type {SINGLE, KING}
-
-    // Classification for the Piece's color
-
     public enum Color {RED, WHITE}
-
-    //
-    // Piece Attributes
-    //
 
     private Type type;
     private Color color;
 
     /**
-     * The constructor for a game Piece
+     * The piece data type.
      *
-     * @param type
-     *      The type of the piece
-     * @param color
-     *      The color of the given piece
+     * @param type the piece type
+     * @param color the piece color
      */
     public Piece(Type type, Color color) {
         this.type = type;
         this.color = color;
     }
 
-    //
-    // Public Methods
-    //
-
+    /**
+     * Gets the pieces type
+     *
+     * @return the piece type
+     */
     public Type getType() {
         return type;
     }
 
+    /**
+     * Gets the pieces color
+     *
+     * @return the piece color
+     */
     public Color getColor() {
         return color;
     }
