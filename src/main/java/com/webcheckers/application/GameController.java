@@ -3,7 +3,14 @@ package com.webcheckers.application;
 import com.webcheckers.model.Piece;
 import com.webcheckers.model.Space;
 
+/**
+ * The GameController class
+ */
 public class GameController {
+    /**
+     * Creates a new board class
+     * @param board an double array to initialize the board
+     */
     public static void initializeBoard(Space[][] board) {
         for (int col = 0; col < board.length; col++) {
             if (col % 2 == 1) {
