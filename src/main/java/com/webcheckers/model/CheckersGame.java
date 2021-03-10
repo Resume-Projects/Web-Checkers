@@ -45,11 +45,11 @@ public class CheckersGame {
         return board;
     }
 
-    public BoardView getWhiteBoardView() {
+    public BoardView getRedBoardView() {
         return new BoardView(board);
     }
 
-    public BoardView getRedBoardView() {
+    public BoardView getWhiteBoardView() {
         Space[][] tempBoard = new Space[8][8];
         for (int i = 0; i < board.length; i++) {
             tempBoard[i] = Arrays.copyOf(board[i], board[i].length);
