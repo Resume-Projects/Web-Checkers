@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- * The Row data type.
+ * The Row data type that allows the board to be rendered
  */
 public class Row implements Iterable<Space> {
 
@@ -15,6 +15,7 @@ public class Row implements Iterable<Space> {
      * The Row data type.
      *
      * @param index the row index
+     * @param spaces the array of Spaces in that row
      */
     public Row(int index, Space[] spaces) {
         this.index = index;

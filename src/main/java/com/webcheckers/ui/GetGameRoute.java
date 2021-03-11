@@ -13,7 +13,6 @@ import spark.Response;
 import spark.Route;
 import spark.Session;
 import spark.TemplateEngine;
-import static spark.Spark.halt;
 
 /**
  * The UI Controller to GET the Game page.
@@ -28,7 +27,9 @@ public class GetGameRoute implements Route {
     static final String BOARD = "board";
     static final String MESSAGE = "message";
 
+    /** The different play modes that a user can be in */
     public enum playMode {PLAY, SPECTATOR, REPLAY}
+    /** The two different colors a player can be */
     public enum playerColor {RED, WHITE};
 
     private final TemplateEngine templateEngine;
@@ -41,7 +42,7 @@ public class GetGameRoute implements Route {
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetGameRoute (final GameManager gameManager, final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+    public GetGameRoute(final GameManager gameManager, final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
         this.gameManager = gameManager;
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
