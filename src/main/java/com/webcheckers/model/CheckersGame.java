@@ -14,13 +14,13 @@ import java.util.logging.Logger;
 public class CheckersGame {
     private static final Logger LOG = Logger.getLogger(CheckersGame.class.getName());
 
-    private Space[][] board;
-    private BoardView boardView;
+    private final Space[][] board;
 
+    /** The side length of a square checkers board */
     public static final int BOARD_SIZE = 8;
 
-    private Player redPlayer;
-    private Player whitePlayer;
+    private final Player redPlayer;
+    private final Player whitePlayer;
 
     /**
      * The CheckersGame data type
@@ -31,11 +31,7 @@ public class CheckersGame {
     public CheckersGame(Player redPlayer, Player whitePlayer) {
         LOG.fine("Game created");
         board = new Space[BOARD_SIZE][BOARD_SIZE];
-//        for (int row = 0; row < BOARD_SIZE; row++) {
-//            for (int col = 0; col < BOARD_SIZE; col++) {
-//                board[row][col] = new Space(col, Space.State.OPEN);
-//            }
-//        }
+
         for (int col = 0; col < board.length; col++) {
             if (col % 2 == 1) {
                 board[0][col] = new Space(col, Space.State.OCCUPIED);
@@ -59,9 +55,6 @@ public class CheckersGame {
         }
         GameController.initializeBoard(board);
 
-        //board[0][0] = new Space(0, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
-
-        boardView = new BoardView(board);
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
     }
@@ -104,30 +97,12 @@ public class CheckersGame {
     }
 
     /**
-     * Sets the board of the red player
-     *
-     * @param player the player of the red pieces
-     */
-    public void setRedPlayer(Player player) {
-        redPlayer = player;
-    }
-
-    /**
      * Gets the player of the red pieces
      *
      * @return the player of the red pieces
      */
     public Player getRedPlayer() {
         return redPlayer;
-    }
-
-    /**
-     * Sets the player of the white pieces
-     *
-     * @param player the player of the white pieces
-     */
-    public void setWhitePlayer(Player player) {
-        whitePlayer = player;
     }
 
     /**

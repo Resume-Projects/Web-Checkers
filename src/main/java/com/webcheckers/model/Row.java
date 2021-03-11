@@ -1,17 +1,15 @@
 package com.webcheckers.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * The Row data type.
  */
 public class Row implements Iterable<Space> {
 
-    private int index;
-    private Space[] spaces;
+    private final int index;
+    private final Space[] spaces;
 
     /**
      * The Row data type.

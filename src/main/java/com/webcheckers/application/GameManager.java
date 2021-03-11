@@ -14,6 +14,10 @@ public class GameManager {
 
     private final ArrayList<CheckersGame> checkersGames;
 
+    /**
+     * Creates the GameManager object that just initialized the list of games. Only one should
+     * ever be made
+     */
     public GameManager() {
         checkersGames = new ArrayList<>();
     }
@@ -31,6 +35,12 @@ public class GameManager {
         return null;
     }
 
+    /**
+     * Returns a new checkers game that gets added to the list
+     * @param redPlayer the red player in the checkers game
+     * @param whitePlayer the white player in the checkers game
+     * @return the new Checkers game
+     */
     public CheckersGame getNewGame(Player redPlayer, Player whitePlayer) {
         CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer);
         checkersGames.add(checkersGame);

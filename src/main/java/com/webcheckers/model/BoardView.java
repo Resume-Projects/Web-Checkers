@@ -9,7 +9,7 @@ import java.util.Iterator;
  */
 public class BoardView implements Iterable<Row> {
 
-    private Row[] rows;
+    private final Row[] rows;
 
     public BoardView(Space[][] board) {
         rows = new Row[board.length];
