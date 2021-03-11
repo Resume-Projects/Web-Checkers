@@ -63,7 +63,7 @@ public class GetHomeRoute implements Route {
         //A game has been created
         Player currentUser = request.session().attribute("currentUser");
 
-        if(checkersGame.getWhitePlayer() != null) {
+        if(checkersGame.getWhitePlayer() != null && currentUser != null) {
             if(currentUser.equals(checkersGame.getWhitePlayer()))
                 response.redirect("/game");
         }
