@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
@@ -28,8 +29,7 @@ public class GetHomeRoute implements Route {
 
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
-
-    private final CheckersGame checkersGame;
+    private final GameManager gameManager;
 
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
@@ -37,9 +37,9 @@ public class GetHomeRoute implements Route {
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetHomeRoute(final CheckersGame checkersGame, final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+    public GetHomeRoute(final GameManager gameManager, final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
         this.playerLobby = playerLobby;
-        this.checkersGame = checkersGame;
+        this.gameManager = gameManager;
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
         //
         LOG.config("GetHomeRoute is initialized.");
@@ -63,9 +63,10 @@ public class GetHomeRoute implements Route {
         //A game has been created
         Player currentUser = request.session().attribute("currentUser");
 
-        if(checkersGame.getWhitePlayer() != null && currentUser != null) {
-            if(currentUser.equals(checkersGame.getWhitePlayer()))
-                response.redirect("/game");
+        //If the player is in a game, show them the game
+        if(currentUser != null && gameManager.getPlayersGame(currentUser) != null) {
+            response.redirect("/game");
+            return null; //They get sent to the game page
         }
 
         Map<String, Object> vm = new HashMap<>();

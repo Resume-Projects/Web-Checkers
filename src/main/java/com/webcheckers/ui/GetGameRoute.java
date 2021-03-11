@@ -3,6 +3,7 @@ package com.webcheckers.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
@@ -32,7 +33,7 @@ public class GetGameRoute implements Route {
 
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
-    private CheckersGame checkersGame;
+    private final GameManager gameManager;
 
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
@@ -40,10 +41,10 @@ public class GetGameRoute implements Route {
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetGameRoute (CheckersGame checkersGame, final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+    public GetGameRoute (final GameManager gameManager, final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+        this.gameManager = gameManager;
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
-        this.checkersGame = checkersGame;
     }
 
     /**
@@ -62,16 +63,21 @@ public class GetGameRoute implements Route {
         final Session session = request.session();
         Map<String, Object> vm = new HashMap<>();
         Player currentPlayer = session.attribute("currentUser");
-        if(checkersGame.getRedPlayer() == null) {
-            Player redPlayer = session.attribute("currentUser");
+        CheckersGame checkersGame;
+
+        //If the player is not in a game, then the game just started and a game needs to be made
+        if(gameManager.getPlayersGame(currentPlayer) == null) {
             Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
-            checkersGame.setRedPlayer(redPlayer);
-            checkersGame.setWhitePlayer(whitePlayer);
-        } else {
-            if(!currentPlayer.equals(checkersGame.getRedPlayer()) && !currentPlayer.equals(checkersGame.getWhitePlayer())) {
+            //If the white player is already in a game, send them back to the home page
+            if(gameManager.getPlayersGame(whitePlayer) != null) {
                 session.attribute("errorMessage", "That player is already in a game");
                 response.redirect("/");
+                return null; //They get sent back to the home page
+            } else {
+                checkersGame = gameManager.getNewGame(currentPlayer, whitePlayer);
             }
+        } else {
+            checkersGame = gameManager.getPlayersGame(currentPlayer);
         }
 
         vm.put("title", "Game");
@@ -79,15 +85,13 @@ public class GetGameRoute implements Route {
         vm.put("viewMode", playMode.PLAY);
         vm.put("redPlayer", checkersGame.getRedPlayer());
         vm.put("whitePlayer", checkersGame.getWhitePlayer());
-        if(checkersGame.getRedPlayer().equals(session.attribute("currentUser")))
+        if(currentPlayer.equals(checkersGame.getRedPlayer())) {
             vm.put("activeColor", playerColor.RED);
-        else
-            vm.put("activeColor", playerColor.WHITE);
-
-        if(currentPlayer.equals(checkersGame.getRedPlayer()))
             vm.put("board", checkersGame.getRedBoardView());
-        else
+        } else {
+            vm.put("activeColor", playerColor.WHITE);
             vm.put("board", checkersGame.getWhiteBoardView());
+        }
 
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
