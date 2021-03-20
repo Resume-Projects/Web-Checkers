@@ -9,20 +9,23 @@ geometry: margin=1in
 > and appear in the generated PDF in italics._
 
 ## Team Information
-* Team name: TEAMNAME
+* Team name: Something-Cool
 * Team members
-  * MEMBER1
-  * MEMBER2
-  * MEMBER3
-  * MEMBER4
+  * Kevin Hlavaty
+  * Corey Urbanke
+  * Russell Lee
+  * Ray Lorenzo
+  * Danny Gardner
 
 ## Executive Summary
 
-This is a summary of the project.
+This project allows players to play local checkers games using any common
+web-browser. Players can start playing by signing in using their name, and
+then initiate a game by selecting the name of other signed in players.
 
 ### Purpose
-> _Provide a very brief statement about the project and the most
-> important user group and user goals._
+This project was created in order to allow people to have fun playing
+checkers, while also teaching some people how to play checkers.
 
 ### Glossary and Acronyms
 > _Provide a table of terms and acronyms._
@@ -54,7 +57,7 @@ This section describes the features of the application.
 
 This section describes the application domain.
 
-![The WebCheckers Domain Model](domain-model-placeholder.png)
+![The WebCheckers Domain Model](domain-model.png)
 
 > _Provide a high-level overview of the domain for this application. You
 > can discuss the more important domain entities and their relationship
@@ -87,7 +90,7 @@ Details of the components within these tiers are supplied below.
 This section describes the web interface flow; this is how the user views and interacts
 with the WebCheckers application.
 
-![The WebCheckers Web Interface Statechart](web-interface-placeholder.png)
+![The WebCheckers Web Interface Statechart](web-interface.png)
 
 > _Provide a summary of the application's user interface.  Describe, from
 > the user's perspective, the flow of the pages in the web application._
