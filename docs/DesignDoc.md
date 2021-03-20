@@ -92,8 +92,12 @@ with the WebCheckers application.
 
 ![The WebCheckers Web Interface Statechart](web-interface.png)
 
-> _Provide a summary of the application's user interface.  Describe, from
-> the user's perspective, the flow of the pages in the web application._
+Once a connection is established, the user is brought to the Home page where they can click a sign in button.
+To sign in, the user is brought to the Sign In page and, once signed in, brought back to the Home page.
+If a user enters aj invalid name, they are brought back to the sign in page until a valid name is entered.
+From the Home page, the user can enter a game with another player, bringing them to the Game page. Finally, when
+the game ends, the user is brought back to the Home page where they are still signed in, able to enter another
+game.
 
 
 ### UI Tier
