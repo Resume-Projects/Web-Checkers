@@ -59,9 +59,13 @@ This section describes the application domain.
 
 ![The WebCheckers Domain Model](domain-model.png)
 
-> _Provide a high-level overview of the domain for this application. You
-> can discuss the more important domain entities and their relationship
-> to each other._
+* A signed-in Player is able to join a match with another signed-in Player who is not already in a game.
+* The two players play a WebCheckers game on a Board until one Player wins and the other loses.
+* Pieces on the Board can be moved by a Player when it is their turn. There are different types of moves
+  a player can make, either to a valid space or in attempt to capture an opponent Piece.
+* Pieces are deemed King Pieces when they reach the last Row of the opponent's side.
+* Signed-in Players can spectate a match that two other signed-in Players are in.
+* Players who have completed a WebCheckers match can request a replay for that given game.
 
 
 ## Architecture and Design
