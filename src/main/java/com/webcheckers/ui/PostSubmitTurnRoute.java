@@ -1,7 +1,9 @@
 package com.webcheckers.ui;
 
+import com.google.gson.Gson;
 import com.webcheckers.application.GameManager;
 import com.webcheckers.model.Player;
+import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -16,9 +18,6 @@ public class PostSubmitTurnRoute implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        Player currentPlayer = request.session().attribute("currentUser");
-        gameManager.applyPlayersMove(currentPlayer);
-        response.redirect("/game");
-        return null;
+        return new Gson().toJson(Message.info("Good"));
     }
 }
