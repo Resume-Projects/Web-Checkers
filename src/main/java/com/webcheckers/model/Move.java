@@ -1,4 +1,20 @@
 package com.webcheckers.model;
 
 public class Move {
+
+    private final Position start;
+    private final Position end;
+
+    public Move(Position start, Position end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    public Position getStart() {
+        return start;
+    }
+
+    public Position getEnd() {
+        return end;
+    }
 }
