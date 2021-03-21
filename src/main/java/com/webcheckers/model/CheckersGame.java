@@ -136,6 +136,11 @@ public class CheckersGame {
         Position endMove = attemptedMove.getEnd();
         board[startMove.getRow()][startMove.getCell()] = new Space(startMove.getCell(), Space.State.OPEN);
         board[endMove.getRow()][endMove.getCell()] = new Space(endMove.getCell(), new Piece(Piece.Type.SINGLE, Piece.Color.RED));
+        //Flip the active color
+        if(activeColor == Piece.Color.RED)
+            activeColor = Piece.Color.WHITE;
+        else
+            activeColor = Piece.Color.RED;
         return Message.info("Move applied");
     }
 
