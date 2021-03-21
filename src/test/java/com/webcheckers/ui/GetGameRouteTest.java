@@ -1,16 +1,15 @@
 package com.webcheckers.ui;
 
+
 import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import spark.Request;
-import spark.Response;
-import spark.Session;
+import spark.*;
 import org.junit.jupiter.api.Tag;
-import spark.TemplateEngine;
+import spark.http.matching.Halt;
 
 import static org.mockito.Mockito.*;
 
@@ -28,6 +27,10 @@ public class GetGameRouteTest {
     private GameManager gameManager;
     private PlayerLobby playerLobby;
     private TemplateEngine templateEngine;
+    private CheckersGame checkersGame;
+
+    private Player redPlayer;
+    private Player whitePlayer;
 
     @BeforeEach
     public void setup() {
@@ -44,11 +47,64 @@ public class GetGameRouteTest {
     }
 
     @Test
-    public void testGame() throws Exception {
-        try{
-            CuT.handle(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void newGame() throws Exception {
+        redPlayer = mock(Player.class);
+        whitePlayer = mock(Player.class);
+        checkersGame = new CheckersGame(redPlayer, whitePlayer);
+        when(request.session().attribute("currentUser")).thenReturn(redPlayer);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
+        CuT.handle(request, response);
+
+        testHelper.assertViewModelExists();
+        testHelper.assertViewModelIsaMap();
+        testHelper.assertViewModelAttribute("title", "Game");
+        testHelper.assertViewModelAttribute("redPlayer", checkersGame.getRedPlayer());
+        testHelper.assertViewModelAttribute("whitePlayer", checkersGame.getWhitePlayer());
+
+        testHelper.assertViewName(GetGameRoute.VIEW_NAME);
+    }
+
+    @Test
+    public void testGameRed() throws Exception {
+        redPlayer = mock(Player.class);
+        whitePlayer = mock(Player.class);
+        checkersGame = new CheckersGame(redPlayer, whitePlayer);
+        when(session.attribute("currentUser")).thenReturn(redPlayer);
+        // when(playerLobby.  thenReturn(whitePlayer);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
+        CuT.handle(request, response);
+    }
+
+    @Test
+    public void testGameWhite() throws Exception {
+        redPlayer = mock(Player.class);
+        whitePlayer = mock(Player.class);
+        checkersGame = new CheckersGame(redPlayer, whitePlayer);
+        when(session.attribute("currentUser")).thenReturn(whitePlayer);
+        // when(playerLobby.getPlayer("whitePlayer")).thenReturn(whitePlayer);
+        when(gameManager.getPlayersGame(whitePlayer)).thenReturn(checkersGame);
+        CuT.handle(request, response);
+    }
+
+    @Test
+    public void faultySession() throws Exception {
+
+        redPlayer = mock(Player.class);
+        whitePlayer = mock(Player.class);
+        checkersGame = new CheckersGame(redPlayer, whitePlayer);
+
+        when(session.attribute("currentUser")).thenReturn(redPlayer);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(null);
+        when(gameManager.getPlayersGame(whitePlayer)).thenReturn(mock(CheckersGame.class));
+        //when(session.attribute("errorMessage"))
+        CuT.handle(request, response);
+        verify(response, times(1)).redirect("/");
+        // assertThat(response).isEqualTo(null);
     }
 }
+
+
+
