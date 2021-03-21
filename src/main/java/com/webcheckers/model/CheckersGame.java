@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
 import com.webcheckers.application.GameController;
+import com.webcheckers.util.Message;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,7 +25,7 @@ public class CheckersGame {
 
     private Piece.Color activeColor;
 
-    private Move pendingMove;
+    private Move attemptedMove;
 
     /**
      * The CheckersGame data type
@@ -123,8 +124,19 @@ public class CheckersGame {
         return activeColor;
     }
 
-    public void applyPendingMove() {
+    //Called from PostValidateMoveRoute (and maybe backup move)
+    public Message saveAttemptedMove(Move attemptedMove) {
+        this.attemptedMove = attemptedMove;
+        return Message.info("The move was saved");
+    }
 
+    //Called from GameManager when PostSubmitMoveRoute tells it to
+    public Message applyAttemptedMove() {
+        Position startMove = attemptedMove.getStart();
+        Position endMove = attemptedMove.getEnd();
+        board[startMove.getRow()][startMove.getCell()] = new Space(startMove.getCell(), Space.State.OPEN);
+        board[endMove.getRow()][endMove.getCell()] = new Space(endMove.getCell(), new Piece(Piece.Type.SINGLE, Piece.Color.RED));
+        return Message.info("Move applied");
     }
 
 }

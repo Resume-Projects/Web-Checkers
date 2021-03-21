@@ -3,6 +3,7 @@ package com.webcheckers.application;
 
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.util.Message;
 
 import java.util.ArrayList;
 
@@ -47,9 +48,9 @@ public class GameManager {
         return checkersGame;
     }
 
-    public void applyPlayersMove(Player player) {
+    public Message applyPlayersMove(Player player) {
         CheckersGame playersGame = getPlayersGame(player);
-        playersGame.applyPendingMove();
+        return playersGame.applyAttemptedMove();
     }
 
 }
