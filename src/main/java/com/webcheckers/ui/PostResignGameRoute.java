@@ -1,4 +1,17 @@
 package com.webcheckers.ui;
 
-public class PostResignGameRoute {
+import spark.Request;
+import spark.Response;
+import spark.Route;
+
+public class PostResignGameRoute implements Route {
+
+    public PostResignGameRoute() {
+
+    }
+
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+        return null;
+    }
 }

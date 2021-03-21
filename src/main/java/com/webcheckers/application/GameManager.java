@@ -47,4 +47,9 @@ public class GameManager {
         return checkersGame;
     }
 
+    public void applyPlayersMove(Player player) {
+        CheckersGame playersGame = getPlayersGame(player);
+        playersGame.applyPendingMove();
+    }
+
 }

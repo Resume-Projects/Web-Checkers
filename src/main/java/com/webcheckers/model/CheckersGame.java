@@ -22,6 +22,10 @@ public class CheckersGame {
     private final Player redPlayer;
     private final Player whitePlayer;
 
+    private Piece.Color activeColor;
+
+    private Move pendingMove;
+
     /**
      * The CheckersGame data type
      *
@@ -57,6 +61,7 @@ public class CheckersGame {
 
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
+        this.activeColor = Piece.Color.RED;
     }
 
     /**
@@ -112,6 +117,14 @@ public class CheckersGame {
      */
     public Player getWhitePlayer() {
         return whitePlayer;
+    }
+
+    public Piece.Color getActiveColor() {
+        return activeColor;
+    }
+
+    public void applyPendingMove() {
+
     }
 
 }
