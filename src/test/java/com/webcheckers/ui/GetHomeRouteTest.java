@@ -37,6 +37,8 @@ public class GetHomeRouteTest {
         CuT = new GetHomeRoute(gameManager, playerLobby, templateEngine);
     }
 
+    //When this method is run, the majority of lines in the coverage report are green.
+    //The remaining tests make it so the red lines get run
     @Test
     public void testMostThings() {
         CuT.handle(request, response);
