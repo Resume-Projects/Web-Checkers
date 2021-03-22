@@ -14,7 +14,7 @@ import spark.http.matching.Halt;
 import static org.mockito.Mockito.*;
 
 /**
- * Code coverage for GetHomeRoute
+ * Code coverage for GetGameRoute
  *
  */
 @Tag("UI-tier")
