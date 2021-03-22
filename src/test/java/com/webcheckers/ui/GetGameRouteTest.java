@@ -91,19 +91,30 @@ public class GetGameRouteTest {
 
     @Test
     public void faultySession() throws Exception {
-
+        //Test for when neither player is in a game and a new game needs to be made
         redPlayer = mock(Player.class);
         whitePlayer = mock(Player.class);
-        checkersGame = new CheckersGame(redPlayer, whitePlayer);
 
         when(session.attribute("currentUser")).thenReturn(redPlayer);
-        when(gameManager.getPlayersGame(redPlayer)).thenReturn(null);
-        when(gameManager.getPlayersGame(whitePlayer)).thenReturn(mock(CheckersGame.class));
+        when(request.queryParams("whitePlayer")).thenReturn("white name");
+        when(playerLobby.getPlayerFromName("white name")).thenReturn(whitePlayer);
+        when(gameManager.getNewGame(redPlayer, whitePlayer)).thenReturn(mock(CheckersGame.class));
         //when(session.attribute("errorMessage"))
         CuT.handle(request, response);
-        verify(response, times(1)).redirect("/");
         // assertThat(response).isEqualTo(null);
     }
+
+    @Test
+    public void whitePlayerAlreadyInGame() throws Exception {
+        //If the white player is already in a game, then a new game should not be made
+        when(request.queryParams("whitePlayer")).thenReturn("name");
+        Player mockPlayer = mock(Player.class);
+        when(playerLobby.getPlayerFromName("name")).thenReturn(mockPlayer);
+        when(gameManager.getPlayersGame(mockPlayer)).thenReturn(mock(CheckersGame.class));
+        CuT.handle(request, response);
+        verify(response, times(1)).redirect("/");
+    }
+
 }
 
 
