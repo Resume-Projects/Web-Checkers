@@ -160,7 +160,7 @@ public class WebServer {
 
         post("/checkTurn", new PostCheckTurnRoute(gameManager));
 
-        post("/backupMove", new PostBackupMoveRoute());
+        post("/backupMove", new PostBackupMoveRoute(gameManager));
 
         post("/resignGame", new PostResignGameRoute());
 

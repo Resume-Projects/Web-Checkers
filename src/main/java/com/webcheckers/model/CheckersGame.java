@@ -134,14 +134,20 @@ public class CheckersGame {
     public Message applyAttemptedMove() {
         Position startMove = attemptedMove.getStart();
         Position endMove = attemptedMove.getEnd();
+        Piece pieceBeingMoved = board[startMove.getRow()][startMove.getCell()].getPiece();
         board[startMove.getRow()][startMove.getCell()] = new Space(startMove.getCell(), Space.State.OPEN);
-        board[endMove.getRow()][endMove.getCell()] = new Space(endMove.getCell(), new Piece(Piece.Type.SINGLE, Piece.Color.RED));
+        board[endMove.getRow()][endMove.getCell()] = new Space(endMove.getCell(), pieceBeingMoved);
         //Flip the active color
         if(activeColor == Piece.Color.RED)
             activeColor = Piece.Color.WHITE;
         else
             activeColor = Piece.Color.RED;
         return Message.info("Move applied");
+    }
+
+    public Message resetAttemptedMove() {
+        attemptedMove = null;
+        return Message.info("Attempted move was removed");
     }
 
 }

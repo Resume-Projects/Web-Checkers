@@ -12,8 +12,8 @@ import spark.Route;
 
 public class PostValidateMoveRoute implements Route {
 
-    private GameManager gameManager;
-    private Gson gson;
+    private final GameManager gameManager;
+    private final Gson gson;
 
     public PostValidateMoveRoute(GameManager gameManager, Gson gson) {
         this.gameManager = gameManager;
@@ -31,7 +31,6 @@ public class PostValidateMoveRoute implements Route {
         Player currentPlayer = request.session().attribute("currentUser");
         Move attemptedMove = gson.fromJson(request.queryParams("actionData"), Move.class);
         CheckersGame playersGame = gameManager.getPlayersGame(currentPlayer);
-        playersGame.saveAttemptedMove(attemptedMove);
-        return gson.toJson(Message.info("Good"));
+        return gson.toJson(playersGame.saveAttemptedMove(attemptedMove));
     }
 }
