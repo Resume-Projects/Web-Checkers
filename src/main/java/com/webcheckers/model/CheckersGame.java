@@ -5,7 +5,6 @@ import com.webcheckers.util.Message;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -26,6 +25,10 @@ public class CheckersGame {
 
     private Piece.Color activeColor;
 
+    //******************
+    //This will need to be turned into a queue that saves all of the attempted moves, since multiple
+    //multiple moves can be made when jumping
+    //******************
     private Move attemptedMove;
 
     /**
@@ -127,8 +130,18 @@ public class CheckersGame {
 
     //Called from PostValidateMoveRoute (and maybe backup move)
     public Message saveAttemptedMove(Move attemptedMove) {
-        this.attemptedMove = attemptedMove;
-        return Message.info("The move was saved");
+        Position start = attemptedMove.getStart();
+        Position end = attemptedMove.getEnd();
+        int deltaCol = Math.abs(start.getCell() - end.getCell());
+        boolean isValidMove = (deltaCol == 1) &&
+                              ((activeColor == Piece.Color.RED && end.getRow() + 1 == start.getRow()) ||
+                               (activeColor == Piece.Color.WHITE && end.getRow() - 1 == start.getRow()));
+        if(isValidMove) {
+            this.attemptedMove = attemptedMove;
+            return Message.info("Valid move");
+        } else {
+            return Message.error("Not a valid move");
+        }
     }
 
     //Called from GameManager when PostSubmitMoveRoute tells it to
