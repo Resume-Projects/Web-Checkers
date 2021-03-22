@@ -5,6 +5,7 @@ import com.webcheckers.util.Message;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -59,7 +60,6 @@ public class CheckersGame {
             }
         }
         GameController.initializeBoard(board);
-
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.activeColor = Piece.Color.RED;
@@ -80,7 +80,11 @@ public class CheckersGame {
      * @return the game board
      */
     public BoardView getRedBoardView() {
-        return new BoardView(board);
+        Row[] rows = new Row[BOARD_SIZE];
+        for(int i = 0; i < BOARD_SIZE; i++) {
+            rows[i] = new Row(i, board[i]);
+        }
+        return new BoardView(rows);
     }
 
     /**
@@ -90,16 +94,13 @@ public class CheckersGame {
      * @return the game board.
      */
     public BoardView getWhiteBoardView() {
-        Space[][] tempBoard = new Space[8][8];
-        for (int i = 0; i < board.length; i++) {
-            tempBoard[i] = Arrays.copyOf(board[i], board[i].length);
+        Row[] rows = new Row[BOARD_SIZE];
+        for(int i = BOARD_SIZE - 1; i >= 0; i--) {
+            Space[] tempSpaces = Arrays.copyOf(board[i], BOARD_SIZE);
+            Collections.reverse(Arrays.asList(tempSpaces));
+            rows[BOARD_SIZE - i - 1] = new Row(i, tempSpaces);
         }
-
-        Collections.reverse(Arrays.asList(tempBoard));
-        for(int i = 0; i < 8; i++) {
-            Collections.reverse(Arrays.asList(tempBoard[i]));
-        }
-        return new BoardView(tempBoard);
+        return new BoardView(rows);
     }
 
     /**
