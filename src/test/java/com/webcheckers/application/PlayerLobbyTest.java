@@ -1,5 +1,6 @@
 package com.webcheckers.application;
 
+import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -43,11 +44,11 @@ public class PlayerLobbyTest {
     public void testisNameTaken(){
         CuT.newPlayer("abc");
         assertTrue(CuT.isNameTaken("abc"));
-        assertFalse(CuT.isValidName("def"));
+        assertFalse(CuT.isNameTaken("def"));
     }
     @Test
     public void testGetPlayerFromName(){
         CuT.newPlayer("mockPlayer");
-        assertEquals(CuT.getPlayerFromName("mockPlayer"), CuTasdf);
+        assertEquals(CuT.getPlayerFromName("mockPlayer"), new Player("mockPlayer"));
     }
 }
