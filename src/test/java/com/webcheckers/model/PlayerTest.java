@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -38,6 +40,6 @@ public class PlayerTest {
     public void comparePlayer(){
         assertNotEquals(CuT.compareTo(CuT2),0);
         assertEquals(CuT.equals(CuT2),false);
-
+        assertFalse(CuT.equals("Hello"));
     }
 }
