@@ -38,19 +38,19 @@ public class SpaceTest {
     }
 
     @Test
-    public void validSpace_test () {
+    public void validSpace_test() {
         CuT = new Space(cellIdx, Space.State.OPEN);
         assertTrue(CuT.isValid());
     }
 
     @Test
-    public void InvalidSpace_test () {
+    public void InvalidSpace_test() {
         CuT = new Space(cellIdx, Space.State.INVALID);
         assertFalse(CuT.isValid());
     }
 
     @Test
-    public void getPiece_test () {
+    public void getPiece_test() {
         piece = new Piece(Piece.Type.SINGLE, Piece.Color.RED);
         cellIdx = 0;
         CuT = new Space(cellIdx, piece);
@@ -59,7 +59,15 @@ public class SpaceTest {
     }
 
     @Test
-    public void setPiece_test () {
+    public void getCellIdx_test() {
+        cellIdx = 7;
+        CuT = new Space(cellIdx, Space.State.OPEN);
+
+        assertSame(CuT.getCellIdx(), 7);
+    }
+
+    @Test
+    public void setPiece_test() {
         cellIdx = 0;
         CuT = new Space(cellIdx, Space.State.OPEN);
         piece = new Piece(Piece.Type.SINGLE, Piece.Color.WHITE);
