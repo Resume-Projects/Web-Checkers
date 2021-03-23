@@ -16,7 +16,7 @@ public class RowTest {
     @BeforeEach
     public void setUp() {
         index = 3;
-        //spaces =;
+        spaces = new Space[7];
         CuT = new Row(index, spaces);
     }
 
@@ -27,7 +27,10 @@ public class RowTest {
 
     @Test
     public void getSpace() {
-
+        Space space = new Space(0, Space.State.OPEN);
+        spaces[0] = space;
+        //CuT = new Row(index, spaces);
+        assertSame(CuT.getSpace(0), space);
     }
 
     @Test
