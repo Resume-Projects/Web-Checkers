@@ -76,8 +76,7 @@ public class Space {
     /**
      * Sets a piece on that space
      *
-     * @param type the type of piece on that space
-     * @param color the color of the piece on that space
+     * @param piece, a piece to be added to the space
      */
     public void setPiece (Piece piece) {
         this.piece = piece;
