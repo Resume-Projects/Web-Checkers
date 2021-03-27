@@ -10,25 +10,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class GetSignOutRoute implements Route {
+public class PostSignOutRoute implements Route {
 
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
-    private final TemplateEngine templateEngine;
 
-    public GetSignOutRoute(TemplateEngine templateEngine, PlayerLobby playerLobby, GameManager gameManager) {
+    public PostSignOutRoute(PlayerLobby playerLobby, GameManager gameManager) {
 
         this.playerLobby = playerLobby;
         this.gameManager = gameManager;
-        this.templateEngine = templateEngine;
     }
 
 
     @Override
-    public Object handle(Request request, Response response) throws Exception {
-        Map<String, Object> viewModel = new HashMap<>();
+    public Object handle(Request request, Response response) {
 
-        Player player = request.session().attribute("Player");
+        Player player = request.session().attribute("currentUser");
         String playerName = player.getName();
         CheckersGame game = gameManager.getPlayersGame(player);
         playerLobby.removePlayer(playerName);
@@ -37,6 +34,7 @@ public class GetSignOutRoute implements Route {
 
         }
 
-        return templateEngine.render(new ModelAndView(viewModel, "home.ftl"));
+        response.redirect(WebServer.HOME_URL);
+        return null;
     }
 }
