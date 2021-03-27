@@ -13,13 +13,10 @@ public class BoardView implements Iterable<Row> {
 
     /**
      * Creates the board view by making an array of Rows from the board
-     * @param board the 2d array of spaces
+     * @param rows the entire board in the form of an array of rows
      */
-    public BoardView(Space[][] board) {
-        rows = new Row[board.length];
-        for(int i = 0; i < rows.length; i++) {
-            rows[i] = new Row(i, board[i]);
-        }
+    public BoardView(Row[] rows) {
+        this.rows = rows;
     }
 
     /**

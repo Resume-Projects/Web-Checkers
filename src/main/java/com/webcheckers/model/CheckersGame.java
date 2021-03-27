@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
 import com.webcheckers.application.GameController;
+import com.webcheckers.util.Message;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +22,14 @@ public class CheckersGame {
 
     private final Player redPlayer;
     private final Player whitePlayer;
+
+    private Piece.Color activeColor;
+
+    //******************
+    //This will need to be turned into a queue that saves all of the attempted moves, since multiple
+    //multiple moves can be made when jumping
+    //******************
+    private Move attemptedMove;
 
     /**
      * The CheckersGame data type
@@ -54,9 +63,9 @@ public class CheckersGame {
             }
         }
         GameController.initializeBoard(board);
-
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
+        this.activeColor = Piece.Color.RED;
     }
 
     /**
@@ -74,7 +83,11 @@ public class CheckersGame {
      * @return the game board
      */
     public BoardView getRedBoardView() {
-        return new BoardView(board);
+        Row[] rows = new Row[BOARD_SIZE];
+        for(int i = 0; i < BOARD_SIZE; i++) {
+            rows[i] = new Row(i, board[i]);
+        }
+        return new BoardView(rows);
     }
 
     /**
@@ -84,16 +97,13 @@ public class CheckersGame {
      * @return the game board.
      */
     public BoardView getWhiteBoardView() {
-        Space[][] tempBoard = new Space[8][8];
-        for (int i = 0; i < board.length; i++) {
-            tempBoard[i] = Arrays.copyOf(board[i], board[i].length);
+        Row[] rows = new Row[BOARD_SIZE];
+        for(int i = BOARD_SIZE - 1; i >= 0; i--) {
+            Space[] tempSpaces = Arrays.copyOf(board[i], BOARD_SIZE);
+            Collections.reverse(Arrays.asList(tempSpaces));
+            rows[BOARD_SIZE - i - 1] = new Row(i, tempSpaces);
         }
-
-        Collections.reverse(Arrays.asList(tempBoard));
-        for(int i = 0; i < 8; i++) {
-            Collections.reverse(Arrays.asList(tempBoard[i]));
-        }
-        return new BoardView(tempBoard);
+        return new BoardView(rows);
     }
 
     /**
@@ -112,6 +122,46 @@ public class CheckersGame {
      */
     public Player getWhitePlayer() {
         return whitePlayer;
+    }
+
+    public Piece.Color getActiveColor() {
+        return activeColor;
+    }
+
+    //Called from PostValidateMoveRoute (and maybe backup move)
+    public Message saveAttemptedMove(Move attemptedMove) {
+        Position start = attemptedMove.getStart();
+        Position end = attemptedMove.getEnd();
+        int deltaCol = Math.abs(start.getCell() - end.getCell());
+        boolean isValidMove = (deltaCol == 1) &&
+                              ((activeColor == Piece.Color.RED && end.getRow() + 1 == start.getRow()) ||
+                               (activeColor == Piece.Color.WHITE && end.getRow() - 1 == start.getRow()));
+        if(isValidMove) {
+            this.attemptedMove = attemptedMove;
+            return Message.info("Valid move");
+        } else {
+            return Message.error("Not a valid move");
+        }
+    }
+
+    //Called from GameManager when PostSubmitMoveRoute tells it to
+    public Message applyAttemptedMove() {
+        Position startMove = attemptedMove.getStart();
+        Position endMove = attemptedMove.getEnd();
+        Piece pieceBeingMoved = board[startMove.getRow()][startMove.getCell()].getPiece();
+        board[startMove.getRow()][startMove.getCell()] = new Space(startMove.getCell(), Space.State.OPEN);
+        board[endMove.getRow()][endMove.getCell()] = new Space(endMove.getCell(), pieceBeingMoved);
+        //Flip the active color
+        if(activeColor == Piece.Color.RED)
+            activeColor = Piece.Color.WHITE;
+        else
+            activeColor = Piece.Color.RED;
+        return Message.info("Move applied");
+    }
+
+    public Message resetAttemptedMove() {
+        attemptedMove = null;
+        return Message.info("Attempted move was removed");
     }
 
 }

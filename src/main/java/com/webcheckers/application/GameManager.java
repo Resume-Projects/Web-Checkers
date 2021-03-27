@@ -3,6 +3,7 @@ package com.webcheckers.application;
 
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.util.Message;
 
 import java.util.ArrayList;
 
@@ -45,6 +46,11 @@ public class GameManager {
         CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer);
         checkersGames.add(checkersGame);
         return checkersGame;
+    }
+
+    public Message applyPlayersMove(Player player) {
+        CheckersGame playersGame = getPlayersGame(player);
+        return playersGame.applyAttemptedMove();
     }
 
 }

@@ -86,13 +86,12 @@ public class GetGameRoute implements Route {
         vm.put("viewMode", playMode.PLAY);
         vm.put("redPlayer", checkersGame.getRedPlayer());
         vm.put("whitePlayer", checkersGame.getWhitePlayer());
-        if(currentPlayer.equals(checkersGame.getRedPlayer())) {
-            vm.put("activeColor", playerColor.RED);
+        vm.put("activeColor", checkersGame.getActiveColor());
+
+        if(currentPlayer.equals(checkersGame.getRedPlayer()))
             vm.put("board", checkersGame.getRedBoardView());
-        } else {
-            vm.put("activeColor", playerColor.WHITE);
+        else
             vm.put("board", checkersGame.getWhiteBoardView());
-        }
 
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }

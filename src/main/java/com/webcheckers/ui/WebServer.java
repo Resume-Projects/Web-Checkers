@@ -153,7 +153,17 @@ public class WebServer {
         post("/signin", new PostSignInRoute(playerLobby, templateEngine));
 
         get("/game", new GetGameRoute(gameManager, playerLobby, templateEngine));
-        //
+
+        post("/submitTurn", new PostSubmitTurnRoute(gameManager));
+
+        post("/validateMove", new PostValidateMoveRoute(gameManager, gson));
+
+        post("/checkTurn", new PostCheckTurnRoute(gameManager));
+
+        post("/backupMove", new PostBackupMoveRoute(gameManager));
+
+        post("/resignGame", new PostResignGameRoute());
+
         LOG.config("WebServer is initialized.");
     }
 
