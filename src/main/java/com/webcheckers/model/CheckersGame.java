@@ -5,6 +5,8 @@ import com.webcheckers.util.Message;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.logging.Logger;
 
 /**
@@ -17,7 +19,9 @@ public class CheckersGame {
 
     private final Space[][] board;
 
-    /** The side length of a square checkers board */
+    /**
+     * The side length of a square checkers board
+     */
     public static final int BOARD_SIZE = 8;
 
     private final Player redPlayer;
@@ -29,17 +33,18 @@ public class CheckersGame {
     //This will need to be turned into a queue that saves all of the attempted moves, since multiple
     //multiple moves can be made when jumping
     //******************
-    private Move attemptedMove;
+    private Queue<Move> moves;
 
     /**
      * The CheckersGame data type
      *
-     * @param redPlayer the player with the red pieces
+     * @param redPlayer   the player with the red pieces
      * @param whitePlayer the player with the white pieces
      */
     public CheckersGame(Player redPlayer, Player whitePlayer) {
         LOG.fine("Game created");
         board = new Space[BOARD_SIZE][BOARD_SIZE];
+        moves = new LinkedList<>();
 
         for (int col = 0; col < board.length; col++) {
             if (col % 2 == 1) {
@@ -84,7 +89,7 @@ public class CheckersGame {
      */
     public BoardView getRedBoardView() {
         Row[] rows = new Row[BOARD_SIZE];
-        for(int i = 0; i < BOARD_SIZE; i++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
             rows[i] = new Row(i, board[i]);
         }
         return new BoardView(rows);
@@ -98,7 +103,7 @@ public class CheckersGame {
      */
     public BoardView getWhiteBoardView() {
         Row[] rows = new Row[BOARD_SIZE];
-        for(int i = BOARD_SIZE - 1; i >= 0; i--) {
+        for (int i = BOARD_SIZE - 1; i >= 0; i--) {
             Space[] tempSpaces = Arrays.copyOf(board[i], BOARD_SIZE);
             Collections.reverse(Arrays.asList(tempSpaces));
             rows[BOARD_SIZE - i - 1] = new Row(i, tempSpaces);
@@ -128,31 +133,40 @@ public class CheckersGame {
         return activeColor;
     }
 
+    private boolean isJump(Position start, Position end, int deltaCol) {
+        if (deltaCol != 2) {
+            return false;
+        } else if (activeColor == Piece.Color.RED && end.getRow() + 2 == start.getRow()) {
+
+        }
+        return (activeColor == Piece.Color.WHITE && end.getRow() - 2 == start.getRow());
+    }
+
     //Called from PostValidateMoveRoute (and maybe backup move)
     public Message saveAttemptedMove(Move attemptedMove) {
         Position start = attemptedMove.getStart();
         Position end = attemptedMove.getEnd();
         int deltaCol = Math.abs(start.getCell() - end.getCell());
-        boolean isValidMove = (deltaCol == 1) &&
-                              ((activeColor == Piece.Color.RED && end.getRow() + 1 == start.getRow()) ||
-                               (activeColor == Piece.Color.WHITE && end.getRow() - 1 == start.getRow()));
-        if(isValidMove) {
-            this.attemptedMove = attemptedMove;
+        boolean isValidMove = ((deltaCol == 1) &&
+                ((activeColor == Piece.Color.RED && end.getRow() + 1 == start.getRow()) ||
+                        (activeColor == Piece.Color.WHITE && end.getRow() - 1 == start.getRow()))) || isJump(start, end, deltaCol);
+        if (isValidMove) {
+            moves.add(attemptedMove);
             return Message.info("Valid move");
         } else {
             return Message.error("Not a valid move");
         }
     }
 
-    //Called from GameManager when PostSubmitMoveRoute tells it to
+    //Called from GameManager when PostSubmitTurnRoute tells it to
     public Message applyAttemptedMove() {
-        Position startMove = attemptedMove.getStart();
-        Position endMove = attemptedMove.getEnd();
+        Position startMove = moves.peek().getStart();
+        Position endMove = moves.peek().getEnd();
         Piece pieceBeingMoved = board[startMove.getRow()][startMove.getCell()].getPiece();
         board[startMove.getRow()][startMove.getCell()] = new Space(startMove.getCell(), Space.State.OPEN);
         board[endMove.getRow()][endMove.getCell()] = new Space(endMove.getCell(), pieceBeingMoved);
         //Flip the active color
-        if(activeColor == Piece.Color.RED)
+        if (activeColor == Piece.Color.RED)
             activeColor = Piece.Color.WHITE;
         else
             activeColor = Piece.Color.RED;
@@ -160,8 +174,7 @@ public class CheckersGame {
     }
 
     public Message resetAttemptedMove() {
-        attemptedMove = null;
+        moves = null;
         return Message.info("Attempted move was removed");
     }
-
 }
