@@ -6,9 +6,7 @@ import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import spark.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import static com.webcheckers.ui.WebServer.HOME_URL;
 
 public class PostSignOutRoute implements Route {
 
@@ -31,10 +29,14 @@ public class PostSignOutRoute implements Route {
         playerLobby.removePlayer(playerName);
         if(!playerLobby.isPlayerInLobby(player)) {
             request.session().removeAttribute(playerName);
-
+            request.session().attribute("currentUser", null);
+            if(game != null) {
+                // gameManager.quitGame(player);
+            }
         }
 
         response.redirect(WebServer.HOME_URL);
         return null;
+
     }
 }
