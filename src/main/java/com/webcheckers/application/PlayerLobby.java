@@ -69,4 +69,22 @@ public class PlayerLobby {
         return activePlayers.get(name);
     }
 
+    public int getActivePlayersCount() {
+        return this.activePlayers.size();
+    }
+
+    public void removePlayer(String name) {
+        this.activePlayers.remove(name);
+    }
+
+    public boolean isPlayerInLobby(Player player) {
+        if(player == null) {
+            return false;
+        }
+        if(getActivePlayersCount() == 0) {
+            return false;
+        }
+        return activePlayers.containsKey(player.getName());
+    }
+
 }
