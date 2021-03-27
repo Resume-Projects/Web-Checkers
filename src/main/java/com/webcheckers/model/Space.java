@@ -79,6 +79,14 @@ public class Space {
     }
 
     /**
+     * Returns the color of the piece on this space
+     * @return a Piece Color
+     */
+    public Piece.Color getPieceColor () {
+        return piece.getColor();
+    }
+
+    /**
      * Sets a piece on that space
      *
      * @param type  the type of piece on that space
