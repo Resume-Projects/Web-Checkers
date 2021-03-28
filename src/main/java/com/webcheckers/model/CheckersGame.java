@@ -154,11 +154,21 @@ public class CheckersGame {
         if (deltaCol != 2) {
             return false;
         } else if (activeColor == Piece.Color.RED && end.getRow() + 2 == start.getRow()) {
-            Space opponent = board[end.getRow() - 1][end.getCell() - 1];
+            Space opponent;
+            if (start.getCell() > end.getCell()) {
+                opponent = board[end.getRow() + 1][end.getCell() + 1];
+            } else {
+                opponent = board[end.getRow() + 1][end.getCell() - 1];
+            }
             return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.WHITE &&
                     board[end.getRow()][end.getCell()].getState() == Space.State.OPEN;
         } else if (activeColor == Piece.Color.WHITE && end.getRow() - 2 == start.getRow()) {
-            Space opponent = board[end.getRow() + 1][end.getCell() + 1];
+            Space opponent;
+            if (start.getCell() > end.getCell()) {
+                opponent = board[end.getRow() + 1][end.getCell() - 1];
+            } else {
+                opponent = board[end.getRow() + 1][end.getCell() + 1];
+            }
             return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.RED &&
                     board[end.getRow()][end.getCell()].getState() == Space.State.OPEN;
         }
@@ -194,14 +204,18 @@ public class CheckersGame {
         if (activeColor == Piece.Color.RED) {
             if (start.getCell() > end.getCell()) {
                 removePiece(board[start.getRow() - 1][start.getCell() - 1].getPiece());
+                board[start.getRow() - 1][start.getCell() - 1].setState(Space.State.OPEN);
             } else {
                 removePiece(board[start.getRow() - 1][start.getCell() + 1].getPiece());
+                board[start.getRow() - 1][start.getCell() + 1].setState(Space.State.OPEN);
             }
         } else {
             if (start.getCell() > end.getCell()) {
                 removePiece(board[end.getRow() - 1][start.getCell() - 1].getPiece());
+                board[end.getRow() - 1][start.getCell() - 1].setState(Space.State.OPEN);
             } else {
                 removePiece(board[end.getRow() - 1][start.getCell() + 1].getPiece());
+                board[end.getRow() - 1][start.getCell() + 1].setState(Space.State.OPEN);
             }
         }
     }
