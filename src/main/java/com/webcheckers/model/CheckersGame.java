@@ -164,4 +164,25 @@ public class CheckersGame {
         return Message.info("Attempted move was removed");
     }
 
+    public Piece.Color getPlayerColor(Player player) {
+        if(player.equals(redPlayer)) {
+            return Piece.Color.RED;
+        }
+        else if(player.equals(whitePlayer)) {
+            return Piece.Color.WHITE;
+        }
+        else {
+            return null;
+        }
+    }
+
+
+    public boolean resignGame(Player player) {
+        // can only resign if it is their turn
+        if(activeColor == getPlayerColor(player)) {
+            //
+        }
+        return true;
+    }
+
 }

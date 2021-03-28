@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 
 import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
 import spark.TemplateEngine;
 
 
@@ -162,7 +161,7 @@ public class WebServer {
 
         post("/backupMove", new PostBackupMoveRoute(gameManager));
 
-        post("/resignGame", new PostResignGameRoute());
+        post("/resignGame", new PostResignGameRoute(gameManager));
 
         LOG.config("WebServer is initialized.");
     }

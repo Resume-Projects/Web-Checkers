@@ -1,6 +1,7 @@
 
 package com.webcheckers.application;
 
+import com.sun.tools.javac.comp.Check;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
@@ -46,6 +47,11 @@ public class GameManager {
         CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer);
         checkersGames.add(checkersGame);
         return checkersGame;
+    }
+
+    public boolean resignGame(Player player) {
+        CheckersGame game = getPlayersGame(player);
+        return game.resignGame(player);
     }
 
     public Message applyPlayersMove(Player player) {
