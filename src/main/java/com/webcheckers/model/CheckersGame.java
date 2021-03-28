@@ -20,6 +20,13 @@ public class CheckersGame {
     /** The side length of a square checkers board */
     public static final int BOARD_SIZE = 8;
 
+    protected enum State {
+        PLAYING,
+        RESIGNED
+    }
+
+    private State state;
+
     private final Player redPlayer;
     private final Player whitePlayer;
 
@@ -71,6 +78,7 @@ public class CheckersGame {
         this.activeColor = Piece.Color.RED;
         this.winner = null;
         this.loser = null;
+        this.state = State.PLAYING;
     }
 
     /**
@@ -190,6 +198,7 @@ public class CheckersGame {
         // Can only resign if it is their turn
         else if(activeColor == getPlayerColor(player)) {
             loser = player;
+            state = State.RESIGNED;
             if(redPlayer.equals(player)) {
                 winner = whitePlayer;
             }
