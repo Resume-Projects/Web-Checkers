@@ -29,9 +29,6 @@ public class CheckersGame {
 
     private Piece.Color activeColor;
 
-    private LinkedList<Piece> redPieces;
-    private LinkedList<Piece> whitePieces;
-
     private Queue<Move> moves;
 
     /**
@@ -44,8 +41,6 @@ public class CheckersGame {
         LOG.fine("Game created");
         board = new Space[BOARD_SIZE][BOARD_SIZE];
         moves = new LinkedList<>();
-        redPieces = new LinkedList<>();
-        whitePieces = new LinkedList<>();
 
         for (int col = 0; col < board.length; col++) {
             if (col % 2 == 1) {
@@ -68,7 +63,7 @@ public class CheckersGame {
                 board[3][col] = new Space(col, Space.State.OPEN);
             }
         }
-        GameController.initializeBoard(board, redPieces, whitePieces);
+        GameController.initializeBoard(board);
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.activeColor = Piece.Color.RED;
@@ -134,14 +129,6 @@ public class CheckersGame {
         return activeColor;
     }
 
-    public void removePiece(Piece piece) {
-        if (piece.getColor() == Piece.Color.RED) {
-            redPieces.remove(piece);
-        } else {
-            whitePieces.remove(piece);
-        }
-    }
-
     /**
      * determines if the move made was a jump
      *
@@ -201,18 +188,14 @@ public class CheckersGame {
     private void makeJump(Position start, Position end)  {
         if (activeColor == Piece.Color.RED) {
             if (start.getCell() > end.getCell()) {
-                removePiece(board[start.getRow() - 1][start.getCell() - 1].getPiece());
                 board[end.getRow() + 1][end.getCell() + 1] = new Space(start.getCell() - 1, Space.State.OPEN);
             } else {
-                removePiece(board[start.getRow() - 1][start.getCell() + 1].getPiece());
                 board[end.getRow() + 1][end.getCell() - 1] = new Space(start.getCell() + 1, Space.State.OPEN);
             }
         } else {
             if (start.getCell() > end.getCell()) {
-                removePiece(board[end.getRow() - 1][end.getCell() + 1].getPiece());
                 board[end.getRow() - 1][end.getCell() + 1] = new Space(end.getCell() + 1, Space.State.OPEN);
             } else {
-                removePiece(board[end.getRow() - 1][end.getCell() - 1].getPiece());
                 board[end.getRow() - 1][end.getCell() - 1] = new Space(end.getCell() - 1, Space.State.OPEN);
             }
         }
