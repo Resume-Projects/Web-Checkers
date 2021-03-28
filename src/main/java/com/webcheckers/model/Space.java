@@ -41,6 +41,7 @@ public class Space {
 
     /**
      * Get the state of the current space
+     *
      * @return the state
      */
     public State getState() {
@@ -80,19 +81,17 @@ public class Space {
 
     /**
      * Returns the color of the piece on this space
+     *
      * @return a Piece Color
      */
-    public Piece.Color getPieceColor () {
+    public Piece.Color getPieceColor() {
         return piece.getColor();
     }
 
     /**
      * Sets a piece on that space
-     *
-     * @param type  the type of piece on that space
-     * @param color the color of the piece on that space
      */
-    public void setPiece(Piece.Type type, Piece.Color color) {
-        piece = new Piece(type, color);
+    public void setPiece(Piece piece) {
+        this.piece = piece;
     }
 }

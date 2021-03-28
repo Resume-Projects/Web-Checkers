@@ -68,7 +68,7 @@ public class CheckersGame {
                 board[3][col] = new Space(col, Space.State.OPEN);
             }
         }
-        GameController.initializeBoard(board);
+        GameController.initializeBoard(board, redPieces, whitePieces);
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.activeColor = Piece.Color.RED;
