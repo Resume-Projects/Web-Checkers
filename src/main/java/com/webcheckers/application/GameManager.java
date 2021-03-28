@@ -1,7 +1,6 @@
 
 package com.webcheckers.application;
 
-import com.sun.tools.javac.comp.Check;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;

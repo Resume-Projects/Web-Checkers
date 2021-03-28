@@ -23,6 +23,9 @@ public class CheckersGame {
     private final Player redPlayer;
     private final Player whitePlayer;
 
+    private Player winner;
+    private Player loser;
+
     private Piece.Color activeColor;
 
     //******************
@@ -66,6 +69,8 @@ public class CheckersGame {
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.activeColor = Piece.Color.RED;
+        this.winner = null;
+        this.loser = null;
     }
 
     /**
@@ -178,11 +183,23 @@ public class CheckersGame {
 
 
     public boolean resignGame(Player player) {
-        // can only resign if it is their turn
-        if(activeColor == getPlayerColor(player)) {
-            //
+        // If there is no active turn
+        if(activeColor == null) {
+            return false;
         }
-        return true;
+        // Can only resign if it is their turn
+        else if(activeColor == getPlayerColor(player)) {
+            loser = player;
+            if(redPlayer.equals(player)) {
+                winner = whitePlayer;
+            }
+            else {
+                winner = redPlayer;
+            }
+            return true;
+        }
+        // Otherwise it is not their turn or something's wrong
+        return false;
     }
 
 }
