@@ -211,4 +211,16 @@ public class CheckersGame {
         return false;
     }
 
+    public boolean isResigned() {
+        return state == State.RESIGNED;
+    }
+
+    public Player getWinner() {
+        return this.winner;
+    }
+
+    public Player getLoser() {
+        return this.loser;
+    }
+
 }
