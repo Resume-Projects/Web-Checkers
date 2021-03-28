@@ -48,10 +48,6 @@ public class Space {
         return state;
     }
 
-    public void setState(State state) {
-        this.state = state;
-    }
-
     /**
      * Finds the cellIdx
      *
