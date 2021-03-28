@@ -134,23 +134,33 @@ public class CheckersGame {
         return activeColor;
     }
 
+    public void removePiece(Piece piece) {
+        if (piece.getColor() == Piece.Color.RED) {
+            redPieces.remove(piece);
+        } else {
+            whitePieces.remove(piece);
+        }
+    }
+
     /**
      * determines if the move made was a jump
      *
-     * @param start    the starting position
-     * @param end      the ending position
-     * @param deltaCol the differenc in columns
+     * @param start the starting position
+     * @param end   the ending position
      * @return whether the move was a jump
      */
-    private boolean isJump(Position start, Position end, int deltaCol) {
+    private boolean isJump(Position start, Position end) {
+        int deltaCol = Math.abs(start.getCell() - end.getCell());
         if (deltaCol != 2) {
             return false;
         } else if (activeColor == Piece.Color.RED && end.getRow() + 2 == start.getRow()) {
             Space opponent = board[end.getRow() - 1][end.getCell() - 1];
-            return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.WHITE;
+            return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.WHITE &&
+                    board[end.getRow()][end.getCell()].getState() == Space.State.OPEN;
         } else if (activeColor == Piece.Color.WHITE && end.getRow() - 2 == start.getRow()) {
             Space opponent = board[end.getRow() + 1][end.getCell() + 1];
-            return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.RED;
+            return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.RED &&
+                    board[end.getRow()][end.getCell()].getState() == Space.State.OPEN;
         }
         return false;
     }
@@ -164,18 +174,34 @@ public class CheckersGame {
         if (activeColor == Piece.Color.RED) {
             if (col - 2 >= 0 && row + 2 >= 0 &&
                     board[row - 1][col - 1].getState() == Space.State.OCCUPIED &&
-                    board[row-2][col-2].getState() == Space.State.OPEN) {
+                    board[row - 2][col - 2].getState() == Space.State.OPEN) {
                 Position newEnd = new Position(row + 2, col - 2);
-                if (isJump(p, newEnd, Math.abs(newEnd.getCell() - col))) {
+                if (isJump(p, newEnd)) {
                     moves.add(new Move(p, newEnd));
                 }
             } else if (col + 2 < board.length && row + 2 < board.length &&
                     board[row + 1][col + 1].getState() == Space.State.OCCUPIED &&
-                    board[row+2][col+2].getState() == Space.State.OPEN) {
+                    board[row + 2][col + 2].getState() == Space.State.OPEN) {
                 Position newEnd = new Position(row + 2, col + 2);
-                if (isJump(p, newEnd, Math.abs(newEnd.getCell() - col))) {
+                if (isJump(p, newEnd)) {
                     moves.add(new Move(p, newEnd));
                 }
+            }
+        }
+    }
+
+    private void makeJump(Position start, Position end)  {
+        if (activeColor == Piece.Color.RED) {
+            if (start.getCell() > end.getCell()) {
+                removePiece(board[start.getRow() - 1][start.getCell() - 1].getPiece());
+            } else {
+                removePiece(board[start.getRow() - 1][start.getCell() + 1].getPiece());
+            }
+        } else {
+            if (start.getCell() > end.getCell()) {
+                removePiece(board[end.getRow() - 1][start.getCell() - 1].getPiece());
+            } else {
+                removePiece(board[end.getRow() - 1][start.getCell() + 1].getPiece());
             }
         }
     }
@@ -185,15 +211,12 @@ public class CheckersGame {
         Position start = attemptedMove.getStart();
         Position end = attemptedMove.getEnd();
         int deltaCol = Math.abs(start.getCell() - end.getCell());
-        boolean jump = isJump(start, end, deltaCol);
+        boolean jump = isJump(start, end);
         boolean isValidMove = ((deltaCol == 1) &&
                 ((activeColor == Piece.Color.RED && end.getRow() + 1 == start.getRow()) ||
                         (activeColor == Piece.Color.WHITE && end.getRow() - 1 == start.getRow()))) || jump;
         if (isValidMove) {
             moves.add(attemptedMove);
-            if (jump) {
-                checkForJumps(end);
-            }
             return Message.info("Valid move");
         } else {
             return Message.error("Not a valid move");
@@ -208,6 +231,9 @@ public class CheckersGame {
         Piece pieceBeingMoved = board[startMove.getRow()][startMove.getCell()].getPiece();
         board[startMove.getRow()][startMove.getCell()] = new Space(startMove.getCell(), Space.State.OPEN);
         board[endMove.getRow()][endMove.getCell()] = new Space(endMove.getCell(), pieceBeingMoved);
+        if (isJump(startMove, endMove)) {
+            makeJump(startMove, endMove);
+        }
         //Flip the active color
         if (activeColor == Piece.Color.RED)
             activeColor = Piece.Color.WHITE;
