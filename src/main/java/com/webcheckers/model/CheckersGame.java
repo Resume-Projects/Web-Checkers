@@ -29,10 +29,9 @@ public class CheckersGame {
 
     private Piece.Color activeColor;
 
-    //******************
-    //This will need to be turned into a queue that saves all of the attempted moves, since multiple
-    //multiple moves can be made when jumping
-    //******************
+    private LinkedList<Piece> redPieces;
+    private LinkedList<Piece> whitePieces;
+
     private Queue<Move> moves;
 
     /**
@@ -45,6 +44,8 @@ public class CheckersGame {
         LOG.fine("Game created");
         board = new Space[BOARD_SIZE][BOARD_SIZE];
         moves = new LinkedList<>();
+        redPieces = new LinkedList<>();
+        whitePieces = new LinkedList<>();
 
         for (int col = 0; col < board.length; col++) {
             if (col % 2 == 1) {
@@ -133,13 +134,50 @@ public class CheckersGame {
         return activeColor;
     }
 
+    /**
+     * determines if the move made was a jump
+     *
+     * @param start    the starting position
+     * @param end      the ending position
+     * @param deltaCol the differenc in columns
+     * @return whether the move was a jump
+     */
     private boolean isJump(Position start, Position end, int deltaCol) {
         if (deltaCol != 2) {
             return false;
         } else if (activeColor == Piece.Color.RED && end.getRow() + 2 == start.getRow()) {
-
+            Space opponent = board[end.getRow() - 1][end.getCell() - 1];
+            return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.WHITE;
+        } else if (activeColor == Piece.Color.WHITE && end.getRow() - 2 == start.getRow()) {
+            Space opponent = board[end.getRow() + 1][end.getCell() + 1];
+            return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.RED;
         }
-        return (activeColor == Piece.Color.WHITE && end.getRow() - 2 == start.getRow());
+        return false;
+    }
+
+    /**
+     * Checks for other valid jumps
+     */
+    private void checkForJumps(Position p) {
+        int row = p.getRow();
+        int col = p.getCell();
+        if (activeColor == Piece.Color.RED) {
+            if (col - 2 >= 0 && row + 2 >= 0 &&
+                    board[row - 1][col - 1].getState() == Space.State.OCCUPIED &&
+                    board[row-2][col-2].getState() == Space.State.OPEN) {
+                Position newEnd = new Position(row + 2, col - 2);
+                if (isJump(p, newEnd, Math.abs(newEnd.getCell() - col))) {
+                    moves.add(new Move(p, newEnd));
+                }
+            } else if (col + 2 < board.length && row + 2 < board.length &&
+                    board[row + 1][col + 1].getState() == Space.State.OCCUPIED &&
+                    board[row+2][col+2].getState() == Space.State.OPEN) {
+                Position newEnd = new Position(row + 2, col + 2);
+                if (isJump(p, newEnd, Math.abs(newEnd.getCell() - col))) {
+                    moves.add(new Move(p, newEnd));
+                }
+            }
+        }
     }
 
     //Called from PostValidateMoveRoute (and maybe backup move)
@@ -147,11 +185,15 @@ public class CheckersGame {
         Position start = attemptedMove.getStart();
         Position end = attemptedMove.getEnd();
         int deltaCol = Math.abs(start.getCell() - end.getCell());
+        boolean jump = isJump(start, end, deltaCol);
         boolean isValidMove = ((deltaCol == 1) &&
                 ((activeColor == Piece.Color.RED && end.getRow() + 1 == start.getRow()) ||
-                        (activeColor == Piece.Color.WHITE && end.getRow() - 1 == start.getRow()))) || isJump(start, end, deltaCol);
+                        (activeColor == Piece.Color.WHITE && end.getRow() - 1 == start.getRow()))) || jump;
         if (isValidMove) {
             moves.add(attemptedMove);
+            if (jump) {
+                checkForJumps(end);
+            }
             return Message.info("Valid move");
         } else {
             return Message.error("Not a valid move");
@@ -162,6 +204,7 @@ public class CheckersGame {
     public Message applyAttemptedMove() {
         Position startMove = moves.peek().getStart();
         Position endMove = moves.peek().getEnd();
+        moves.remove();
         Piece pieceBeingMoved = board[startMove.getRow()][startMove.getCell()].getPiece();
         board[startMove.getRow()][startMove.getCell()] = new Space(startMove.getCell(), Space.State.OPEN);
         board[endMove.getRow()][endMove.getCell()] = new Space(endMove.getCell(), pieceBeingMoved);
