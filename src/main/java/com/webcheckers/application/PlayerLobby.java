@@ -69,14 +69,30 @@ public class PlayerLobby {
         return activePlayers.get(name);
     }
 
+    /**
+     * Gets the amount of players in the active players list
+     * @return - count of the players in activePlayers
+     */
     public int getActivePlayersCount() {
         return this.activePlayers.size();
     }
 
+    /**
+     * Removes a player from the list of active players in the lobby
+     * @param name - name of the player to be removed
+     */
     public void removePlayer(String name) {
         this.activePlayers.remove(name);
     }
 
+    /**
+     * Check if the specified Player object is in the PlayerLobby
+     *
+     * @param player
+     *     the player in question
+     * @return
+     *     true if they are in the lobby, false otherwise
+     */
     public boolean isPlayerInLobby(Player player) {
         if(player == null) {
             return false;

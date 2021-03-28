@@ -8,11 +8,22 @@ import spark.*;
 
 import static com.webcheckers.ui.WebServer.HOME_URL;
 
+/**
+ * The UI Controller to POST the Sign Out
+ */
 public class PostSignOutRoute implements Route {
 
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
 
+    /**
+     * Create the Spark Route (UI Controller) to handle all {@code POST /signout} HTTP requests
+     *
+     * @param playerLobby
+     *     the Player Lobby object storing info about the active players, games, etc.
+     * @param gameManager
+     *     Keeps track of all of the active games and what players are included in that game
+     */
     public PostSignOutRoute(PlayerLobby playerLobby, GameManager gameManager) {
 
         this.playerLobby = playerLobby;
@@ -20,6 +31,16 @@ public class PostSignOutRoute implements Route {
     }
 
 
+    /**
+     * Removes the user from the playerLobby and removes the attribute in the session
+     *
+     * @param request
+     *     the HTTP request
+     * @param response
+     *     the HTTP response
+     * @return
+     *     null, with a redirect back to the home page
+     */
     @Override
     public Object handle(Request request, Response response) {
 
@@ -31,7 +52,8 @@ public class PostSignOutRoute implements Route {
             request.session().removeAttribute(playerName);
             request.session().attribute("currentUser", null);
             if(game != null) {
-                // gameManager.quitGame(player);
+                // where resigning the game will go
+                // signing out will cause an automatic resignation
             }
         }
 
