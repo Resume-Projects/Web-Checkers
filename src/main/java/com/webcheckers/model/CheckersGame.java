@@ -31,6 +31,11 @@ public class CheckersGame {
 
     private Queue<Move> moves;
 
+    private int numRedPieces;
+    private int numWhitePieces;
+
+    private boolean justJumped;
+
     /**
      * The CheckersGame data type
      *
@@ -64,6 +69,9 @@ public class CheckersGame {
             }
         }
         GameController.initializeBoard(board);
+        justJumped = false;
+        this.numRedPieces = 12;
+        this.numWhitePieces = 12;
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.activeColor = Piece.Color.RED;
@@ -127,6 +135,70 @@ public class CheckersGame {
 
     public Piece.Color getActiveColor() {
         return activeColor;
+    }
+
+    //Called from PostValidateMoveRoute (and maybe backup move)
+    public Message saveAttemptedMove(Move attemptedMove) {
+        Position start = attemptedMove.getStart();
+        Position end = attemptedMove.getEnd();
+
+        if(isSimpleMove(start, end)) {
+            if(!moves.isEmpty()) {
+                return Message.error("You already moved");
+            } else {
+                moves.add(attemptedMove);
+                return Message.info("Valid move");
+            }
+        } else if(isJump(start, end)) {
+            if(!moves.isEmpty() && !justJumped) {
+                return Message.error("You already made a simply move");
+            } else {
+                moves.add(attemptedMove);
+                justJumped = true;
+                return Message.info("Valid move");
+            }
+        } else {
+            return Message.error("That space is too far away");
+        }
+
+    }
+
+    //Called from GameManager when PostSubmitTurnRoute tells it to
+    public Message applyAttemptedMoves() {
+        while (moves.size() > 0) {
+            Position startMove = moves.peek().getStart();
+            Position endMove = moves.peek().getEnd();
+            moves.remove();
+            Piece pieceBeingMoved = board[startMove.getRow()][startMove.getCell()].getPiece();
+            board[startMove.getRow()][startMove.getCell()] = new Space(startMove.getCell(), Space.State.OPEN);
+            board[endMove.getRow()][endMove.getCell()] = new Space(endMove.getCell(), pieceBeingMoved);
+            if (isJump(startMove, endMove)) {
+                makeJump(startMove, endMove);
+            }
+        }
+
+        if (activeColor == Piece.Color.RED)
+            activeColor = Piece.Color.WHITE;
+        else
+            activeColor = Piece.Color.RED;
+        return Message.info("Move applied");
+    }
+
+    public Message resetAttemptedMove() {
+        moves.remove();
+        return Message.info("Attempted move was removed");
+    }
+
+    private boolean isSimpleMove(Position start, Position end) {
+        int deltaRow = end.getRow() - start.getRow();
+        int deltaCol = end.getCell() - start.getCell();
+        if(board[start.getRow()][start.getCell()].getPieceType() == Piece.Type.KING) {
+            return Math.abs(deltaRow) == 1 && Math.abs(deltaCol) == 1;
+        } else if(activeColor == Piece.Color.RED){
+            return deltaRow == -1 && Math.abs(deltaCol) == 1;
+        } else { //Not a king and active color is white
+            return deltaRow == 1 && Math.abs(deltaCol) == 1;
+        }
     }
 
     /**
@@ -206,51 +278,5 @@ public class CheckersGame {
                 board[end.getRow() - 1][end.getCell() - 1] = new Space(end.getCell() - 1, Space.State.OPEN);
             }
         }
-    }
-
-    //Called from PostValidateMoveRoute (and maybe backup move)
-    public Message saveAttemptedMove(Move attemptedMove) {
-        Position start = attemptedMove.getStart();
-        Position end = attemptedMove.getEnd();
-        int deltaCol = Math.abs(start.getCell() - end.getCell());
-        boolean jump = isJump(start, end);
-        boolean isValidMove = ((deltaCol == 1) &&
-                ((activeColor == Piece.Color.RED && end.getRow() + 1 == start.getRow()) ||
-                        (activeColor == Piece.Color.WHITE && end.getRow() - 1 == start.getRow()))) || jump;
-        if (isValidMove) {
-            moves.add(attemptedMove);
-            if (jump && checkForJumps(end)) {
-
-            }
-            return Message.info("Valid move");
-        } else {
-            return Message.error("Not a valid move");
-        }
-    }
-
-    //Called from GameManager when PostSubmitTurnRoute tells it to
-    public Message applyAttemptedMove() {
-        //while (moves.size() > 0) {
-        Position startMove = moves.peek().getStart();
-        Position endMove = moves.peek().getEnd();
-        moves.remove();
-        Piece pieceBeingMoved = board[startMove.getRow()][startMove.getCell()].getPiece();
-        board[startMove.getRow()][startMove.getCell()] = new Space(startMove.getCell(), Space.State.OPEN);
-        board[endMove.getRow()][endMove.getCell()] = new Space(endMove.getCell(), pieceBeingMoved);
-        if (isJump(startMove, endMove)) {
-            makeJump(startMove, endMove);
-        }
-        //Flip the active color
-        if (activeColor == Piece.Color.RED)
-            activeColor = Piece.Color.WHITE;
-        else
-            activeColor = Piece.Color.RED;
-        //}
-        return Message.info("Move applied");
-    }
-
-    public Message resetAttemptedMove() {
-        moves = null;
-        return Message.info("Attempted move was removed");
     }
 }

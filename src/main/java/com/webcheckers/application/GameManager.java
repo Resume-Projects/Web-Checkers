@@ -50,7 +50,7 @@ public class GameManager {
 
     public Message applyPlayersMove(Player player) {
         CheckersGame playersGame = getPlayersGame(player);
-        return playersGame.applyAttemptedMove();
+        return playersGame.applyAttemptedMoves();
     }
 
 }

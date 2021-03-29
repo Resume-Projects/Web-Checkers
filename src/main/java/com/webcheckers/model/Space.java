@@ -84,6 +84,10 @@ public class Space {
         return piece.getColor();
     }
 
+    public Piece.Type getPieceType() {
+        return piece.getType();
+    }
+
     /**
      * Sets a piece on that space
      */

@@ -20,6 +20,6 @@ public class PostSubmitTurnRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         Player currentPlayer = request.session().attribute("currentUser");
         CheckersGame playersGame = gameManager.getPlayersGame(currentPlayer);
-        return new Gson().toJson(playersGame.applyAttemptedMove());
+        return new Gson().toJson(playersGame.applyAttemptedMoves());
     }
 }

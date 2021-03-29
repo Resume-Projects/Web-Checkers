@@ -12,7 +12,7 @@ import spark.Route;
 
 public class PostCheckTurnRoute implements Route {
 
-    private GameManager gameManager;
+    private final GameManager gameManager;
 
     public PostCheckTurnRoute(GameManager gameManager) {
         this.gameManager = gameManager;
