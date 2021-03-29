@@ -6,7 +6,6 @@ import com.webcheckers.util.Message;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -151,7 +150,7 @@ public class CheckersGame {
         }
         Piece.Type movedPieceType = board[firstPosition.getRow()][firstPosition.getCell()].getPieceType();
 
-        if(isJump(start, end, movedPieceType)) {
+        if(isValidJump(start, end, movedPieceType)) {
             if(!movesQueue.isEmpty() && !justJumped) {
                 return Message.error("You already made a simple move");
             } else {
@@ -159,7 +158,7 @@ public class CheckersGame {
                 justJumped = true;
                 return Message.info("Valid move");
             }
-        } else if(isSimpleMove(start, end, movedPieceType)) {
+        } else if(isValidSimpleMove(start, end, movedPieceType)) {
             if(!movesQueue.isEmpty()) {
                 return Message.error("You already made a move");
             }else if(isJumpPossible()) {
@@ -203,7 +202,7 @@ public class CheckersGame {
         return Message.info("Attempted move was removed");
     }
 
-    private boolean isSimpleMove(Position start, Position end, Piece.Type pieceType) {
+    private boolean isValidSimpleMove(Position start, Position end, Piece.Type pieceType) {
         int deltaRow = end.getRow() - start.getRow();
         int deltaCol = end.getCell() - start.getCell();
 
@@ -226,7 +225,7 @@ public class CheckersGame {
      * @param end   the ending position
      * @return whether the move was a jump
      */
-    private boolean isJump(Position start, Position end, Piece.Type pieceType) {
+    private boolean isValidJump(Position start, Position end, Piece.Type pieceType) {
         int deltaRow = end.getRow() - start.getRow();
         int deltaCol = end.getCell() - start.getCell();
 
@@ -248,9 +247,16 @@ public class CheckersGame {
 
     private boolean isJumpPossible() {
         /*
-        If the player just jumped and a jump is possible, then the player
-        must make the jump
+        If the player has the choice between a jump and a simple move, he must jump
          */
+        for(int row = 0; row < BOARD_SIZE; row++) {
+            for(int col = 0; col < BOARD_SIZE; col++) {
+                if(board[row][col].getState() == Space.State.OCCUPIED && board[row][col].getPieceColor() == activeColor) {
+                    if(jumpCanBeMade(row, col))
+                        return true;
+                }
+            }
+        }
 
         return false;
     }
@@ -277,14 +283,17 @@ public class CheckersGame {
     }
 
     private boolean jumpCanBeMade(int pieceRow, int pieceCol) {
+        //This code is disgusting but I don't think I can make it much cleaner
         Piece.Type pieceType = board[pieceRow][pieceCol].getPieceType();
         if(pieceType == Piece.Type.KING) {
             for(int rowOffset : new int[] {-2, 2}) {
                 for(int colOffset : new int[] {-2, 2}) {
-                    boolean isPossibleJump = (pieceRow + rowOffset < BOARD_SIZE && pieceCol + colOffset < BOARD_SIZE) &&
-                                             (board[pieceRow + rowOffset][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
-                                             (board[pieceRow + (rowOffset / 2)][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
-                                             (board[pieceRow + (rowOffset / 2)][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
+                    boolean isPossibleJump =
+                            (pieceRow + rowOffset < BOARD_SIZE && pieceRow + rowOffset >= 0) &&
+                            (pieceCol + colOffset < BOARD_SIZE && pieceCol + colOffset >= 0) &&
+                            (board[pieceRow + rowOffset][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
+                            (board[pieceRow + (rowOffset / 2)][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
+                            (board[pieceRow + (rowOffset / 2)][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
 
                     if(isPossibleJump)
                         return false;
@@ -292,17 +301,19 @@ public class CheckersGame {
             }
         } else if(activeColor == Piece.Color.RED) {
             for(int colOffset : new int[] {-2, 2})  {
-                boolean isPossibleJump = (pieceRow - 2 < BOARD_SIZE && pieceCol + colOffset < BOARD_SIZE) &&
-                                         (board[pieceRow - 2][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
-                                         (board[pieceRow - 1][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
-                                         (board[pieceRow - 1][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
+                boolean isPossibleJump =
+                        (pieceRow - 2 >= 0 && pieceCol + colOffset < BOARD_SIZE && pieceCol + colOffset >= 0) &&
+                        (board[pieceRow - 2][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
+                        (board[pieceRow - 1][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
+                        (board[pieceRow - 1][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
 
                 if(isPossibleJump)
                     return true;
             }
         } else { //Not a king and white
             for(int colOffset : new int[] {-2, 2})  {
-                boolean isPossibleJump = (pieceRow + 2 < BOARD_SIZE && pieceCol + colOffset < BOARD_SIZE) &&
+                boolean isPossibleJump =
+                        (pieceRow + 2 < BOARD_SIZE && pieceCol + colOffset < BOARD_SIZE && pieceCol + colOffset >= 0) &&
                         (board[pieceRow + 2][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
                         (board[pieceRow + 1][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
                         (board[pieceRow + 1][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
