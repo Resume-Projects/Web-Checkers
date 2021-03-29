@@ -52,10 +52,4 @@ public class GameManager {
         CheckersGame game = getPlayersGame(player);
         return game.resignGame(player);
     }
-
-    public Message applyPlayersMove(Player player) {
-        CheckersGame playersGame = getPlayersGame(player);
-        return playersGame.applyAttemptedMoves();
-    }
-
 }
