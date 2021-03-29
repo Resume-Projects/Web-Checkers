@@ -45,7 +45,7 @@ public class CheckersGame {
     private int numWhitePieces;
 
     private boolean justJumped;
-    boolean justKinged;
+    private boolean justKinged;
 
     /**
      * The CheckersGame data type
@@ -158,17 +158,17 @@ public class CheckersGame {
         Position end = attemptedMove.getEnd();
 
         Position firstPosition;
-        if(movesQueue.isEmpty()) {
+        if (movesQueue.isEmpty()) {
             firstPosition = start;
         } else {
             firstPosition = movesQueue.getFirst().getStart();
         }
         Piece.Type movedPieceType = board[firstPosition.getRow()][firstPosition.getCell()].getPieceType();
 
-        if(justKinged) {
+        if (justKinged) {
             return Message.error("You reached the end of the board. You cannot make any more moves");
-        } else if(isValidJump(start, end, movedPieceType)) {
-            if(!movesQueue.isEmpty() && !justJumped) {
+        } else if (isValidJump(start, end, movedPieceType)) {
+            if (!movesQueue.isEmpty() && !justJumped) {
                 return Message.error("You already made a simple move");
             } else {
                 movesQueue.add(attemptedMove);
@@ -176,10 +176,10 @@ public class CheckersGame {
                 checkForKings(movedPieceType);
                 return Message.info("Valid move");
             }
-        } else if(isValidSimpleMove(start, end, movedPieceType)) {
-            if(!movesQueue.isEmpty()) {
+        } else if (isValidSimpleMove(start, end, movedPieceType)) {
+            if (!movesQueue.isEmpty()) {
                 return Message.error("You already made a move");
-            }else if(isJumpPossible()) {
+            } else if (isJumpPossible()) {
                 return Message.error("There is a jump you must make");
             } else {
                 movesQueue.add(attemptedMove);
@@ -193,11 +193,11 @@ public class CheckersGame {
 
     //Called from GameManager when PostSubmitTurnRoute tells it to
     public Message applyAttemptedMoves() {
-        if(justJumped && jumpCanBeContinued()) {
+        if (justJumped && jumpCanBeContinued()) {
             return Message.error("You must continue your jump");
         }
 
-        while(!movesQueue.isEmpty()) {
+        while (!movesQueue.isEmpty()) {
             Move currentMove = movesQueue.remove();
             applyMove(currentMove);
         }
@@ -217,7 +217,7 @@ public class CheckersGame {
         //If the player moved their piece to jump, then took their move back, then they no longer just jumped
         //If the size of the queue used to be bigger than 1, then they must have already jumped before
         //since the size of the queue can only be one if a simple move was made
-        if(movesQueue.isEmpty() && Math.abs(removedMove.getStart().getRow() - removedMove.getEnd().getRow()) > 1) {
+        if (movesQueue.isEmpty() && Math.abs(removedMove.getStart().getRow() - removedMove.getEnd().getRow()) > 1) {
             justJumped = false;
         }
         return Message.info("Attempted move was removed");
@@ -227,12 +227,12 @@ public class CheckersGame {
         int deltaRow = end.getRow() - start.getRow();
         int deltaCol = end.getCell() - start.getCell();
 
-        if(Math.abs(deltaCol) != 1)
+        if (Math.abs(deltaCol) != 1)
             return false;
 
-        if(pieceType == Piece.Type.KING) {
+        if (pieceType == Piece.Type.KING) {
             return Math.abs(deltaRow) == 1;
-        } else if(activeColor == Piece.Color.RED){
+        } else if (activeColor == Piece.Color.RED) {
             return deltaRow == -1;
         } else { //Not a king and active color is white
             return deltaRow == 1;
@@ -250,16 +250,16 @@ public class CheckersGame {
         int deltaRow = end.getRow() - start.getRow();
         int deltaCol = end.getCell() - start.getCell();
 
-        if(Math.abs(deltaRow) != 2 || Math.abs(deltaCol) != 2)
+        if (Math.abs(deltaRow) != 2 || Math.abs(deltaCol) != 2)
             return false; //To make a jump, the column must change by 2
 
         Space jumpedSpace = board[start.getRow() + (deltaRow / 2)][start.getCell() + (deltaCol / 2)];
-        if(jumpedSpace.getState() == Space.State.OPEN || jumpedSpace.getPieceColor() == activeColor)
+        if (jumpedSpace.getState() == Space.State.OPEN || jumpedSpace.getPieceColor() == activeColor)
             return false; //If a piece was not jumped over or the piece jumped was friendly, return false right away
 
-        if(pieceType == Piece.Type.KING) {
+        if (pieceType == Piece.Type.KING) {
             return Math.abs(deltaRow) == 2;
-        } else if(activeColor == Piece.Color.RED) {
+        } else if (activeColor == Piece.Color.RED) {
             return deltaRow == -2;
         } else { //Not a king and white player
             return deltaRow == 2;
@@ -268,10 +268,10 @@ public class CheckersGame {
 
     private boolean isJumpPossible() {
         //If the player has the choice between a jump and a simple move, he must jump
-        for(int row = 0; row < BOARD_SIZE; row++) {
-            for(int col = 0; col < BOARD_SIZE; col++) {
-                if(board[row][col].getState() == Space.State.OCCUPIED && board[row][col].getPieceColor() == activeColor) {
-                    if(jumpCanBeMade(row, col))
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if (board[row][col].getState() == Space.State.OCCUPIED && board[row][col].getPieceColor() == activeColor) {
+                    if (jumpCanBeMade(row, col))
                         return true;
                 }
             }
@@ -282,11 +282,11 @@ public class CheckersGame {
 
     private boolean jumpCanBeContinued() {
         Space[][] boardCopy = new Space[BOARD_SIZE][];
-        for(int i = 0; i < BOARD_SIZE; i++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
             boardCopy[i] = Arrays.copyOf(board[i], BOARD_SIZE);
         }
         //All of the moves need to be applied before we can check if a jump is still possible
-        for(Move move : movesQueue) {
+        for (Move move : movesQueue) {
             applyMove(move);
         }
         int endingRow = movesQueue.getLast().getEnd().getRow();
@@ -294,7 +294,7 @@ public class CheckersGame {
         boolean moveCanBeContinued = jumpCanBeMade(endingRow, endingCell);
 
         //Reset the board after it changed
-        for(int i = 0; i < BOARD_SIZE; i++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
             board[i] = Arrays.copyOf(boardCopy[i], BOARD_SIZE);
         }
 
@@ -304,40 +304,40 @@ public class CheckersGame {
     private boolean jumpCanBeMade(int pieceRow, int pieceCol) {
         //This code is disgusting but I don't think I can make it much cleaner
         Piece.Type pieceType = board[pieceRow][pieceCol].getPieceType();
-        if(pieceType == Piece.Type.KING) {
-            for(int rowOffset : new int[] {-2, 2}) {
-                for(int colOffset : new int[] {-2, 2}) {
+        if (pieceType == Piece.Type.KING) {
+            for (int rowOffset : new int[]{-2, 2}) {
+                for (int colOffset : new int[]{-2, 2}) {
                     boolean isPossibleJump =
                             (pieceRow + rowOffset < BOARD_SIZE && pieceRow + rowOffset >= 0) &&
-                            (pieceCol + colOffset < BOARD_SIZE && pieceCol + colOffset >= 0) &&
-                            (board[pieceRow + rowOffset][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
-                            (board[pieceRow + (rowOffset / 2)][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
-                            (board[pieceRow + (rowOffset / 2)][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
+                                    (pieceCol + colOffset < BOARD_SIZE && pieceCol + colOffset >= 0) &&
+                                    (board[pieceRow + rowOffset][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
+                                    (board[pieceRow + (rowOffset / 2)][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
+                                    (board[pieceRow + (rowOffset / 2)][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
 
-                    if(isPossibleJump)
+                    if (isPossibleJump)
                         return false;
                 }
             }
-        } else if(activeColor == Piece.Color.RED) {
-            for(int colOffset : new int[] {-2, 2})  {
+        } else if (activeColor == Piece.Color.RED) {
+            for (int colOffset : new int[]{-2, 2}) {
                 boolean isPossibleJump =
                         (pieceRow - 2 >= 0 && pieceCol + colOffset < BOARD_SIZE && pieceCol + colOffset >= 0) &&
-                        (board[pieceRow - 2][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
-                        (board[pieceRow - 1][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
-                        (board[pieceRow - 1][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
+                                (board[pieceRow - 2][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
+                                (board[pieceRow - 1][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
+                                (board[pieceRow - 1][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
 
-                if(isPossibleJump)
+                if (isPossibleJump)
                     return true;
             }
         } else { //Not a king and white
-            for(int colOffset : new int[] {-2, 2})  {
+            for (int colOffset : new int[]{-2, 2}) {
                 boolean isPossibleJump =
                         (pieceRow + 2 < BOARD_SIZE && pieceCol + colOffset < BOARD_SIZE && pieceCol + colOffset >= 0) &&
-                        (board[pieceRow + 2][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
-                        (board[pieceRow + 1][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
-                        (board[pieceRow + 1][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
+                                (board[pieceRow + 2][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
+                                (board[pieceRow + 1][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
+                                (board[pieceRow + 1][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
 
-                if(isPossibleJump)
+                if (isPossibleJump)
                     return true;
             }
         }
@@ -350,11 +350,11 @@ public class CheckersGame {
         int deltaRow = end.getRow() - start.getRow();
         int deltaCol = end.getCell() - start.getCell();
 
-        if(Math.abs(deltaRow) > 1) { //It was a jump move
+        if (Math.abs(deltaRow) > 1) { //It was a jump move
             Space openSpace = new Space(start.getCell() + (deltaCol / 2), Space.State.OPEN);
             board[start.getRow() + (deltaRow / 2)][start.getCell() + (deltaCol / 2)] = openSpace;
 
-            if(activeColor == Piece.Color.RED)
+            if (activeColor == Piece.Color.RED)
                 numWhitePieces--;
             else
                 numRedPieces--;
@@ -363,9 +363,8 @@ public class CheckersGame {
         //We do this stuff whether or not it was a jump
         Piece movedPiece;
         //If the piece reaches the end, make it a king (even if it was already a king)
-        if((activeColor == Piece.Color.RED && end.getRow() == 0) ||
-            activeColor == Piece.Color.WHITE && end.getRow() == BOARD_SIZE - 1)
-        {
+        if ((activeColor == Piece.Color.RED && end.getRow() == 0) ||
+                activeColor == Piece.Color.WHITE && end.getRow() == BOARD_SIZE - 1) {
             movedPiece = new Piece(Piece.Type.KING, activeColor);
         } else {
             movedPiece = board[start.getRow()][start.getCell()].getPiece();
@@ -379,42 +378,38 @@ public class CheckersGame {
     //and the justKinged variable is set to true
     private void checkForKings(Piece.Type pieceMovedType) {
         Position endPosition = movesQueue.getLast().getEnd();
-        if(pieceMovedType == Piece.Type.KING)
+        if (pieceMovedType == Piece.Type.KING)
             return; //The piece was already a king. Don't need to do anything
 
         //If the piece reached the other end of the board, make it a king
-        if((activeColor == Piece.Color.RED && endPosition.getRow() == 0) ||
-            activeColor == Piece.Color.WHITE && endPosition.getRow() == BOARD_SIZE - 1)
-        {
+        if ((activeColor == Piece.Color.RED && endPosition.getRow() == 0) ||
+                activeColor == Piece.Color.WHITE && endPosition.getRow() == BOARD_SIZE - 1) {
             justKinged = true;
         }
     }
+
     public Piece.Color getPlayerColor(Player player) {
-        if(player.equals(redPlayer)) {
+        if (player.equals(redPlayer)) {
             return Piece.Color.RED;
-        }
-        else if(player.equals(whitePlayer)) {
+        } else if (player.equals(whitePlayer)) {
             return Piece.Color.WHITE;
-        }
-        else {
+        } else {
             return null;
         }
     }
 
-
     public boolean resignGame(Player player) {
         // If there is no active turn
-        if(activeColor == null) {
+        if (activeColor == null) {
             return false;
         }
         // Can only resign if it is their turn
-        else if(activeColor == getPlayerColor(player)) {
+        else if (activeColor == getPlayerColor(player)) {
             loser = player;
             state = State.RESIGNED;
-            if(redPlayer.equals(player)) {
+            if (redPlayer.equals(player)) {
                 winner = whitePlayer;
-            }
-            else {
+            } else {
                 winner = redPlayer;
             }
             return true;
@@ -434,5 +429,4 @@ public class CheckersGame {
     public Player getLoser() {
         return this.loser;
     }
-
 }
