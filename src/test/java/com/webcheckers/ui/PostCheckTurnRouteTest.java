@@ -16,15 +16,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Tag("UI-tier")
-public class PostBackupRouteTest {
-    private PostBackupMoveRoute CuT;
+public class PostCheckTurnRouteTest {
+    private PostCheckTurnRoute CuT;
     private GameManager gameManager;
 
     private Request request;
     private Response response;
     private Session session;
-    Player player1;
-    Player player2;
+    private Player player1;
+    private Player player2;
 
     @BeforeEach
     public void setUp() {
@@ -37,11 +37,15 @@ public class PostBackupRouteTest {
         when(request.session()).thenReturn(session);
         when(request.session().attribute("currentUser")).thenReturn(player1);
 
-        CuT = new PostBackupMoveRoute(gameManager);
+        CuT = new PostCheckTurnRoute(gameManager);
     }
 
     @Test
-    public void handle_test() throws Exception{
+    public void handle_test() throws Exception {
+        gameManager.getNewGame(player1, player2);
+        CheckersGame game = gameManager.getPlayersGame(player1);
+        Move move = new Move(new Position(5, 0), new Position(4, 1));
+        game.saveAttemptedMove(move);
         CuT.handle(request, response);
     }
 }
