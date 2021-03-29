@@ -43,9 +43,6 @@ public class PostCheckTurnRouteTest {
     @Test
     public void handle_test() throws Exception {
         gameManager.getNewGame(player1, player2);
-        CheckersGame game = gameManager.getPlayersGame(player1);
-        Move move = new Move(new Position(5, 0), new Position(4, 1));
-        game.saveAttemptedMove(move);
         CuT.handle(request, response);
     }
 }
