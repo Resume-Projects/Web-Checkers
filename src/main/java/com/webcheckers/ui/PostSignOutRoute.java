@@ -52,8 +52,7 @@ public class PostSignOutRoute implements Route {
             request.session().removeAttribute(playerName);
             request.session().attribute("currentUser", null);
             if(game != null) {
-                // where resigning the game will go
-                // signing out will cause an automatic resignation
+                game.resignGame(player);
             }
         }
 
