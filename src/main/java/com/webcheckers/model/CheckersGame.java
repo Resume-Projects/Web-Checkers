@@ -6,7 +6,6 @@ import com.webcheckers.util.Message;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.logging.Logger;
 
 /**
@@ -29,7 +28,8 @@ public class CheckersGame {
 
     private Piece.Color activeColor;
 
-    private Queue<Move> moves;
+    //I needed to make it a LinkedList so I can check the back of the queue
+    private LinkedList<Move> movesQueue;
 
     private int numRedPieces;
     private int numWhitePieces;
@@ -45,7 +45,7 @@ public class CheckersGame {
     public CheckersGame(Player redPlayer, Player whitePlayer) {
         LOG.fine("Game created");
         board = new Space[BOARD_SIZE][BOARD_SIZE];
-        moves = new LinkedList<>();
+        movesQueue = new LinkedList<>();
 
         for (int col = 0; col < board.length; col++) {
             if (col % 2 == 1) {
@@ -142,33 +142,45 @@ public class CheckersGame {
         Position start = attemptedMove.getStart();
         Position end = attemptedMove.getEnd();
 
-        if(isSimpleMove(start, end)) {
-            if(!moves.isEmpty()) {
-                return Message.error("You already moved");
+        if(isJump(start, end)) {
+            if(!movesQueue.isEmpty() && !justJumped) {
+                return Message.error("You already made a simple move");
             } else {
-                moves.add(attemptedMove);
-                return Message.info("Valid move");
-            }
-        } else if(isJump(start, end)) {
-            if(!moves.isEmpty() && !justJumped) {
-                return Message.error("You already made a simply move");
-            } else {
-                moves.add(attemptedMove);
+                movesQueue.add(attemptedMove);
                 justJumped = true;
                 return Message.info("Valid move");
             }
+        } else if(isSimpleMove(start, end)) {
+            if(isJumpPossible()) {
+                return Message.error("There is a jump you must make");
+            } else if(!movesQueue.isEmpty()) {
+                return Message.error("You already made a move");
+            } else {
+                movesQueue.add(attemptedMove);
+                return Message.info("Valid move");
+            }
         } else {
-            return Message.error("That space is too far away");
+            return Message.error("Move is too far");
         }
-
     }
 
     //Called from GameManager when PostSubmitTurnRoute tells it to
     public Message applyAttemptedMoves() {
-        while (moves.size() > 0) {
-            Position startMove = moves.peek().getStart();
-            Position endMove = moves.peek().getEnd();
-            moves.remove();
+        if(justJumped) {
+            Position beginningPosition = movesQueue.getLast().getStart();
+            Piece.Type movedPieceType = board[beginningPosition.getRow()][beginningPosition.getCell()].getPieceType();
+            if(jumpCanBeContinued(movesQueue.peek(), movedPieceType)) {
+                return Message.error("You must continue your jump");
+            }
+        }
+
+        while(!movesQueue.isEmpty()) {
+            Move currentMove = movesQueue.remove();
+            Position startMove = currentMove.getStart();
+            Position endMove = currentMove.getEnd();
+            applyMove(currentMove);
+
+
             Piece pieceBeingMoved = board[startMove.getRow()][startMove.getCell()].getPiece();
             board[startMove.getRow()][startMove.getCell()] = new Space(startMove.getCell(), Space.State.OPEN);
             board[endMove.getRow()][endMove.getCell()] = new Space(endMove.getCell(), pieceBeingMoved);
@@ -177,6 +189,7 @@ public class CheckersGame {
             }
         }
 
+        justJumped = false;
         if (activeColor == Piece.Color.RED)
             activeColor = Piece.Color.WHITE;
         else
@@ -185,7 +198,7 @@ public class CheckersGame {
     }
 
     public Message resetAttemptedMove() {
-        moves.remove();
+        movesQueue.remove();
         return Message.info("Attempted move was removed");
     }
 
@@ -230,28 +243,20 @@ public class CheckersGame {
         } else { //Not a king and white player
             return deltaRow == 2;
         }
+    }
 
-//        int deltaCol = Math.abs(start.getCell() - end.getCell());
-//        if (deltaCol != 2) {
-//            return false;
-//        } else if (activeColor == Piece.Color.RED && end.getRow() + 2 == start.getRow()) {
-//            Space opponent;
-//            if (start.getCell() > end.getCell()) {
-//                opponent = board[end.getRow() + 1][end.getCell() + 1];
-//            } else {
-//                opponent = board[end.getRow() + 1][end.getCell() - 1];
-//            }
-//            return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.WHITE;
-//        } else if (activeColor == Piece.Color.WHITE && end.getRow() - 2 == start.getRow()) {
-//            Space opponent;
-//            if (start.getCell() > end.getCell()) {
-//                opponent = board[end.getRow() - 1][end.getCell() + 1];
-//            } else {
-//                opponent = board[end.getRow() - 1][end.getCell() - 1];
-//            }
-//            return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.RED;
-//        }
-//        return false;
+    private boolean isJumpPossible() {
+        /*
+        If the player just jumped and a jump is possible, then the player
+        must make the jump
+         */
+
+        return false;
+    }
+
+    private boolean jumpCanBeContinued(Move lastMove, Piece.Type pieceType) {
+
+        return false;
     }
 
     /**
@@ -300,5 +305,9 @@ public class CheckersGame {
                 board[end.getRow() - 1][end.getCell() - 1] = new Space(end.getCell() - 1, Space.State.OPEN);
             }
         }
+    }
+
+    private void applyMove(Move move) {
+
     }
 }
