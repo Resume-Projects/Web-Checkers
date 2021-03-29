@@ -7,6 +7,7 @@ import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.util.Message;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -79,6 +80,10 @@ public class GetGameRoute implements Route {
             }
         } else {
             checkersGame = gameManager.getPlayersGame(currentPlayer);
+        }
+        if(checkersGame.isResigned()) {
+            vm.put("message", Message.info(String.format("%s has resigned, %s has won the game.",
+                    checkersGame.getLoser().getName(), checkersGame.getWinner().getName())));
         }
 
         vm.put("title", "Game");

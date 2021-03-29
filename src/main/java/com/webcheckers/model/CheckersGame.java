@@ -20,8 +20,18 @@ public class CheckersGame {
     /** The side length of a square checkers board */
     public static final int BOARD_SIZE = 8;
 
+    protected enum State {
+        PLAYING,
+        RESIGNED
+    }
+
+    private State state;
+
     private final Player redPlayer;
     private final Player whitePlayer;
+
+    private Player winner;
+    private Player loser;
 
     private Piece.Color activeColor;
 
@@ -66,6 +76,9 @@ public class CheckersGame {
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.activeColor = Piece.Color.RED;
+        this.winner = null;
+        this.loser = null;
+        this.state = State.PLAYING;
     }
 
     /**
@@ -162,6 +175,52 @@ public class CheckersGame {
     public Message resetAttemptedMove() {
         attemptedMove = null;
         return Message.info("Attempted move was removed");
+    }
+
+    public Piece.Color getPlayerColor(Player player) {
+        if(player.equals(redPlayer)) {
+            return Piece.Color.RED;
+        }
+        else if(player.equals(whitePlayer)) {
+            return Piece.Color.WHITE;
+        }
+        else {
+            return null;
+        }
+    }
+
+
+    public boolean resignGame(Player player) {
+        // If there is no active turn
+        if(activeColor == null) {
+            return false;
+        }
+        // Can only resign if it is their turn
+        else if(activeColor == getPlayerColor(player)) {
+            loser = player;
+            state = State.RESIGNED;
+            if(redPlayer.equals(player)) {
+                winner = whitePlayer;
+            }
+            else {
+                winner = redPlayer;
+            }
+            return true;
+        }
+        // Otherwise it is not their turn or something's wrong
+        return false;
+    }
+
+    public boolean isResigned() {
+        return state == State.RESIGNED;
+    }
+
+    public Player getWinner() {
+        return this.winner;
+    }
+
+    public Player getLoser() {
+        return this.loser;
     }
 
 }
