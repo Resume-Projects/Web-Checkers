@@ -84,8 +84,6 @@ public class GetGameRoute implements Route {
         if(checkersGame.isResigned()) {
             vm.put("message", Message.info(String.format("%s has resigned, %s has won the game.",
                     checkersGame.getLoser().getName(), checkersGame.getWinner().getName())));
-            response.redirect("/");
-            return null;
         }
 
         vm.put("title", "Game");
