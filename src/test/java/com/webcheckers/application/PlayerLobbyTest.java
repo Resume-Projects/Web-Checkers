@@ -51,4 +51,34 @@ public class PlayerLobbyTest {
         CuT.newPlayer("mockPlayer");
         assertEquals(CuT.getPlayerFromName("mockPlayer"), new Player("mockPlayer"));
     }
+
+    @Test
+    public void getPlayerCount_test() {
+        CuT.newPlayer("mockPlayer");
+        assertEquals(CuT.getActivePlayersCount(), 1);
+    }
+
+    @Test
+    public void removePlayer_test() {
+        CuT.newPlayer("mockPlayer");
+        CuT.removePlayer("mockPlayer");
+        assertNull(CuT.getPlayerFromName("mockPlayer"));
+    }
+
+    @Test
+    public void playerInLobby_test() {
+        CuT.newPlayer("mockPlayer");
+        assertTrue(CuT.isPlayerInLobby(CuT.getPlayerFromName("mockPlayer")));
+    }
+
+    @Test
+    public void playerNotInLobby_test() {
+        CuT.newPlayer("mockPlayer");
+        assertFalse(CuT.isPlayerInLobby(CuT.getPlayerFromName("mockPlayer2")));
+    }
+
+    @Test
+    public void noPlayersInLobby_test() {
+        assertFalse(CuT.isPlayerInLobby(new Player("mockPlayer")));
+    }
 }
