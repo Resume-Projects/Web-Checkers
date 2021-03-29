@@ -35,6 +35,7 @@ public class CheckersGame {
     private int numWhitePieces;
 
     private boolean justJumped;
+    boolean justKinged;
 
     /**
      * The CheckersGame data type
@@ -69,7 +70,8 @@ public class CheckersGame {
             }
         }
         GameController.initializeBoard(board);
-        justJumped = false;
+        this.justJumped = false;
+        this.justKinged = false;
         this.numRedPieces = 12;
         this.numWhitePieces = 12;
         this.redPlayer = redPlayer;
@@ -150,12 +152,15 @@ public class CheckersGame {
         }
         Piece.Type movedPieceType = board[firstPosition.getRow()][firstPosition.getCell()].getPieceType();
 
-        if(isValidJump(start, end, movedPieceType)) {
+        if(justKinged) {
+            return Message.error("You reached the end of the board. You cannot make any more moves");
+        } else if(isValidJump(start, end, movedPieceType)) {
             if(!movesQueue.isEmpty() && !justJumped) {
                 return Message.error("You already made a simple move");
             } else {
                 movesQueue.add(attemptedMove);
                 justJumped = true;
+                checkForKings(movedPieceType);
                 return Message.info("Valid move");
             }
         } else if(isValidSimpleMove(start, end, movedPieceType)) {
@@ -165,6 +170,7 @@ public class CheckersGame {
                 return Message.error("There is a jump you must make");
             } else {
                 movesQueue.add(attemptedMove);
+                checkForKings(movedPieceType);
                 return Message.info("Valid move");
             }
         } else {
@@ -184,6 +190,7 @@ public class CheckersGame {
         }
 
         justJumped = false;
+        justKinged = false;
         if (activeColor == Piece.Color.RED)
             activeColor = Piece.Color.WHITE;
         else
@@ -193,6 +200,7 @@ public class CheckersGame {
 
     public Message resetAttemptedMove() {
         Move removedMove = movesQueue.remove();
+        justKinged = false;
         //If the player moved their piece to jump, then took their move back, then they no longer just jumped
         //If the size of the queue used to be bigger than 1, then they must have already jumped before
         //since the size of the queue can only be one if a simple move was made
@@ -246,9 +254,7 @@ public class CheckersGame {
     }
 
     private boolean isJumpPossible() {
-        /*
-        If the player has the choice between a jump and a simple move, he must jump
-         */
+        //If the player has the choice between a jump and a simple move, he must jump
         for(int row = 0; row < BOARD_SIZE; row++) {
             for(int col = 0; col < BOARD_SIZE; col++) {
                 if(board[row][col].getState() == Space.State.OCCUPIED && board[row][col].getPieceColor() == activeColor) {
@@ -342,8 +348,32 @@ public class CheckersGame {
         }
 
         //We do this stuff whether or not it was a jump
-        Piece jumpingPiece = board[start.getRow()][start.getCell()].getPiece();
+        Piece movedPiece;
+        //If the piece reaches the end, make it a king (even if it was already a king)
+        if((activeColor == Piece.Color.RED && end.getRow() == 0) ||
+            activeColor == Piece.Color.WHITE && end.getRow() == BOARD_SIZE - 1)
+        {
+            movedPiece = new Piece(Piece.Type.KING, activeColor);
+        } else {
+            movedPiece = board[start.getRow()][start.getCell()].getPiece();
+        }
+
         board[start.getRow()][start.getCell()] = new Space(start.getCell(), Space.State.OPEN);
-        board[end.getRow()][end.getCell()] = new Space(end.getCell(), jumpingPiece);
+        board[end.getRow()][end.getCell()] = new Space(end.getCell(), movedPiece);
+    }
+
+    //If the piece that just moved reached the end of the board, it must become a king
+    //and the justKinged variable is set to true
+    private void checkForKings(Piece.Type pieceMovedType) {
+        Position endPosition = movesQueue.getLast().getEnd();
+        if(pieceMovedType == Piece.Type.KING)
+            return; //The piece was already a king. Don't need to do anything
+
+        //If the piece reached the other end of the board, make it a king
+        if((activeColor == Piece.Color.RED && endPosition.getRow() == 0) ||
+            activeColor == Piece.Color.WHITE && endPosition.getRow() == BOARD_SIZE - 1)
+        {
+            justKinged = true;
+        }
     }
 }
