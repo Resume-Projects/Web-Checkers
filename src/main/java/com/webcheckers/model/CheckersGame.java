@@ -192,12 +192,16 @@ public class CheckersGame {
     private boolean isSimpleMove(Position start, Position end) {
         int deltaRow = end.getRow() - start.getRow();
         int deltaCol = end.getCell() - start.getCell();
+
+        if(Math.abs(deltaCol) != 1)
+            return false;
+
         if(board[start.getRow()][start.getCell()].getPieceType() == Piece.Type.KING) {
-            return Math.abs(deltaRow) == 1 && Math.abs(deltaCol) == 1;
+            return Math.abs(deltaRow) == 1;
         } else if(activeColor == Piece.Color.RED){
-            return deltaRow == -1 && Math.abs(deltaCol) == 1;
+            return deltaRow == -1;
         } else { //Not a king and active color is white
-            return deltaRow == 1 && Math.abs(deltaCol) == 1;
+            return deltaRow == 1;
         }
     }
 
