@@ -209,27 +209,45 @@ public class CheckersGame {
      * @return whether the move was a jump
      */
     private boolean isJump(Position start, Position end) {
-        int deltaCol = Math.abs(start.getCell() - end.getCell());
-        if (deltaCol != 2) {
-            return false;
-        } else if (activeColor == Piece.Color.RED && end.getRow() + 2 == start.getRow()) {
-            Space opponent;
-            if (start.getCell() > end.getCell()) {
-                opponent = board[end.getRow() + 1][end.getCell() + 1];
-            } else {
-                opponent = board[end.getRow() + 1][end.getCell() - 1];
-            }
-            return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.WHITE;
-        } else if (activeColor == Piece.Color.WHITE && end.getRow() - 2 == start.getRow()) {
-            Space opponent;
-            if (start.getCell() > end.getCell()) {
-                opponent = board[end.getRow() - 1][end.getCell() + 1];
-            } else {
-                opponent = board[end.getRow() - 1][end.getCell() - 1];
-            }
-            return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.RED;
+        int deltaRow = end.getRow() - start.getRow();
+        int deltaCol = end.getCell() - start.getCell();
+
+        Space jumpedSpace = board[start.getRow() + (deltaRow / 2)][start.getCell() + (deltaCol / 2)];
+        if(jumpedSpace.getState() != Space.State.OPEN)
+            return false; //If a piece was not jumped over, return false right away
+
+        if(Math.abs(deltaCol) != 2)
+            return false; //To make a jump, the column must change by 2
+
+        if(board[start.getRow()][start.getCell()].getPieceType() == Piece.Type.KING) {
+            return Math.abs(deltaRow) == 2;
+        } else if(activeColor == Piece.Color.RED) {
+            return deltaRow == -2;
+        } else { //Not a king and white player
+            return deltaRow == 2;
         }
-        return false;
+
+//        int deltaCol = Math.abs(start.getCell() - end.getCell());
+//        if (deltaCol != 2) {
+//            return false;
+//        } else if (activeColor == Piece.Color.RED && end.getRow() + 2 == start.getRow()) {
+//            Space opponent;
+//            if (start.getCell() > end.getCell()) {
+//                opponent = board[end.getRow() + 1][end.getCell() + 1];
+//            } else {
+//                opponent = board[end.getRow() + 1][end.getCell() - 1];
+//            }
+//            return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.WHITE;
+//        } else if (activeColor == Piece.Color.WHITE && end.getRow() - 2 == start.getRow()) {
+//            Space opponent;
+//            if (start.getCell() > end.getCell()) {
+//                opponent = board[end.getRow() - 1][end.getCell() + 1];
+//            } else {
+//                opponent = board[end.getRow() - 1][end.getCell() - 1];
+//            }
+//            return opponent.getState() == Space.State.OCCUPIED && opponent.getPieceColor() == Piece.Color.RED;
+//        }
+//        return false;
     }
 
     /**
