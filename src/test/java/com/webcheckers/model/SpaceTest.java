@@ -65,4 +65,22 @@ public class SpaceTest {
 
         assertSame(CuT.getPiece(), piece);
     }
+
+    @Test
+    public void getPieceColor_test() {
+        CuT = new Space(0, new Piece(Piece.Type.SINGLE, Piece.Color.WHITE));
+        assertSame(CuT.getPieceColor(), Piece.Color.WHITE);
+    }
+
+    @Test
+    public void getPieceType_test() {
+        CuT = new Space(0, new Piece(Piece.Type.SINGLE, Piece.Color.WHITE));
+        assertSame(CuT.getPieceType(), Piece.Type.SINGLE);
+    }
+
+    @Test
+    public void getState_test() {
+        CuT = new Space(0, Space.State.OPEN);
+        assertSame(CuT.getState(), Space.State.OPEN);
+    }
 }
