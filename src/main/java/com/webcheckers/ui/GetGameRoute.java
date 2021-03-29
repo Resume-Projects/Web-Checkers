@@ -3,6 +3,7 @@ package com.webcheckers.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.Gson;
 import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
@@ -36,17 +37,18 @@ public class GetGameRoute implements Route {
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
-
+    private final Gson gson;
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
      *
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetGameRoute(final GameManager gameManager, final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+    public GetGameRoute(final GameManager gameManager, final PlayerLobby playerLobby, final TemplateEngine templateEngine, final Gson gson) {
         this.gameManager = gameManager;
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
+        this.gson = gson;
     }
 
     /**
@@ -85,6 +87,8 @@ public class GetGameRoute implements Route {
         if(checkersGame.isResigned()) {
             vm.put("message", Message.info(String.format("%s has resigned, %s has won the game.",
                     checkersGame.getLoser().getName(), checkersGame.getWinner().getName())));
+            vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+
         }
 
         vm.put("title", "Game");
@@ -98,6 +102,19 @@ public class GetGameRoute implements Route {
             vm.put("board", checkersGame.getRedBoardView());
         else
             vm.put("board", checkersGame.getWhiteBoardView());
+
+        if(checkersGame.isGameOver()){
+            if(checkersGame.redWon()){
+                modeOptions.put("isGameOver", true);
+                modeOptions.put("gameOverMessage", checkersGame.getRedPlayer().getName() + " has captured all of the pieces.");
+                vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+            }
+            if(checkersGame.whiteWon()){
+                modeOptions.put("isGameOver", true);
+                modeOptions.put("gameOverMessage", checkersGame.getWhitePlayer().getName() + " has captured all of the pieces.");
+                vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+            }
+        }
 
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
