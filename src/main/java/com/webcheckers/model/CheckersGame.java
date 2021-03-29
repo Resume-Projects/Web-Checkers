@@ -163,29 +163,36 @@ public class CheckersGame {
     /**
      * Checks for other valid jumps
      */
-    private void checkForJumps(Position p) {
+    private boolean checkForJumps(Position p) {
         int row = p.getRow();
         int col = p.getCell();
         if (activeColor == Piece.Color.RED) {
-            if (col - 2 >= 0 && row + 2 >= 0 &&
-                    board[row - 1][col - 1].getState() == Space.State.OCCUPIED &&
-                    board[row - 2][col - 2].getState() == Space.State.OPEN) {
-                Position newEnd = new Position(row + 2, col - 2);
-                if (isJump(p, newEnd)) {
-                    moves.add(new Move(p, newEnd));
-                }
-            } else if (col + 2 < board.length && row + 2 < board.length &&
-                    board[row + 1][col + 1].getState() == Space.State.OCCUPIED &&
-                    board[row + 2][col + 2].getState() == Space.State.OPEN) {
-                Position newEnd = new Position(row + 2, col + 2);
-                if (isJump(p, newEnd)) {
-                    moves.add(new Move(p, newEnd));
-                }
+            Position newEnd = new Position(row - 2, col - 2);
+            if (isJump(p, newEnd)) {
+                return true;
+            } else {
+                newEnd = new Position(row - 2, col + 2);
+                return isJump(p, newEnd);
+            }
+        } else if (activeColor == Piece.Color.WHITE) {
+            Position newEnd = new Position(row + 2, col - 2);
+            if (isJump(p, newEnd)) {
+                return true;
+            } else {
+                newEnd = new Position(row + 2, col + 2);
+                return isJump(p, newEnd);
             }
         }
+        return false;
     }
 
-    private void makeJump(Position start, Position end)  {
+    /**
+     * Applies the jump move and removes the opponent piece that was captured
+     *
+     * @param start the starting position of the jumping piece
+     * @param end   the final position of the jumping piece
+     */
+    private void makeJump(Position start, Position end) {
         if (activeColor == Piece.Color.RED) {
             if (start.getCell() > end.getCell()) {
                 board[end.getRow() + 1][end.getCell() + 1] = new Space(start.getCell() - 1, Space.State.OPEN);
@@ -212,6 +219,9 @@ public class CheckersGame {
                         (activeColor == Piece.Color.WHITE && end.getRow() - 1 == start.getRow()))) || jump;
         if (isValidMove) {
             moves.add(attemptedMove);
+            if (jump && checkForJumps(end)) {
+
+            }
             return Message.info("Valid move");
         } else {
             return Message.error("Not a valid move");
@@ -220,6 +230,7 @@ public class CheckersGame {
 
     //Called from GameManager when PostSubmitTurnRoute tells it to
     public Message applyAttemptedMove() {
+        //while (moves.size() > 0) {
         Position startMove = moves.peek().getStart();
         Position endMove = moves.peek().getEnd();
         moves.remove();
@@ -234,6 +245,7 @@ public class CheckersGame {
             activeColor = Piece.Color.WHITE;
         else
             activeColor = Piece.Color.RED;
+        //}
         return Message.info("Move applied");
     }
 
