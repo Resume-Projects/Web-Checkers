@@ -64,6 +64,7 @@ public class GetGameRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         final Session session = request.session();
         Map<String, Object> vm = new HashMap<>();
+        Map<String, Object> modeOptions = new HashMap<>(2);
         Player currentPlayer = session.attribute("currentUser");
         CheckersGame checkersGame;
 
