@@ -89,6 +89,8 @@ public class GetGameRoute implements Route {
                     checkersGame.getLoser().getName(), checkersGame.getWinner().getName())));
             modeOptions.put("isGameOver", true);
             vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+            gameManager.deleteGame(currentPlayer);
+            gameManager.deleteGame(checkersGame.getWhitePlayer());
         }
 
         vm.put("title", "Game");
@@ -108,6 +110,8 @@ public class GetGameRoute implements Route {
                     checkersGame.getWinner().getName())));
             modeOptions.put("isGameOver", true);
             vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+            gameManager.deleteGame(currentPlayer);
+            gameManager.deleteGame(checkersGame.getWhitePlayer());
             }
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }

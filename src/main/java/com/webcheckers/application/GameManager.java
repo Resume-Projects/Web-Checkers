@@ -58,4 +58,8 @@ public class GameManager {
         return playersGame.applyAttemptedMoves();
     }
 
+    public void deleteGame(Player player){
+        checkersGames.removeIf(game -> game.getRedPlayer() == player);
+        checkersGames.removeIf(game -> game.getWhitePlayer() == player);
+    }
 }
