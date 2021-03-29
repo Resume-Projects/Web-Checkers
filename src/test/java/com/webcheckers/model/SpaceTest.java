@@ -28,14 +28,6 @@ public class SpaceTest {
     }
 
     @Test
-    public void setState_test() {
-        CuT = new Space(cellIdx, Space.State.OPEN);
-        CuT.setState(Space.State.INVALID);
-
-        assertSame(CuT.getState(), Space.State.INVALID);
-    }
-
-    @Test
     public void validSpace_test() {
         CuT = new Space(cellIdx, Space.State.OPEN);
         assertTrue(CuT.isValid());

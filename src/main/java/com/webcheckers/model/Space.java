@@ -24,7 +24,7 @@ public class Space {
      * The constructor for the space used in a given Row
      *
      * @param cellIdx The column of the space
-     * @param piece The piece that will sit in that space
+     * @param piece   The piece that will sit in that space
      */
     public Space(int cellIdx, Piece piece) {
         this.cellIdx = cellIdx;
@@ -39,13 +39,15 @@ public class Space {
 
     // Public Methods
 
-    public void setState( State state ) {
-        this.state = state;
-    }
-
-    public State getState () {
+    /**
+     * Get the state of the current space
+     *
+     * @return the state
+     */
+    public State getState() {
         return state;
     }
+
     /**
      * Finds the cellIdx
      *
@@ -71,6 +73,19 @@ public class Space {
      */
     public Piece getPiece() {
         return piece;
+    }
+
+    /**
+     * Returns the color of the piece on this space
+     *
+     * @return a Piece Color
+     */
+    public Piece.Color getPieceColor() {
+        return piece.getColor();
+    }
+
+    public Piece.Type getPieceType() {
+        return piece.getType();
     }
 
     /**
