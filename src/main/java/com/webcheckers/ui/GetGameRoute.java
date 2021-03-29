@@ -103,19 +103,12 @@ public class GetGameRoute implements Route {
         else
             vm.put("board", checkersGame.getWhiteBoardView());
 
-//        if(checkersGame.isGameOver()){
-//            if(checkersGame.redWon()){
-//                modeOptions.put("isGameOver", true);
-//                modeOptions.put("gameOverMessage", checkersGame.getRedPlayer().getName() + " has captured all of the pieces.");
-//                vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
-//            }
-//            if(checkersGame.whiteWon()){
-//                modeOptions.put("isGameOver", true);
-//                modeOptions.put("gameOverMessage", checkersGame.getWhitePlayer().getName() + " has captured all of the pieces.");
-//                vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
-//            }
-//        }
-
+        if(checkersGame.gameOver()){
+            vm.put("message", Message.info(String.format("%s has captured all of the pieces.",
+                    checkersGame.getWinner().getName())));
+            modeOptions.put("isGameOver", true);
+            vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+            }
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 }

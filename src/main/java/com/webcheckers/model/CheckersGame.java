@@ -25,7 +25,8 @@ public class CheckersGame {
 
     protected enum State {
         PLAYING,
-        RESIGNED
+        RESIGNED,
+        OVER
     }
 
     private State state;
@@ -359,6 +360,16 @@ public class CheckersGame {
             else
                 numRedPieces--;
         }
+        if(numRedPieces == 0){
+            state = State.OVER;
+            loser = redPlayer;
+            winner = whitePlayer;
+        }
+        if(numWhitePieces == 0){
+            state = State.OVER;
+            loser = whitePlayer;
+            winner = redPlayer;
+        }
 
         //We do this stuff whether or not it was a jump
         Piece movedPiece;
@@ -435,4 +446,8 @@ public class CheckersGame {
         return this.loser;
     }
 
+    //if a player captures all of the other player's pieces:
+    public boolean gameOver() {
+        return state == State.OVER;
+    }
 }
