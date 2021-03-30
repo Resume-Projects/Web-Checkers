@@ -157,7 +157,7 @@ public class WebServer {
 
         post("/submitTurn", new PostSubmitTurnRoute(gameManager));
 
-        post("/validateMove", new PostValidateMoveRoute(gameManager, gson));
+        post("/validateMove", new PostValidateMoveRoute(gameManager));
 
         post("/checkTurn", new PostCheckTurnRoute(gameManager));
 

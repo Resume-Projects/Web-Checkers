@@ -5,7 +5,6 @@ import com.webcheckers.application.GameManager;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
-import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -13,11 +12,9 @@ import spark.Route;
 public class PostValidateMoveRoute implements Route {
 
     private final GameManager gameManager;
-    private final Gson gson;
 
-    public PostValidateMoveRoute(GameManager gameManager, Gson gson) {
+    public PostValidateMoveRoute(GameManager gameManager) {
         this.gameManager = gameManager;
-        this.gson = gson;
     }
 
     @Override
@@ -29,8 +26,8 @@ public class PostValidateMoveRoute implements Route {
         //button is hit, the move will take effect
         //*********************************************************************************
         Player currentPlayer = request.session().attribute("currentUser");
-        Move attemptedMove = gson.fromJson(request.queryParams("actionData"), Move.class);
+        Move attemptedMove = new Gson().fromJson(request.queryParams("actionData"), Move.class);
         CheckersGame playersGame = gameManager.getPlayersGame(currentPlayer);
-        return gson.toJson(playersGame.saveAttemptedMove(attemptedMove));
+        return new Gson().toJson(playersGame.saveAttemptedMove(attemptedMove));
     }
 }
