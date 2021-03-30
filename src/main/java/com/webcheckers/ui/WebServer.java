@@ -153,7 +153,7 @@ public class WebServer {
 
         post("/signout", new PostSignOutRoute(playerLobby, gameManager));
 
-        get("/game", new GetGameRoute(gameManager, playerLobby, templateEngine));
+        get("/game", new GetGameRoute(gameManager, playerLobby, templateEngine, gson));
 
         post("/submitTurn", new PostSubmitTurnRoute(gameManager));
 

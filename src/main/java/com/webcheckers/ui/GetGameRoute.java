@@ -3,6 +3,7 @@ package com.webcheckers.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.Gson;
 import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
@@ -36,17 +37,18 @@ public class GetGameRoute implements Route {
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
-
+    private final Gson gson;
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
      *
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetGameRoute(final GameManager gameManager, final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+    public GetGameRoute(final GameManager gameManager, final PlayerLobby playerLobby, final TemplateEngine templateEngine, final Gson gson) {
         this.gameManager = gameManager;
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
+        this.gson = gson;
     }
 
     /**
@@ -64,6 +66,7 @@ public class GetGameRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         final Session session = request.session();
         Map<String, Object> vm = new HashMap<>();
+        Map<String, Object> modeOptions = new HashMap<>(2);
         Player currentPlayer = session.attribute("currentUser");
         CheckersGame checkersGame;
 
@@ -84,6 +87,10 @@ public class GetGameRoute implements Route {
         if(checkersGame.isResigned()) {
             vm.put("message", Message.info(String.format("%s has resigned, %s has won the game.",
                     checkersGame.getLoser().getName(), checkersGame.getWinner().getName())));
+            modeOptions.put("isGameOver", true);
+            vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+            gameManager.deleteGame(currentPlayer);
+            gameManager.deleteGame(checkersGame.getWhitePlayer());
         }
 
         vm.put("title", "Game");
@@ -98,6 +105,14 @@ public class GetGameRoute implements Route {
         else
             vm.put("board", checkersGame.getWhiteBoardView());
 
+        if(checkersGame.gameOver()){
+            vm.put("message", Message.info(String.format("%s has captured all of the pieces.",
+                    checkersGame.getWinner().getName())));
+            modeOptions.put("isGameOver", true);
+            vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+            gameManager.deleteGame(currentPlayer);
+            gameManager.deleteGame(checkersGame.getWhitePlayer());
+            }
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 }

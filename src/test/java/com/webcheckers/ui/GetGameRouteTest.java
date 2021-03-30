@@ -1,6 +1,7 @@
 package com.webcheckers.ui;
 
 
+import com.google.gson.Gson;
 import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
@@ -28,7 +29,7 @@ public class GetGameRouteTest {
     private PlayerLobby playerLobby;
     private TemplateEngine templateEngine;
     private CheckersGame checkersGame;
-
+    private Gson gson;
     private Player redPlayer;
     private Player whitePlayer;
 
@@ -42,7 +43,7 @@ public class GetGameRouteTest {
         gameManager = mock(GameManager.class);
         playerLobby = mock(PlayerLobby.class);
         templateEngine = mock(TemplateEngine.class);
-        CuT = new GetGameRoute(gameManager, playerLobby, templateEngine);
+        CuT = new GetGameRoute(gameManager, playerLobby, templateEngine, gson);
 
     }
 

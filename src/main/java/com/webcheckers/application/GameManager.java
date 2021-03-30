@@ -52,4 +52,9 @@ public class GameManager {
         CheckersGame game = getPlayersGame(player);
         return game.resignGame(player);
     }
+
+    public void deleteGame(Player player){
+        checkersGames.removeIf(game -> game.getRedPlayer() == player);
+        checkersGames.removeIf(game -> game.getWhitePlayer() == player);
+    }
 }
