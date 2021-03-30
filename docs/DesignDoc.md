@@ -5,7 +5,7 @@ geometry: margin=1in
 
 > _The following template provides the headings for your Design
 > Documentation.  As you edit each section make sure you remove these
-> commentary 'blockquotes'; the lines that start with a > character
+> commentary 'block quotes'; the lines that start with a > character
 > and appear in the generated PDF in italics._
 
 ## Team Information
@@ -28,30 +28,48 @@ This project was created in order to allow people to have fun playing
 checkers, while also teaching some people how to play checkers.
 
 ### Glossary and Acronyms
-> _Provide a table of terms and acronyms._
 
 | Term | Definition |
 |------|------------|
-| VO | Value Object |
-
+| CheckersGame | Represents a game of checkers |
+| Player | An object that represents the actions of a real life player|
+| Board, BoardView | An object that represents a checkerboard |
+| Row | A row of the BoardView object |
+| Space | A Object that represents a location on the Row |
+| Piece | A checker object that is moved by a Player |
+| Move | A class that represents a move for a checker piece.|
 
 ## Requirements
-
+<!--
 This section describes the features of the application.
 
 > _In this section you do not need to be exhaustive and list every
 > story.  Focus on top-level features from the Vision document and
 > maybe Epics and critical Stories._
+-->
+
+The project should allow a player to be able to start a game of checkers against an opponent. The game will keep track of the progress of a game and award a win condition to the player if either:
+
+1. The opponent has no pieces left, OR
+2. The opponent resigns.
 
 ### Definition of MVP
-> _Provide a simple description of the Minimum Viable Product._
+
+The player is able to sign in, play a game of checkers against an opponent, and then sign out of the web service .
 
 ### MVP Features
-> _Provide a list of top-level Epics and/or Stories of the MVP._
+
+The MVP features:
+* Sign in/out functionality
+* Making a move
+* "Jumping move" for pieces
+* Resigning from a game
 
 ### Roadmap of Enhancements
-> _Provide a list of top-level features in the order you plan to consider them._
 
+A list of enhancements that will come to the project are :
+* Player Help - Receive a hint or instructions on how to play the game upon pressing a button
+* Spectator mode - View an ongoing game and be able to watch other people play.
 
 ## Application Domain
 
@@ -125,8 +143,15 @@ game.
 > not mostly in this tier and cuts across multiple tiers, you can
 > consider placing the narrative description of that feature in a
 > separate section for describing significant features. Place this after
-> you describe the design of the three tiers._
+> you describe the design of the three tiers.
 
+![Full Interface](Swen Sprint 2 State.png)
+
+When the application starts, the application connects to GetHomeRoute and renders to the home page. The user can click on a "Sign In" button and GetSignInRoute will then take them to the login page where they can enter a username. If the name is invalid or taken, the PostSignInRoute will prompt the user to select another name. Otherwise the user will be brought back to the home menu, where they can now select a game.
+
+Upon selecting a game (by clicking on a player in the lobby), the game calls GetGameRoute and starts a game with the other player. During the game, the program calls PostCheckTurnRoute to see whose turn it is. During that turn, a player can move a piece, and it will call PostValidateMoveRoute in order to see if the move is valid. If so, the player can either submit the move (PostSubmitTurnRoute) or revert their move (PostBackupMoveRoute). Afterwards, the other player gets to take their turn.
+
+The game ends in one of two ways 
 
 ### Application Tier
 > _Provide a summary of the Application tier of your architecture. This
@@ -145,7 +170,7 @@ game.
 > analysis of where there are problems in the code base which could be
 > addressed with design changes, and describe those suggested design
 > improvements. After completion of the Code metrics exercise, you
-> will also discuss the resutling metric measurements.  Indicate the
+> will also discuss the resulting metric measurements.  Indicate the
 > hot spots the metrics identified in your code base, and your
 > suggested design improvements to address those hot spots._
 
@@ -159,6 +184,8 @@ game.
 > criteria tests failing, and the number of user stories that
 > have not had any testing yet. Highlight the issues found during
 > acceptance testing and if there are any concerns._
+
+
 
 ### Unit Testing and Code Coverage
 > _Discuss your unit testing strategy. Report on the code coverage
