@@ -12,6 +12,9 @@ import spark.*;
 import org.junit.jupiter.api.Tag;
 import spark.http.matching.Halt;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.mockito.Mockito.*;
 
 /**
@@ -116,6 +119,21 @@ public class GetGameRouteTest {
         verify(response, times(1)).redirect("/");
     }
 
+    @Test
+    public void playerResigned_test() throws Exception{
+        redPlayer = mock(Player.class);
+        whitePlayer = mock(Player.class);
+        checkersGame = new CheckersGame(redPlayer, whitePlayer);
+        gson = mock(Gson.class);
+        HashMap<String, Object> modeOptions = mock(HashMap.class);
+        when(request.session().attribute("currentUser")).thenReturn(redPlayer);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
+        when(gson.toJson(modeOptions)).thenReturn(null);
+        checkersGame.resignGame(redPlayer);
+
+        CuT.handle(request, response);
+
+    }
 }
 
 

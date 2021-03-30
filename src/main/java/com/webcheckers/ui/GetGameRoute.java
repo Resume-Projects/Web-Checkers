@@ -32,7 +32,6 @@ public class GetGameRoute implements Route {
     /** The different play modes that a user can be in */
     public enum playMode {PLAY, SPECTATOR, REPLAY}
     /** The two different colors a player can be */
-    public enum playerColor {RED, WHITE};
 
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
