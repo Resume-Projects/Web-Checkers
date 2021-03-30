@@ -8,6 +8,7 @@ import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.util.reflection.FieldSetter;
 import spark.*;
 import org.junit.jupiter.api.Tag;
 import spark.http.matching.Halt;
@@ -119,24 +120,37 @@ public class GetGameRouteTest {
         verify(response, times(1)).redirect("/");
     }
 
-    /*
     @Test
     public void playerResigned_test() throws Exception{
         redPlayer = mock(Player.class);
         whitePlayer = mock(Player.class);
         checkersGame = new CheckersGame(redPlayer, whitePlayer);
-        gson = mock(Gson.class);
-        HashMap<String, Object> modeOptions = mock(HashMap.class);
+        gson = new Gson();
+        CuT = new GetGameRoute(gameManager, playerLobby, templateEngine, gson);
         when(request.session().attribute("currentUser")).thenReturn(redPlayer);
         when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
-        when(gson.toJson(modeOptions)).thenReturn(null);
         checkersGame.resignGame(redPlayer);
 
         CuT.handle(request, response);
 
     }
 
-     */
+    @Test
+    public void gameOver_test() throws Exception{
+        redPlayer = mock(Player.class);
+        whitePlayer = mock(Player.class);
+        checkersGame = mock(CheckersGame.class);
+        gson = new Gson();
+        CuT = new GetGameRoute(gameManager, playerLobby, templateEngine, gson);
+        when(request.session().attribute("currentUser")).thenReturn(redPlayer);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
+        when(checkersGame.gameOver()).thenReturn(true);
+        when(checkersGame.getWinner()).thenReturn(redPlayer);
+        when(checkersGame.getLoser()).thenReturn(whitePlayer);
+
+        CuT.handle(request, response);
+
+    }
 }
 
 
