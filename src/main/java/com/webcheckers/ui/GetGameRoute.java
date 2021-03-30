@@ -29,19 +29,24 @@ public class GetGameRoute implements Route {
     static final String BOARD = "board";
     static final String MESSAGE = "message";
 
-    /** The different play modes that a user can be in */
+    /**
+     * The different play modes that a user can be in
+     */
     public enum playMode {PLAY, SPECTATOR, REPLAY}
-    /** The two different colors a player can be */
+
+    /**
+     * The two different colors a player can be
+     */
 
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
     private final Gson gson;
+
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
      *
-     * @param templateEngine
-     *   the HTML template rendering engine
+     * @param templateEngine the HTML template rendering engine
      */
     public GetGameRoute(final GameManager gameManager, final PlayerLobby playerLobby, final TemplateEngine templateEngine, final Gson gson) {
         this.gameManager = gameManager;
@@ -53,13 +58,9 @@ public class GetGameRoute implements Route {
     /**
      * Render the WebCheckers Game page.
      *
-     * @param request
-     *   the HTTP request
-     * @param response
-     *   the HTTP response
-     *
-     * @return
-     *   the rendered HTML for the Game page
+     * @param request  the HTTP request
+     * @param response the HTTP response
+     * @return the rendered HTML for the Game page
      */
     @Override
     public Object handle(Request request, Response response) throws Exception {
@@ -70,10 +71,10 @@ public class GetGameRoute implements Route {
         CheckersGame checkersGame;
 
         //If the player is not in a game, then the game just started and a game needs to be made
-        if(gameManager.getPlayersGame(currentPlayer) == null) {
+        if (gameManager.getPlayersGame(currentPlayer) == null) {
             Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
             //If the white player is already in a game, send them back to the home page
-            if(gameManager.getPlayersGame(whitePlayer) != null) {
+            if (gameManager.getPlayersGame(whitePlayer) != null) {
                 session.attribute("errorMessage", "That player is already in a game");
                 response.redirect("/");
                 return null; //They get sent back to the home page
@@ -83,7 +84,7 @@ public class GetGameRoute implements Route {
         } else {
             checkersGame = gameManager.getPlayersGame(currentPlayer);
         }
-        if(checkersGame.isResigned()) {
+        if (checkersGame.isResigned()) {
             vm.put("message", Message.info(String.format("%s has resigned, %s has won the game.",
                     checkersGame.getLoser().getName(), checkersGame.getWinner().getName())));
             modeOptions.put("isGameOver", true);
@@ -99,19 +100,19 @@ public class GetGameRoute implements Route {
         vm.put("whitePlayer", checkersGame.getWhitePlayer());
         vm.put("activeColor", checkersGame.getActiveColor());
 
-        if(currentPlayer.equals(checkersGame.getRedPlayer()))
+        if (currentPlayer.equals(checkersGame.getRedPlayer()))
             vm.put("board", checkersGame.getRedBoardView());
         else
             vm.put("board", checkersGame.getWhiteBoardView());
 
-        if(checkersGame.gameOver()){
+        if (checkersGame.gameOver()) {
             vm.put("message", Message.info(String.format("%s has captured all of the pieces.",
                     checkersGame.getWinner().getName())));
             modeOptions.put("isGameOver", true);
             vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
             gameManager.deleteGame(currentPlayer);
             gameManager.deleteGame(checkersGame.getWhitePlayer());
-            }
+        }
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 }

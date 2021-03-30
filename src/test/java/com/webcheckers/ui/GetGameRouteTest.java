@@ -119,6 +119,7 @@ public class GetGameRouteTest {
         verify(response, times(1)).redirect("/");
     }
 
+    /*
     @Test
     public void playerResigned_test() throws Exception{
         redPlayer = mock(Player.class);
@@ -134,6 +135,8 @@ public class GetGameRouteTest {
         CuT.handle(request, response);
 
     }
+
+     */
 }
 
 
