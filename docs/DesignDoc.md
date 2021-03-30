@@ -50,8 +50,8 @@ This section describes the features of the application.
 
 The project should allow a player to be able to start a game of checkers against an opponent. The game will keep track of the progress of a game and award a win condition to the player if either:
 
-1. The opponent has no pieces left, OR
-2. The opponent resigns.
+* The opponent has no pieces left, OR
+* The opponent resigns.
 
 ### Definition of MVP
 
@@ -123,6 +123,7 @@ game.
 
 
 ### UI Tier
+<!-- comment
 > _Provide a summary of the Server-side UI tier of your architecture.
 > Describe the types of components in the tier and describe their
 > responsibilities.  This should be a narrative description, i.e. it has
@@ -144,27 +145,46 @@ game.
 > consider placing the narrative description of that feature in a
 > separate section for describing significant features. Place this after
 > you describe the design of the three tiers.
+-->
 
 ![Full Interface](Swen Sprint 2 State.png)
 
-When the application starts, the application connects to GetHomeRoute and renders to the home page. The user can click on a "Sign In" button and GetSignInRoute will then take them to the login page where they can enter a username. If the name is invalid or taken, the PostSignInRoute will prompt the user to select another name. Otherwise the user will be brought back to the home menu, where they can now select a game.
+When the application starts, the application starts up the `WebServer`, connects to `GetHomeRoute`, and renders to the home page. The user can click on a "Sign In" button and `GetSignInRoute` will then take them to the login page where they can enter a username. If the name is invalid or taken, the `PostSignInRoute` will prompt the user to select another name. Otherwise the user will be brought back to the home menu, where they can now select a game.
 
-Upon selecting a game (by clicking on a player in the lobby), the game calls GetGameRoute and starts a game with the other player. During the game, the program calls PostCheckTurnRoute to see whose turn it is. During that turn, a player can move a piece, and it will call PostValidateMoveRoute in order to see if the move is valid. If so, the player can either submit the move (PostSubmitTurnRoute) or revert their move (PostBackupMoveRoute). Afterwards, the other player gets to take their turn.
+Upon selecting a game (by clicking on a player in the lobby), the game calls `GetGameRoute` and starts a game with the other player. During the game, the program calls `PostCheckTurnRoute` to see whose turn it is. During a players turn, a player can move a piece, and it will call `PostValidateMoveRoute` in order to see if the move is valid. If so, the player can either submit the move (`PostSubmitTurnRoute`) or revert their move (`PostBackupMoveRoute`). After the move is submitted, the other player gets to take their turn.
 
-The game ends in one of two ways 
+The game ends in one of two ways. 
+* The game ends normally ( after a side has their pieces taken. )
+* A player resigns (calls `PostResignGameRoute`)
+
+In both cases, the player is brought back to the home menu. From there, the player can start another game, or log out (`PostSignOutRoute`).
 
 ### Application Tier
+<!-- Comment
 > _Provide a summary of the Application tier of your architecture. This
 > section will follow the same instructions that are given for the UI
 > Tier above._
+-->
 
+There are three classes in the application: `PlayerLobby`, `GameManager`, and `GameController`.
+
+* `PlayerLobby` manages the all the players currently signed in. It manages name validation and stores the names in a TreeSet.
+* `GameManager` finds/creates a game checkers. It also handles player resignation.
+* `GameController` creates a new game board with `Piece`s in preset locations 
 
 ### Model Tier
+<!-- Comment
 > _Provide a summary of the Application tier of your architecture. This
 > section will follow the same instructions that are given for the UI
 > Tier above._
+--> 
+
+Upon starting a new game, the Project creates a new `CheckersGame` to two `Player` entities. The `CheckersGame` creates a new board by creating a two dimensional array and filling it with the `Space` Object, then add the `Piece` Object to some of the spaces. 
+
+In between each `Player` turn, `CheckersGame` uses `BoardView` (which uses `Row`) to  render the board to the web. The `Player` can the `Move` the `Piece` to another `Space` on a different `Position` to advance their turn. Pieces can become Kings if they reach the other side of the board, which allows them to move in any direction. If all the opponents pieces are captured, or the opponent resigns, then the player is assigned the winner, and the opponent is assigned the loser. 
 
 ### Design Improvements
+<!-- Comment
 > _Discuss design improvements that you would make if the project were
 > to continue. These improvement should be based on your direct
 > analysis of where there are problems in the code base which could be
@@ -173,23 +193,33 @@ The game ends in one of two ways
 > will also discuss the resulting metric measurements.  Indicate the
 > hot spots the metrics identified in your code base, and your
 > suggested design improvements to address those hot spots._
+-->
 
+A lot of the code is currently running in `CheckersGame`. One improvement to the code would be to split that class up into smaller classes so that it is easier to test and debug.
+ 
 ## Testing
+<!-- Comment
 > _This section will provide information about the testing performed
 > and the results of the testing._
-
+-->
 ### Acceptance Testing
+<!-- Comment
 > _Report on the number of user stories that have passed all their
 > acceptance criteria tests, the number that have some acceptance
 > criteria tests failing, and the number of user stories that
 > have not had any testing yet. Highlight the issues found during
 > acceptance testing and if there are any concerns._
-
+-->
+Out of the 78 classes that are tested, all 78 of them pass the acceptance criteria test. 
 
 
 ### Unit Testing and Code Coverage
+<!-- Comment
 > _Discuss your unit testing strategy. Report on the code coverage
 > achieved from unit testing of the code base. Discuss the team's
 > coverage targets, why you selected those values, and how well your
 > code coverage met your targets. If there are any anomalies, discuss
 > those._
+-->
+
+The code testing strategy is to run a unit test for each class in the code. In each unit test, several functions were tested to ensure that they work. For example, the class `BoardView` would get `BoardViewTest`, and in `BoardViewTest`, a test was set on the iterator to make sure it did not return a Null value. These values were selected so that the program does not return an incorrect value, and all the targets were met.
