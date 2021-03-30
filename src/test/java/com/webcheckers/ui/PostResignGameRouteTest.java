@@ -16,8 +16,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Tag("UI-tier")
-public class PostCheckTurnRouteTest {
-    private PostCheckTurnRoute CuT;
+public class PostResignGameRouteTest {
+    private PostResignGameRoute CuT;
     private GameManager gameManager;
 
     private Request request;
@@ -34,22 +34,23 @@ public class PostCheckTurnRouteTest {
         player1 = new Player("player 1");
         player2 = new Player("player 2");
         gameManager = new GameManager();
+
         when(request.session()).thenReturn(session);
         when(request.session().attribute("currentUser")).thenReturn(player1);
 
-        CuT = new PostCheckTurnRoute(gameManager);
+        CuT = new PostResignGameRoute(gameManager);
     }
 
     @Test
-    public void redHandle_test() throws Exception {
+    public void handle_test() throws Exception {
         gameManager.getNewGame(player1, player2);
         CuT.handle(request, response);
     }
 
     @Test
-    public void whiteHandle_test() throws Exception {
+    public void resignFailedHandle_test() throws Exception {
         CheckersGame game = gameManager.getNewGame(player1, player2);
-        FieldSetter.setField(game, game.getClass().getDeclaredField("activeColor"), Piece.Color.WHITE);
+        FieldSetter.setField(game, game.getClass().getDeclaredField("activeColor"), null);
         CuT.handle(request, response);
     }
 }
