@@ -40,4 +40,11 @@ public class GameManagerTest {
         assertTrue(CuT.resignGame(player1));
     }
 
+    @Test
+    public void deleteGame_test() {
+        Player player1 = mock(Player.class);
+        CuT.deleteGame(player1);
+
+        assertNull(CuT.getPlayersGame(player1));
+    }
 }
