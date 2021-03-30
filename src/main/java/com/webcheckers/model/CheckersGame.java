@@ -310,10 +310,10 @@ public class CheckersGame {
                 for (int colOffset : new int[]{-2, 2}) {
                     boolean isPossibleJump =
                             (pieceRow + rowOffset < BOARD_SIZE && pieceRow + rowOffset >= 0) &&
-                                    (pieceCol + colOffset < BOARD_SIZE && pieceCol + colOffset >= 0) &&
-                                    (board[pieceRow + rowOffset][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
-                                    (board[pieceRow + (rowOffset / 2)][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
-                                    (board[pieceRow + (rowOffset / 2)][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
+                            (pieceCol + colOffset < BOARD_SIZE && pieceCol + colOffset >= 0) &&
+                            (board[pieceRow + rowOffset][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
+                            (board[pieceRow + (rowOffset / 2)][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
+                            (board[pieceRow + (rowOffset / 2)][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
 
                     if (isPossibleJump)
                         return false;
@@ -323,9 +323,9 @@ public class CheckersGame {
             for (int colOffset : new int[]{-2, 2}) {
                 boolean isPossibleJump =
                         (pieceRow - 2 >= 0 && pieceCol + colOffset < BOARD_SIZE && pieceCol + colOffset >= 0) &&
-                                (board[pieceRow - 2][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
-                                (board[pieceRow - 1][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
-                                (board[pieceRow - 1][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
+                        (board[pieceRow - 2][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
+                        (board[pieceRow - 1][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
+                        (board[pieceRow - 1][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
 
                 if (isPossibleJump)
                     return true;
@@ -334,9 +334,9 @@ public class CheckersGame {
             for (int colOffset : new int[]{-2, 2}) {
                 boolean isPossibleJump =
                         (pieceRow + 2 < BOARD_SIZE && pieceCol + colOffset < BOARD_SIZE && pieceCol + colOffset >= 0) &&
-                                (board[pieceRow + 2][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
-                                (board[pieceRow + 1][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
-                                (board[pieceRow + 1][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
+                        (board[pieceRow + 2][pieceCol + colOffset].getState() != Space.State.OCCUPIED) &&
+                        (board[pieceRow + 1][pieceCol + (colOffset / 2)].getState() == Space.State.OCCUPIED) &&
+                        (board[pieceRow + 1][pieceCol + (colOffset / 2)].getPieceColor() != activeColor);
 
                 if (isPossibleJump)
                     return true;
