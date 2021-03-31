@@ -3,7 +3,6 @@ package com.webcheckers.application;
 
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
-import com.webcheckers.util.Message;
 
 import java.util.ArrayList;
 

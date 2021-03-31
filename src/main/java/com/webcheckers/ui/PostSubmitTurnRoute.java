@@ -8,10 +8,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Class that handles players submitting their turns
+ */
 public class PostSubmitTurnRoute implements Route {
 
     private GameManager gameManager;
 
+    /**
+     * Constructor for the PostSubmitTurnRoute. Should only get called once by the Webserver class
+     * @param gameManager the GameManager that handles all the active games
+     */
     public PostSubmitTurnRoute(GameManager gameManager) {
         this.gameManager = gameManager;
     }

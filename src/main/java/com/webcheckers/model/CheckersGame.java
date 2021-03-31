@@ -406,7 +406,8 @@ public class CheckersGame {
         board[end.getRow()][end.getCell()] = new Space(end.getCell(), movedPiece);
     }
 
-    /**If the piece that just moved reached the end of the board, it must become a king.
+    /**
+     * If the piece that just moved reached the end of the board, it must become a king.
      *
      * @param pieceMovedType The type of piece
      */

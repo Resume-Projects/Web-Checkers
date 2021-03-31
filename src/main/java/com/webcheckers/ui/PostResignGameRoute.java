@@ -8,12 +8,18 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Class that handles players resigning from games
+ */
 public class PostResignGameRoute implements Route {
 
     private final GameManager gameManager;
 
+    /**
+     * Constructor for the PostResignGameRoute. Should only be called once by the Webserver class
+     * @param gameManager the GameManager that handles all the active games
+     */
     public PostResignGameRoute(GameManager gameManager) {
-
         this.gameManager = gameManager;
     }
 
