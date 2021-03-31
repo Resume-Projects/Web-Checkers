@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 @Tag("Application-tier")
@@ -40,4 +39,11 @@ public class GameManagerTest {
         assertTrue(CuT.resignGame(player1));
     }
 
+    @Test
+    public void deleteGame_test() {
+        Player player1 = mock(Player.class);
+        CuT.deleteGame(player1);
+
+        assertNull(CuT.getPlayersGame(player1));
+    }
 }
