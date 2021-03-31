@@ -267,6 +267,10 @@ public class CheckersGame {
         }
     }
 
+    /**
+     * Determines if a jump is possible
+     * @return true is possible, false otherwise
+     */
     private boolean isJumpPossible() {
         //If the player has the choice between a jump and a simple move, he must jump
         for (int row = 0; row < BOARD_SIZE; row++) {
@@ -281,6 +285,11 @@ public class CheckersGame {
         return false;
     }
 
+    /**
+     * Determines if a jump can be continued
+     *
+     * @return true if it can be continued, false otherwise
+     */
     private boolean jumpCanBeContinued() {
         Space[][] boardCopy = new Space[BOARD_SIZE][];
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -302,8 +311,15 @@ public class CheckersGame {
         return moveCanBeContinued;
     }
 
+    /**
+     * Determines if a jump can be made
+     *
+     * @param pieceRow The row the piece will land
+     * @param pieceCol The Col the piece will land
+     * @return true if it can land, false otherwise
+     */
     private boolean jumpCanBeMade(int pieceRow, int pieceCol) {
-        //This code is disgusting but I don't think I can make it much cleaner
+        //This code is disgusting but I don't think I can make it much cleaner TODO: clean the code up
         Piece.Type pieceType = board[pieceRow][pieceCol].getPieceType();
         if (pieceType == Piece.Type.KING) {
             for (int rowOffset : new int[]{-2, 2}) {
@@ -345,6 +361,11 @@ public class CheckersGame {
         return false;
     }
 
+    /**
+     * Moves a piece
+     *
+     * @param move the move to make
+     */
     private void applyMove(Move move) {
         Position start = move.getStart();
         Position end = move.getEnd();
@@ -385,8 +406,10 @@ public class CheckersGame {
         board[end.getRow()][end.getCell()] = new Space(end.getCell(), movedPiece);
     }
 
-    //If the piece that just moved reached the end of the board, it must become a king
-    //and the justKinged variable is set to true
+    /**If the piece that just moved reached the end of the board, it must become a king.
+     *
+     * @param pieceMovedType The type of piece
+     */
     private void checkForKings(Piece.Type pieceMovedType) {
         Position endPosition = movesQueue.getLast().getEnd();
         if (pieceMovedType == Piece.Type.KING)
@@ -399,6 +422,12 @@ public class CheckersGame {
         }
     }
 
+    /**
+     * Get the players color
+     *
+     * @param player the player
+     * @return the players color
+     */
     public Piece.Color getPlayerColor(Player player) {
         if (player.equals(redPlayer)) {
             return Piece.Color.RED;
@@ -409,6 +438,12 @@ public class CheckersGame {
         }
     }
 
+    /**
+     * Resigns a game
+     *
+     * @param player The player to resign
+     * @return The player to resign
+     */
     public boolean resignGame(Player player) {
         // If there is no active turn
         if (activeColor == null) {
@@ -429,19 +464,37 @@ public class CheckersGame {
         return false;
     }
 
+    /**
+     * See if a player is resigned.
+     *
+     * @return true if the player resigned, false otherwise
+     */
     public boolean isResigned() {
         return state == State.RESIGNED;
     }
 
+    /**
+     * Gets the winner
+     *
+     * @return The winning player
+     */
     public Player getWinner() {
         return this.winner;
     }
 
+    /**
+     * Gets the loser
+     *
+     * @return the losing player
+     */
     public Player getLoser() {
         return this.loser;
     }
 
-    //if a player captures all of the other player's pieces:
+    /**
+     * If a player captures all of the other player's pieces:
+     * @return the gameOver state
+     */
     public boolean gameOver() {
         return state == State.OVER;
     }
