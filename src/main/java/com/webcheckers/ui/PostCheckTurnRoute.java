@@ -10,10 +10,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * This is the Route that checks whether or not it is the current player's turn
+ */
 public class PostCheckTurnRoute implements Route {
 
     private final GameManager gameManager;
 
+    /**
+     * Constructor for the PostCheckTurnRoute. Should get called only once in the Webserver class
+     * @param gameManager The GameManager that stores all the active games
+     */
     public PostCheckTurnRoute(GameManager gameManager) {
         this.gameManager = gameManager;
     }

@@ -9,10 +9,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * The class that handles checking if a move was valid and having the checkers game save the move
+ */
 public class PostValidateMoveRoute implements Route {
 
     private final GameManager gameManager;
 
+    /**
+     * Constructor for the PostValidateMoveRoute. Should only be called once by the Webserver class
+     * @param gameManager the GameManager that handles all the active games
+     */
     public PostValidateMoveRoute(GameManager gameManager) {
         this.gameManager = gameManager;
     }

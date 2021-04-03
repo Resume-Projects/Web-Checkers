@@ -12,6 +12,10 @@ public class PostBackupMoveRoute implements Route {
 
     private final GameManager gameManager;
 
+    /**
+     * The constructor of PostBackupMoveRoute
+     * @param gameManager The gameMmanager
+     */
     public PostBackupMoveRoute(GameManager gameManager) {
         this.gameManager = gameManager;
     }

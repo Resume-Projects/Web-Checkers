@@ -3,7 +3,6 @@ package com.webcheckers.application;
 
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
-import com.webcheckers.util.Message;
 
 import java.util.ArrayList;
 
@@ -25,6 +24,7 @@ public class GameManager {
 
     /**
      * Finds what game the player is in, or returns null if the player is not in a game
+     *
      * @param player the player we are looking for
      * @return the game the player is in or null
      */
@@ -38,6 +38,7 @@ public class GameManager {
 
     /**
      * Returns a new checkers game that gets added to the list
+     *
      * @param redPlayer the red player in the checkers game
      * @param whitePlayer the white player in the checkers game
      * @return the new Checkers game
@@ -48,11 +49,21 @@ public class GameManager {
         return checkersGame;
     }
 
+    /**
+     * resigns a player form the game
+     *
+     * @param player the player to resign
+     * @return the player to resign.
+     */
     public boolean resignGame(Player player) {
         CheckersGame game = getPlayersGame(player);
         return game.resignGame(player);
     }
 
+    /**
+     * Deletes a (finished) game by removing a player
+     * @param player The player to remove from the game
+     */
     public void deleteGame(Player player){
         checkersGames.removeIf(game -> game.getRedPlayer() == player);
         checkersGames.removeIf(game -> game.getWhitePlayer() == player);
