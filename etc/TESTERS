@@ -1,0 +1,7 @@
+How to run Web Checkers Through Intellij:
+Add a new configuration, and select "Maven" on the drop down menu
+For the working directory, make sure the root folder of the project
+is selected.
+In the command line text bar, type "exec:java"
+This should start the local host on port 4567
+
