@@ -2,6 +2,7 @@ package com.webcheckers.ui;
 
 import com.google.gson.Gson;
 import com.webcheckers.application.GameManager;
+import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.Request;
@@ -26,8 +27,9 @@ public class PostResignGameRoute implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Player player = request.session().attribute("currentUser");
-        boolean resign = gameManager.resignGame(player);
-        if(resign){
+        CheckersGame playersGame = gameManager.getPlayersGame(player);
+        boolean resign = playersGame.resignGame(player);
+        if(resign) {
             return new Gson().toJson(Message.info(player.getName() + "has resigned."));
         }
         return new Gson().toJson(Message.error("Resign failed"));

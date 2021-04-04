@@ -89,15 +89,15 @@ public class GetGameRoute implements Route {
                     checkersGame.getLoser().getName(), checkersGame.getWinner().getName())));
             modeOptions.put("isGameOver", true);
             vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
-            gameManager.deleteGame(currentPlayer);
-            gameManager.deleteGame(checkersGame.getWhitePlayer());
         }
 
         vm.put("title", "Game");
         vm.put("currentUser", session.attribute("currentUser"));
         vm.put("viewMode", playMode.PLAY);
-        vm.put("redPlayer", checkersGame.getRedPlayer());
-        vm.put("whitePlayer", checkersGame.getWhitePlayer());
+        //These make new Players because the players could be null.
+        //Getting the players name will never be null
+        vm.put("redPlayer", new Player(checkersGame.getRedPlayerName()));
+        vm.put("whitePlayer", new Player(checkersGame.getWhitePlayerName()));
         vm.put("activeColor", checkersGame.getActiveColor());
 
         if (currentPlayer.equals(checkersGame.getRedPlayer()))
@@ -110,8 +110,6 @@ public class GetGameRoute implements Route {
                     checkersGame.getWinner().getName())));
             modeOptions.put("isGameOver", true);
             vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
-            gameManager.deleteGame(currentPlayer);
-            gameManager.deleteGame(checkersGame.getWhitePlayer());
         }
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }

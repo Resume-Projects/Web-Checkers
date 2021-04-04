@@ -30,7 +30,8 @@ public class PostCheckTurnRoute implements Route {
         Player currentPlayer = request.session().attribute("currentUser");
         CheckersGame playersGame = gameManager.getPlayersGame(currentPlayer);
         Piece.Color activeColor = playersGame.getActiveColor();
-        boolean isPlayersTurn = (currentPlayer.equals(playersGame.getRedPlayer()) && activeColor == Piece.Color.RED) ||
+        boolean isPlayersTurn = (playersGame.isGameDone()) ||
+                                (currentPlayer.equals(playersGame.getRedPlayer()) && activeColor == Piece.Color.RED) ||
                                 (currentPlayer.equals(playersGame.getWhitePlayer()) && activeColor == Piece.Color.WHITE);
         return new Gson().toJson(Message.info("" + isPlayersTurn));
     }

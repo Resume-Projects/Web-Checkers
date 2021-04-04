@@ -65,7 +65,9 @@ public class GameManager {
      * @param player The player to remove from the game
      */
     public void deleteGame(Player player){
-        checkersGames.removeIf(game -> game.getRedPlayer() == player);
-        checkersGames.removeIf(game -> game.getWhitePlayer() == player);
+        checkersGames.removeIf(game ->
+                game.getRedPlayer() != null && player.equals(game.getRedPlayer()) ||
+                game.getWhitePlayer() != null && player.equals(game.getWhitePlayer())
+        );
     }
 }

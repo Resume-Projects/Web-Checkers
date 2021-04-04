@@ -31,22 +31,28 @@ public class CheckersGame {
 
     private State state;
 
-    private final Player redPlayer;
-    private final Player whitePlayer;
+    private Player redPlayer;
+    private Player whitePlayer;
 
     private Player winner;
     private Player loser;
 
     private Piece.Color activeColor;
 
-    //I needed to make it a LinkedList so I can check the back of the queue
-    private LinkedList<Move> movesQueue;
+    //I needed to make it a LinkedList so I can check the back and iterate through it
+    //It is still mostly used like a queue
+    private final LinkedList<Move> movesQueue;
 
     private int numRedPieces;
     private int numWhitePieces;
 
     private boolean justJumped;
     private boolean justKinged;
+
+    private boolean playerLeft;
+
+    private String redPlayerName;
+    private String whitePlayerName;
 
     /**
      * The CheckersGame data type
@@ -87,10 +93,26 @@ public class CheckersGame {
         this.numWhitePieces = 12;
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
+        this.redPlayerName = redPlayer.getName();
+        this.whitePlayerName = whitePlayer.getName();
         this.activeColor = Piece.Color.RED;
         this.winner = null;
         this.loser = null;
         this.state = State.PLAYING;
+        this.playerLeft = false;
+    }
+
+    public boolean hasPlayerLeft() {
+        return playerLeft;
+    }
+
+    public void removePlayer(Player player) {
+        if(redPlayer.equals(player)) {
+            redPlayer = null;
+        } else {
+            whitePlayer = null;
+        }
+        playerLeft = true;
     }
 
     /**
@@ -140,6 +162,12 @@ public class CheckersGame {
         return redPlayer;
     }
 
+    //Will not return null, unlike getRedPlayer.
+    //If a player left, it returns the old name
+    public String getRedPlayerName() {
+        return redPlayerName;
+    }
+
     /**
      * Gets the player of the white pieces
      *
@@ -147,6 +175,10 @@ public class CheckersGame {
      */
     public Player getWhitePlayer() {
         return whitePlayer;
+    }
+
+    public String getWhitePlayerName() {
+        return whitePlayerName;
     }
 
     public Piece.Color getActiveColor() {
@@ -446,23 +478,16 @@ public class CheckersGame {
      * @return The player to resign
      */
     public boolean resignGame(Player player) {
-        // If there is no active turn
-        if (activeColor == null) {
-            return false;
-        }
         // Can only resign if it is their turn
-        else if (activeColor == getPlayerColor(player)) {
-            loser = player;
-            state = State.RESIGNED;
-            if (redPlayer.equals(player)) {
-                winner = whitePlayer;
-            } else {
-                winner = redPlayer;
-            }
-            return true;
+        state = State.RESIGNED;
+        if(player.equals(redPlayer)) {
+            loser = redPlayer;
+            winner = whitePlayer;
+        } else {
+            loser = whitePlayer;
+            winner = redPlayer;
         }
-        // Otherwise it is not their turn or something's wrong
-        return false;
+        return true;
     }
 
     /**
@@ -498,5 +523,10 @@ public class CheckersGame {
      */
     public boolean gameOver() {
         return state == State.OVER;
+    }
+
+    //A game is done if a player resigns or the game ends a normal way
+    public boolean isGameDone() {
+        return state == State.OVER || state == State.RESIGNED;
     }
 }

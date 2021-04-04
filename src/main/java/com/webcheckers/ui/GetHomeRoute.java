@@ -64,9 +64,20 @@ public class GetHomeRoute implements Route {
         Player currentUser = request.session().attribute("currentUser");
 
         //If the player is in a game, show them the game
-        if(currentUser != null && gameManager.getPlayersGame(currentUser) != null) {
-            response.redirect("/game");
-            return null; //They get sent to the game page
+        if(currentUser != null) {
+            CheckersGame playersGame = gameManager.getPlayersGame(currentUser);
+            if(playersGame != null) { //If the player was never involved with a game, nothing should happen
+                if(!playersGame.isGameDone()) {
+                    response.redirect("/game");
+                    return null; //They get sent to the game page
+                } else {
+                    if(playersGame.hasPlayerLeft()) {
+                        gameManager.deleteGame(currentUser);
+                    } else {
+                        playersGame.removePlayer(currentUser);
+                    }
+                }
+            }
         }
 
         Map<String, Object> vm = new HashMap<>();
