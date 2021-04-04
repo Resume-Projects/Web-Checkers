@@ -232,7 +232,7 @@ public class CheckersGame {
 
         while (!movesQueue.isEmpty()) {
             Move currentMove = movesQueue.remove();
-            applyMove(currentMove);
+            applyMove(currentMove, false);
         }
 
         justJumped = false;
@@ -329,7 +329,7 @@ public class CheckersGame {
         }
         //All of the moves need to be applied before we can check if a jump is still possible
         for (Move move : movesQueue) {
-            applyMove(move);
+            applyMove(move, true);
         }
         int endingRow = movesQueue.getLast().getEnd().getRow();
         int endingCell = movesQueue.getLast().getEnd().getCell();
@@ -397,8 +397,10 @@ public class CheckersGame {
      * Moves a piece
      *
      * @param move the move to make
+     * @param temporary This will be true when called from jumpCanBeContinued. If false,
+     *                  the number of red and white pieces will not be decremented
      */
-    private void applyMove(Move move) {
+    private void applyMove(Move move, boolean temporary) {
         Position start = move.getStart();
         Position end = move.getEnd();
         int deltaRow = end.getRow() - start.getRow();
@@ -408,20 +410,24 @@ public class CheckersGame {
             Space openSpace = new Space(start.getCell() + (deltaCol / 2), Space.State.OPEN);
             board[start.getRow() + (deltaRow / 2)][start.getCell() + (deltaCol / 2)] = openSpace;
 
-            if (activeColor == Piece.Color.RED)
-                numWhitePieces--;
-            else
-                numRedPieces--;
+            if(!temporary) {
+                if (activeColor == Piece.Color.RED)
+                    numWhitePieces--;
+                else
+                    numRedPieces--;
+            }
         }
-        if(numRedPieces == 0){
-            state = State.OVER;
-            loser = redPlayer;
-            winner = whitePlayer;
-        }
-        if(numWhitePieces == 0){
-            state = State.OVER;
-            loser = whitePlayer;
-            winner = redPlayer;
+        if(!temporary) {
+            if(numRedPieces == 0) {
+                state = State.OVER;
+                loser = redPlayer;
+                winner = whitePlayer;
+            }
+            if(numWhitePieces == 0) {
+                state = State.OVER;
+                loser = whitePlayer;
+                winner = redPlayer;
+            }
         }
 
         //We do this stuff whether or not it was a jump
