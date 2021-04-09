@@ -8,13 +8,8 @@ import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.util.reflection.FieldSetter;
 import spark.*;
 import org.junit.jupiter.api.Tag;
-import spark.http.matching.Halt;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
@@ -144,7 +139,7 @@ public class GetGameRouteTest {
         CuT = new GetGameRoute(gameManager, playerLobby, templateEngine, gson);
         when(request.session().attribute("currentUser")).thenReturn(redPlayer);
         when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
-        when(checkersGame.gameOver()).thenReturn(true);
+        when(checkersGame.gameEnded()).thenReturn(true);
         when(checkersGame.getWinner()).thenReturn(redPlayer);
         when(checkersGame.getLoser()).thenReturn(whitePlayer);
 

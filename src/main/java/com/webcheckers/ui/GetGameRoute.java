@@ -84,11 +84,19 @@ public class GetGameRoute implements Route {
         } else {
             checkersGame = gameManager.getPlayersGame(currentPlayer);
         }
-        if (checkersGame.isResigned()) {
-            vm.put("message", Message.info(String.format("%s has resigned, %s has won the game.",
-                    checkersGame.getLoser().getName(), checkersGame.getWinner().getName())));
+        if(checkersGame.isGameDone()) {
             modeOptions.put("isGameOver", true);
             vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+            if(checkersGame.isResigned()) {
+                vm.put("message", Message.info(String.format("%s has resigned, %s has won the game.",
+                        checkersGame.getLoser().getName(), checkersGame.getWinner().getName())));
+            } else if(checkersGame.gameEnded()) {
+                vm.put("message", Message.info(String.format("%s has captured all of the pieces.",
+                        checkersGame.getWinner().getName())));
+            } else { //A player is unable to move
+                vm.put("message", Message.info(String.format("%s is unable to move.",
+                        checkersGame.getLoser().getName())));
+            }
         }
 
         vm.put("title", "Game");
@@ -105,12 +113,7 @@ public class GetGameRoute implements Route {
         else
             vm.put("board", checkersGame.getWhiteBoardView());
 
-        if (checkersGame.gameOver()) {
-            vm.put("message", Message.info(String.format("%s has captured all of the pieces.",
-                    checkersGame.getWinner().getName())));
-            modeOptions.put("isGameOver", true);
-            vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
-        }
+
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 }

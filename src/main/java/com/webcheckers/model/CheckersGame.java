@@ -26,6 +26,7 @@ public class CheckersGame {
     protected enum State {
         PLAYING,
         RESIGNED,
+        ENDED,
         OVER
     }
 
@@ -241,6 +242,18 @@ public class CheckersGame {
             activeColor = Piece.Color.WHITE;
         else
             activeColor = Piece.Color.RED;
+
+        if(!playerCanMove()) {
+            state = State.ENDED;
+            if(activeColor == Piece.Color.RED) {
+                winner = whitePlayer;
+                loser = redPlayer;
+            } else {
+                winner = redPlayer;
+                loser = whitePlayer;
+            }
+        }
+
         return Message.info("Move applied");
     }
 
@@ -254,6 +267,39 @@ public class CheckersGame {
             justJumped = false;
         }
         return Message.info("Attempted move was removed");
+    }
+
+    private boolean playerCanMove() {
+        for(int row = 0; row < BOARD_SIZE; row++) {
+            for(int col = 0; col < BOARD_SIZE; col++) {
+                if(board[row][col].getPiece() != null && board[row][col].getPieceColor() == activeColor) {
+                    if(jumpCanBeMade(row, col))
+                        return true;
+
+                    boolean canMove;
+                    Position startPos = new Position(row, col);
+                    if(board[row][col].getPieceType() == Piece.Type.KING) {
+                        canMove =
+                                (row - 1 >= 0 && col - 1 >= 0 && board[row - 1][col - 1].getPiece() == null) ||
+                                (row - 1 >= 0 && col + 1 < BOARD_SIZE && board[row - 1][col + 1].getPiece() == null) ||
+                                (row + 1 < BOARD_SIZE && col - 1 >= 0 && board[row + 1][col - 1].getPiece() == null) ||
+                                (row + 1 < BOARD_SIZE && col + 1 < BOARD_SIZE && board[row + 1][col + 1].getPiece() == null);
+                    } else if(activeColor == Piece.Color.RED) {
+                        canMove =
+                                (row - 1 >= 0 && col - 1 >= 0 && board[row - 1][col - 1].getPiece() == null) ||
+                                (row - 1 >= 0 && col + 1 < BOARD_SIZE && board[row - 1][col + 1].getPiece() == null);
+                    } else { //White and not a king
+                        canMove =
+                                (row + 1 < BOARD_SIZE && col - 1 >= 0 && board[row + 1][col - 1].getPiece() == null) ||
+                                (row + 1 < BOARD_SIZE && col + 1 < BOARD_SIZE && board[row + 1][col + 1].getPiece() == null);
+                    }
+
+                    if(canMove)
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 
     private boolean isValidSimpleMove(Position start, Position end, Piece.Type pieceType) {
@@ -419,12 +465,12 @@ public class CheckersGame {
         }
         if(!temporary) {
             if(numRedPieces == 0) {
-                state = State.OVER;
+                state = State.ENDED;
                 loser = redPlayer;
                 winner = whitePlayer;
             }
             if(numWhitePieces == 0) {
-                state = State.OVER;
+                state = State.ENDED;
                 loser = whitePlayer;
                 winner = redPlayer;
             }
@@ -527,12 +573,12 @@ public class CheckersGame {
      * If a player captures all of the other player's pieces:
      * @return the gameOver state
      */
-    public boolean gameOver() {
-        return state == State.OVER;
+    public boolean gameEnded() {
+        return state == State.ENDED;
     }
 
     //A game is done if a player resigns or the game ends a normal way
     public boolean isGameDone() {
-        return state == State.OVER || state == State.RESIGNED;
+        return state == State.ENDED || state == State.RESIGNED || state == State.OVER;
     }
 }
