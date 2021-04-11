@@ -277,7 +277,6 @@ public class CheckersGame {
                         return true;
 
                     boolean canMove;
-                    Position startPos = new Position(row, col);
                     if(board[row][col].getPieceType() == Piece.Type.KING) {
                         canMove =
                                 (row - 1 >= 0 && col - 1 >= 0 && board[row - 1][col - 1].getPiece() == null) ||
