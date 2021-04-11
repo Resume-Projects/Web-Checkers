@@ -35,6 +35,11 @@ public class Player implements Comparable<Player> {
         return this.name.equals(((Player)other).name);
     }
 
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
     /**
      * Overrides toString to return the player name
      *

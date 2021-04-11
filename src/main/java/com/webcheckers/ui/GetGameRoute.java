@@ -72,11 +72,12 @@ public class GetGameRoute implements Route {
 
         //If the player is not in a game, then the game just started and a game needs to be made
         if (gameManager.getPlayersGame(currentPlayer) == null) {
-            Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
+            String whitePlayerName = request.queryParams("whitePlayer");
+            Player whitePlayer = playerLobby.getPlayerFromName(whitePlayerName);
             //If the white player is already in a game, send them back to the home page
             if (gameManager.getPlayersGame(whitePlayer) != null) {
-                session.attribute("errorMessage", "That player is already in a game");
-                response.redirect("/");
+                //request.queryParams("playerSpectated") will give the player name
+                response.redirect("/spectator/game?playerSpectated=" + whitePlayerName);
                 return null; //They get sent back to the home page
             } else {
                 checkersGame = gameManager.getNewGame(currentPlayer, whitePlayer);

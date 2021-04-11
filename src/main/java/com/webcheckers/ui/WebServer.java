@@ -165,7 +165,7 @@ public class WebServer {
 
         post("/resignGame", new PostResignGameRoute(gameManager));
 
-        get("/spectator/game", new GetSpectatorGameRoute());
+        get("/spectator/game", new GetSpectatorGameRoute(playerLobby, gameManager, templateEngine));
 
         get("/spectator/stopWatching", new GetSpectatorStopWatchingRoute());
 
