@@ -13,7 +13,7 @@ import spark.Route;
  */
 public class PostSubmitTurnRoute implements Route {
 
-    private GameManager gameManager;
+    private final GameManager gameManager;
 
     /**
      * Constructor for the PostSubmitTurnRoute. Should only get called once by the Webserver class
@@ -27,6 +27,7 @@ public class PostSubmitTurnRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         Player currentPlayer = request.session().attribute("currentUser");
         CheckersGame playersGame = gameManager.getPlayersGame(currentPlayer);
+        gameManager.gameHasBeenUpdated(playersGame);
         return new Gson().toJson(playersGame.applyAttemptedMoves());
     }
 }

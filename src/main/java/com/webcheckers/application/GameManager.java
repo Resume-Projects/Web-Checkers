@@ -37,6 +37,10 @@ public class GameManager {
         newBoardState = new HashMap<>();
     }
 
+    public void addSpectator(int gameID, Player player) {
+
+    }
+
     public boolean hasBoardBeenUpdated(Player player) {
         if(newBoardState.get(player)) {
             newBoardState.put(player, false);
@@ -58,6 +62,21 @@ public class GameManager {
                 return Piece.Color.WHITE;
         }
         return null;
+    }
+
+    public void gameHasBeenUpdated(CheckersGame checkersGame) {
+        int gamesID = -1;
+        for(int i = 0; i < currentID; i++) {
+            if(checkersGames.get(i) == checkersGame) {
+                gamesID = i;
+                break;
+            }
+        }
+        if(gamesID == -1)
+            return; //This should not happen
+        for(Player player : spectators.get(gamesID)) {
+            newBoardState.put(player, true);
+        }
     }
 
     /**

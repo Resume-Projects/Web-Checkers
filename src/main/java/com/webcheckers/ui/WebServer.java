@@ -169,7 +169,7 @@ public class WebServer {
 
         get("/spectator/stopWatching", new GetSpectatorStopWatchingRoute());
 
-        post("/spectator/checkTurn", new PostSpectatorCheckTurnRoute());
+        post("/spectator/checkTurn", new PostSpectatorCheckTurnRoute(gameManager));
 
         LOG.config("WebServer is initialized.");
     }

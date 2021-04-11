@@ -28,7 +28,8 @@ public class GetSpectatorGameRoute implements Route {
         //request.queryParams("gameID") will give the game's ID
         HashMap<String, Object> vm = new HashMap<>();
         Player currentUser = request.session().attribute("currentUser");
-        //int gameID = request.attribute("gameID");
+        //This should maybe be used
+        //int gameID = Integer.parseInt(request.queryParams("gameID"));
         Player spectatedPlayer = playerLobby.getPlayerFromName(request.queryParams("playerSpectated"));
         CheckersGame spectatedGame = gameManager.getPlayersGame(spectatedPlayer);
 
@@ -38,7 +39,6 @@ public class GetSpectatorGameRoute implements Route {
         vm.put("redPlayer", new Player(spectatedGame.getRedPlayerName()));
         vm.put("whitePlayer", new Player(spectatedGame.getWhitePlayerName()));
         vm.put("activeColor", spectatedGame.getActiveColor());
-
         vm.put("board", spectatedGame.getRedBoardView());
 
         vm.put("message", Message.info("Cock and balls"));
