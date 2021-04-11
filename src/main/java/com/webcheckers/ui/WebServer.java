@@ -165,6 +165,12 @@ public class WebServer {
 
         post("/resignGame", new PostResignGameRoute(gameManager));
 
+        get("/spectator/game", new GetSpectatorGameRoute());
+
+        get("/spectator/stopWatching", new GetSpectatorStopWatchingRoute());
+
+        post("/spectator/checkTurn", new PostSpectatorCheckTurnRoute());
+
         LOG.config("WebServer is initialized.");
     }
 
