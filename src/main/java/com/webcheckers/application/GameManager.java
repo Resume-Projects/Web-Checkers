@@ -5,6 +5,7 @@ import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class will store all of the active checkers games. Only one should ever be created. Most classes will
@@ -12,14 +13,17 @@ import java.util.ArrayList;
  */
 public class GameManager {
 
-    private final ArrayList<CheckersGame> checkersGames;
+    private static int staticGameID = 0;
+
+    //Changed to a HashMap so game ID's can be used
+    private final HashMap<Integer, CheckersGame> checkersGames;
 
     /**
      * Creates the GameManager object that just initialized the list of games. Only one should
      * ever be made
      */
     public GameManager() {
-        checkersGames = new ArrayList<>();
+        checkersGames = new HashMap<>();
     }
 
     /**
@@ -29,7 +33,7 @@ public class GameManager {
      * @return the game the player is in or null
      */
     public CheckersGame getPlayersGame(Player player) {
-        for(CheckersGame checkersGame : checkersGames)
+        for(CheckersGame checkersGame : checkersGames.values())
             if(player.equals(checkersGame.getRedPlayer()) || player.equals(checkersGame.getWhitePlayer()))
                 return checkersGame;
 
@@ -45,7 +49,8 @@ public class GameManager {
      */
     public CheckersGame getNewGame(Player redPlayer, Player whitePlayer) {
         CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer);
-        checkersGames.add(checkersGame);
+        checkersGames.put(staticGameID, checkersGame);
+        staticGameID++;
         return checkersGame;
     }
 
@@ -65,9 +70,14 @@ public class GameManager {
      * @param player The player to remove from the game
      */
     public void deleteGame(Player player){
-        checkersGames.removeIf(game ->
-                game.getRedPlayer() != null && player.equals(game.getRedPlayer()) ||
-                game.getWhitePlayer() != null && player.equals(game.getWhitePlayer())
-        );
+        for(int gameID : checkersGames.keySet()) {
+            CheckersGame game = checkersGames.get(gameID);
+            Player redPlayer = game.getRedPlayer();
+            Player whitePlayer = game.getWhitePlayer();
+            if((redPlayer != null && redPlayer.equals(player)) || (whitePlayer != null && whitePlayer.equals(player))) {
+                checkersGames.remove(gameID);
+                break; //Stop the loop once we remove the game
+            }
+        }
     }
 }
