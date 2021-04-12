@@ -14,6 +14,7 @@ import java.util.logging.Logger;
  * @author Danny Gardner
  */
 public class CheckersGame {
+
     private static final Logger LOG = Logger.getLogger(CheckersGame.class.getName());
 
     private final Space[][] board;
@@ -52,8 +53,10 @@ public class CheckersGame {
 
     private boolean playerLeft;
 
-    private String redPlayerName;
-    private String whitePlayerName;
+    private final String redPlayerName;
+    private final String whitePlayerName;
+
+    private final int gameID;
 
     /**
      * The CheckersGame data type
@@ -61,7 +64,7 @@ public class CheckersGame {
      * @param redPlayer   the player with the red pieces
      * @param whitePlayer the player with the white pieces
      */
-    public CheckersGame(Player redPlayer, Player whitePlayer) {
+    public CheckersGame(Player redPlayer, Player whitePlayer, int gameID) {
         LOG.fine("Game created");
         board = new Space[BOARD_SIZE][BOARD_SIZE];
         movesQueue = new LinkedList<>();
@@ -87,6 +90,7 @@ public class CheckersGame {
                 board[3][col] = new Space(col, Space.State.OPEN);
             }
         }
+        this.gameID = gameID;
         GameController.initializeBoard(board);
         this.justJumped = false;
         this.justKinged = false;
@@ -101,6 +105,10 @@ public class CheckersGame {
         this.loser = null;
         this.state = State.PLAYING;
         this.playerLeft = false;
+    }
+
+    public int getGameID() {
+        return gameID;
     }
 
     public boolean hasPlayerLeft() {

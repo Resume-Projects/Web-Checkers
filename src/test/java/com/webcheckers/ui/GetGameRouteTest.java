@@ -50,7 +50,7 @@ public class GetGameRouteTest {
     public void newGame() throws Exception {
         redPlayer = mock(Player.class);
         whitePlayer = mock(Player.class);
-        checkersGame = new CheckersGame(redPlayer, whitePlayer);
+        checkersGame = new CheckersGame(redPlayer, whitePlayer, 1);
         when(request.session().attribute("currentUser")).thenReturn(redPlayer);
         when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
         final TemplateEngineTester testHelper = new TemplateEngineTester();
@@ -71,7 +71,7 @@ public class GetGameRouteTest {
     public void testGameRed() throws Exception {
         redPlayer = mock(Player.class);
         whitePlayer = mock(Player.class);
-        checkersGame = new CheckersGame(redPlayer, whitePlayer);
+        checkersGame = new CheckersGame(redPlayer, whitePlayer, 1);
         when(session.attribute("currentUser")).thenReturn(redPlayer);
         // when(playerLobby.  thenReturn(whitePlayer);
         when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
@@ -82,7 +82,7 @@ public class GetGameRouteTest {
     public void testGameWhite() throws Exception {
         redPlayer = mock(Player.class);
         whitePlayer = mock(Player.class);
-        checkersGame = new CheckersGame(redPlayer, whitePlayer);
+        checkersGame = new CheckersGame(redPlayer, whitePlayer, 1);
         when(session.attribute("currentUser")).thenReturn(whitePlayer);
         // when(playerLobby.getPlayer("whitePlayer")).thenReturn(whitePlayer);
         when(gameManager.getPlayersGame(whitePlayer)).thenReturn(checkersGame);
@@ -119,7 +119,7 @@ public class GetGameRouteTest {
     public void playerResigned_test() throws Exception{
         redPlayer = mock(Player.class);
         whitePlayer = mock(Player.class);
-        checkersGame = new CheckersGame(redPlayer, whitePlayer);
+        checkersGame = new CheckersGame(redPlayer, whitePlayer, 1);
         gson = new Gson();
         CuT = new GetGameRoute(gameManager, playerLobby, templateEngine, gson);
         when(request.session().attribute("currentUser")).thenReturn(redPlayer);

@@ -38,7 +38,8 @@ public class GameManager {
     }
 
     public void addSpectator(int gameID, Player player) {
-
+        spectators.get(gameID).add(player);
+        newBoardState.put(player, false);
     }
 
     public boolean hasBoardBeenUpdated(Player player) {
@@ -101,7 +102,7 @@ public class GameManager {
      * @return the new Checkers game
      */
     public CheckersGame getNewGame(Player redPlayer, Player whitePlayer) {
-        CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer);
+        CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer, currentID);
         spectators.put(currentID, new ArrayList<>());
         checkersGames.put(currentID, checkersGame);
         currentID++;
