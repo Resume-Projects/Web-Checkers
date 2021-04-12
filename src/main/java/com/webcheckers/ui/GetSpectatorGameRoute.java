@@ -33,7 +33,7 @@ public class GetSpectatorGameRoute implements Route {
         Player spectatedPlayer = playerLobby.getPlayerFromName(request.queryParams("playerSpectated"));
         CheckersGame spectatedGame = gameManager.getPlayersGame(spectatedPlayer);
 
-        vm.put("title", "penis");
+        vm.put("title", "spectating");
         vm.put("currentUser", currentUser);
         vm.put("viewMode", GetGameRoute.playMode.SPECTATOR);
         vm.put("redPlayer", new Player(spectatedGame.getRedPlayerName()));
@@ -41,7 +41,7 @@ public class GetSpectatorGameRoute implements Route {
         vm.put("activeColor", spectatedGame.getActiveColor());
         vm.put("board", spectatedGame.getRedBoardView());
 
-        vm.put("message", Message.info("Cock and balls"));
+        vm.put("message", Message.info("You are spectating"));
 
         return new FreeMarkerEngine().render(new ModelAndView(vm, "game.ftl"));
     }

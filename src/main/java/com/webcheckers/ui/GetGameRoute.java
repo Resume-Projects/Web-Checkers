@@ -66,7 +66,7 @@ public class GetGameRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         final Session session = request.session();
         Map<String, Object> vm = new HashMap<>();
-        Map<String, Object> modeOptions = new HashMap<>(2);
+        Map<String, Object> modeOptions = new HashMap<>();
         Player currentPlayer = session.attribute("currentUser");
         CheckersGame checkersGame;
 
@@ -80,6 +80,10 @@ public class GetGameRoute implements Route {
                 //request.queryParams("playerSpectated") will give the player name
                 response.redirect("/spectator/game?playerSpectated=" + whitePlayerName);
                 gameManager.addSpectator(checkersGame.getGameID(), currentPlayer);
+                return null;
+            } else if(gameManager.isPlayerSpectating(whitePlayer)){
+                session.attribute("errorMessage", "Player is already spectating");
+                response.redirect("/");
                 return null; //They get sent back to the home page
             } else {
                 checkersGame = gameManager.getNewGame(currentPlayer, whitePlayer);

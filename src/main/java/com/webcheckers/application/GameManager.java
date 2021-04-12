@@ -37,6 +37,10 @@ public class GameManager {
         newBoardState = new HashMap<>();
     }
 
+    public boolean isPlayerSpectating(Player player) {
+        return newBoardState.containsKey(player);
+    }
+
     public void addSpectator(int gameID, Player player) {
         spectators.get(gameID).add(player);
         newBoardState.put(player, false);
@@ -50,8 +54,13 @@ public class GameManager {
         return false;
     }
 
-    public void removeSpectator(int gameID, Player player) {
-        spectators.get(gameID).remove(player);
+    public void removeSpectator(Player player) {
+        for(int num : spectators.keySet()) {
+            if(spectators.get(num).contains(player)) {
+                spectators.get(num).remove(player);
+                break;
+            }
+        }
         newBoardState.remove(player);
     }
 
