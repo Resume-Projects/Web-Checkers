@@ -90,10 +90,12 @@ public class GetHomeRoute implements Route {
             vm.put("message", Message.error(request.session().attribute("errorMessage")));
 
         vm.put("numPlayers", playerLobby.getActivePlayers().size());
+        vm.put("numGames", gameManager.getActiveGames().size());
 
         if(currentUser != null) {
             vm.put("currentUser", currentUser);
             vm.put("activePlayers", playerLobby.getActivePlayers().values());
+            vm.put("activeGames", gameManager.getActiveGames().values());
         }
 
         // render the View
