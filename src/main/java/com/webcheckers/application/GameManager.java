@@ -7,6 +7,7 @@ import com.webcheckers.model.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class will store all of the active checkers games. Only one should ever be created. Most classes will
@@ -35,6 +36,10 @@ public class GameManager {
         checkersGames = new HashMap<>();
         spectators = new HashMap<>();
         newBoardState = new HashMap<>();
+    }
+
+    public HashMap<Integer, CheckersGame> getActiveGames() {
+        return checkersGames;
     }
 
     public boolean isPlayerSpectating(Player player) {
