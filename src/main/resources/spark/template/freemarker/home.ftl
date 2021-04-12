@@ -47,6 +47,18 @@
             </#if>
         </#if>
 
+        <h2>Active Games</h2>
+        <#if activeGames??>
+            <#if numGames == 1>
+                <p>There is ${numGames} active game.</p>
+            <#else>
+                <p>There are ${numGames} active games.</p>
+            </#if>
+        <#else>
+            <p>There are no active games.</p>
+        </#if>
+
+
     </div>
 
 </div>
