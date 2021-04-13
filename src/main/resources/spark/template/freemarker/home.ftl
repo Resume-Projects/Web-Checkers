@@ -55,7 +55,13 @@
                 <p>There are ${numGames} active games.</p>
             </#if>
         <#else>
-            <p>There are no active games.</p>
+            <#if numGames == 0>
+                <p>There are no active games.<p>
+            <#elseif numGames == 1>
+                <p>There is ${numGames} active game. Sign in to see</p>
+            <#else>
+                <p>There are ${numGames} active games. Sign in to see them</p>
+            </#if>
         </#if>
 
 
