@@ -15,7 +15,6 @@ import static org.mockito.Mockito.*;
 
 /**
  * Code coverage for GetGameRoute
- *
  */
 @Tag("UI-tier")
 public class GetGameRouteTest {
@@ -48,8 +47,8 @@ public class GetGameRouteTest {
 
     @Test
     public void newGame() throws Exception {
-        redPlayer = mock(Player.class);
-        whitePlayer = mock(Player.class);
+        redPlayer = new Player("player 1");
+        whitePlayer = new Player("player 2");
         checkersGame = new CheckersGame(redPlayer, whitePlayer);
         when(request.session().attribute("currentUser")).thenReturn(redPlayer);
         when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
@@ -116,7 +115,7 @@ public class GetGameRouteTest {
     }
 
     @Test
-    public void playerResigned_test() throws Exception{
+    public void playerResigned_test() throws Exception {
         redPlayer = mock(Player.class);
         whitePlayer = mock(Player.class);
         checkersGame = new CheckersGame(redPlayer, whitePlayer);
@@ -127,11 +126,10 @@ public class GetGameRouteTest {
         checkersGame.resignGame(redPlayer);
 
         CuT.handle(request, response);
-
     }
 
     @Test
-    public void gameOver_test() throws Exception{
+    public void gameOver_test() throws Exception {
         redPlayer = mock(Player.class);
         whitePlayer = mock(Player.class);
         checkersGame = mock(CheckersGame.class);
@@ -139,12 +137,29 @@ public class GetGameRouteTest {
         CuT = new GetGameRoute(gameManager, playerLobby, templateEngine, gson);
         when(request.session().attribute("currentUser")).thenReturn(redPlayer);
         when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
+        when(checkersGame.isGameDone()).thenReturn(true);
         when(checkersGame.gameEnded()).thenReturn(true);
         when(checkersGame.getWinner()).thenReturn(redPlayer);
         when(checkersGame.getLoser()).thenReturn(whitePlayer);
 
         CuT.handle(request, response);
+    }
 
+    @Test
+    public void noMoves_test() throws Exception {
+        redPlayer = mock(Player.class);
+        whitePlayer = mock(Player.class);
+        checkersGame = mock(CheckersGame.class);
+        gson = new Gson();
+        CuT = new GetGameRoute(gameManager, playerLobby, templateEngine, gson);
+        when(request.session().attribute("currentUser")).thenReturn(redPlayer);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
+        when(checkersGame.isGameDone()).thenReturn(true);
+        when(checkersGame.gameEnded()).thenReturn(false);
+        when(checkersGame.getWinner()).thenReturn(redPlayer);
+        when(checkersGame.getLoser()).thenReturn(whitePlayer);
+
+        CuT.handle(request, response);
     }
 }
 
