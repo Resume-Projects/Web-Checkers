@@ -3,8 +3,12 @@ package com.webcheckers.application;
 
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.SavedGame;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class will store all of the active checkers games. Only one should ever be created. Most classes will
@@ -13,6 +17,7 @@ import java.util.ArrayList;
 public class GameManager {
 
     private final ArrayList<CheckersGame> checkersGames;
+    private final Map<String, SavedGame> savedGames;
 
     /**
      * Creates the GameManager object that just initialized the list of games. Only one should
@@ -20,6 +25,7 @@ public class GameManager {
      */
     public GameManager() {
         checkersGames = new ArrayList<>();
+        savedGames = new HashMap<>();
     }
 
     /**
@@ -69,5 +75,14 @@ public class GameManager {
                 game.getRedPlayer() != null && player.equals(game.getRedPlayer()) ||
                 game.getWhitePlayer() != null && player.equals(game.getWhitePlayer())
         );
+    }
+
+    public void saveGame(String gameID, Player player) {
+        CheckersGame game = getPlayersGame(player);
+        SavedGame savedGame = new SavedGame(game.getMoves(), game);
+    }
+
+    public SavedGame getSavedGame(String gameID) {
+        return savedGames.get(gameID);
     }
 }

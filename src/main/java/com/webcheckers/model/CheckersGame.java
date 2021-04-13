@@ -3,6 +3,7 @@ package com.webcheckers.model;
 import com.webcheckers.application.GameController;
 import com.webcheckers.util.Message;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -54,6 +55,8 @@ public class CheckersGame {
 
     private String redPlayerName;
     private String whitePlayerName;
+
+    private ArrayList<SavedMove> moves = new ArrayList<>();
 
     /**
      * The CheckersGame data type
@@ -580,5 +583,9 @@ public class CheckersGame {
     //A game is done if a player resigns or the game ends a normal way
     public boolean isGameDone() {
         return state == State.ENDED || state == State.RESIGNED || state == State.OVER;
+    }
+
+    public ArrayList<SavedMove> getMoves() {
+        return moves;
     }
 }

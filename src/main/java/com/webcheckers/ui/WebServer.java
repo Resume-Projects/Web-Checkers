@@ -165,15 +165,13 @@ public class WebServer {
 
         post("/resignGame", new PostResignGameRoute(gameManager));
 
-        get("/replay/game", new GetReplayGameRoute());
+        get("/replay/game", new GetReplayGameRoute(gameManager, playerLobby, templateEngine, gson));
 
         get("/replay/stopWatching", new GetReplayStopRoute());
 
         post("/replay/nextTurn", new PostNextTurnRoute());
 
         post("/replay/previousTurn", new PostPreviousTurnRoute());
-
-
 
         LOG.config("WebServer is initialized.");
     }
