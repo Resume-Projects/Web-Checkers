@@ -4,6 +4,7 @@ package com.webcheckers.ui;
 import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
+import com.webcheckers.model.Piece;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
@@ -63,12 +64,19 @@ public class GetSpectatorGameRoute implements Route {
         vm.put("title", "spectating");
         vm.put("currentUser", currentUser);
         vm.put("viewMode", GetGameRoute.playMode.SPECTATOR);
+        //Duplicate lines.........
         vm.put("redPlayer", new Player(spectatedGame.getRedPlayerName()));
         vm.put("whitePlayer", new Player(spectatedGame.getWhitePlayerName()));
-        vm.put("activeColor", spectatedGame.getActiveColor());
-        vm.put("board", spectatedGame.getRedBoardView());
 
-        vm.put("message", Message.info("You are spectating"));
+        vm.put("activeColor", spectatedGame.getActiveColor());
+
+        if(spectatedPlayer.equals(spectatedGame.getRedPlayer()))
+            vm.put("board", spectatedGame.getRedBoardView());
+        else
+            vm.put("board", spectatedGame.getWhiteBoardView());
+
+        String infoText = "You are spectating " + spectatedPlayer.getName() + ". This page will automatically refresh when a move is made";
+        vm.put("message", Message.info(infoText));
 
         return new FreeMarkerEngine().render(new ModelAndView(vm, "game.ftl"));
     }
