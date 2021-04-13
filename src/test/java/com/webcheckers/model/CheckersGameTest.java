@@ -54,6 +54,16 @@ public class CheckersGameTest {
     }
 
     @Test
+    public void getRedColor_test() {
+        assertSame(CuT.getPlayerColor(redPlayer), Piece.Color.RED);
+    }
+
+    @Test
+    public void getWhiteColor_test() {
+        assertSame(CuT.getPlayerColor(whitePlayer), Piece.Color.WHITE);
+    }
+
+    @Test
     public void nullPlayerColor_test() {
         Player player3 = new Player("player3");
         assertNull(CuT.getPlayerColor(player3));
@@ -198,8 +208,11 @@ public class CheckersGameTest {
         FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("board"), board);
 
         Message message = CuT.saveAttemptedMove(move);
+        Message message2 = CuT.applyAttemptedMoves();
+
         assertSame(message.getText(), "Valid move");
         assertSame(message.getType(), Message.Type.INFO);
+        assertSame(message2.getText(), "Move applied");
     }
 
     @Test
@@ -251,8 +264,47 @@ public class CheckersGameTest {
     }
 
     @Test
-    public void nullResign_test() throws NoSuchFieldException {
-        FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("activeColor"), null);
-        assertFalse(CuT.resignGame(whitePlayer));
+    public void gameEnded_test() throws NoSuchFieldException {
+        FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("state"), CheckersGame.State.ENDED);
+        assertTrue(CuT.gameEnded());
+        assertTrue(CuT.isGameDone());
+    }
+
+    @Test
+    public void gameNotEnded_test() {
+        assertFalse(CuT.gameEnded());
+        assertFalse(CuT.isGameDone());
+    }
+
+    @Test
+    public void playerHasNotLeft_test() {
+        assertFalse(CuT.hasPlayerLeft());
+    }
+
+    @Test
+    public void removeRedPlayer_test() {
+        CuT.removePlayer(redPlayer);
+        assertTrue(CuT.hasPlayerLeft());
+    }
+
+    @Test
+    public void removeWhitePlayer_test() {
+        CuT.removePlayer(whitePlayer);
+        assertTrue(CuT.hasPlayerLeft());
+    }
+
+    @Test
+    public void getRedPlayerName_test() {
+        assertSame(CuT.getRedPlayerName(), redPlayer.getName());
+    }
+
+    @Test
+    public void getWhitePlayerName_test() {
+        assertSame(CuT.getWhitePlayerName(), whitePlayer.getName());
+    }
+
+    @Test
+    public void redPlayerCantMove_test() throws NoSuchFieldException {
+        //FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("player"), );
     }
 }
