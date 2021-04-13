@@ -49,21 +49,26 @@
 
         <h2>Active Games</h2>
         <#if activeGames??>
-            <#if numGames == 1>
-                <p>There is ${numGames} active game.</p>
+            <#if numGames == 0>
+                <p>There are no active game.</p>
+            <#elseif numGames == 1>
+                <p>There is one active game. Click a name to start spectating that player</p>
             <#else>
-                <p>There are ${numGames} active games.</p>
+                <p>There are ${numGames} active games. Click a name to start spectating that player</p>
             </#if>
             <ol>
                 <#list activeGames as game>
-                <li><a href="/game?${game.gameID}">Game ${game.gameID}</a></li>
+                    <#if !game.isGameDone>
+                        <li><a href="/spectator/game?playerSpectated=${game.redPlayerName}">Game ${game.gameID}: ${game.redPlayerName}</a></li>
+                        <li><a href="/spectator/game?playerSpectated=${game.whitePlayerName}">Game ${game.gameID}: ${game.whitePlayerName}</a></li>
+                    </#if>
                 </#list>
             </ol>
         <#else>
             <#if numGames == 0>
                 <p>There are no active games.<p>
             <#elseif numGames == 1>
-                <p>There is ${numGames} active game. Sign in to see</p>
+                <p>There is ${numGames} active game. Sign in to see it</p>
             <#else>
                 <p>There are ${numGames} active games. Sign in to see them</p>
             </#if>

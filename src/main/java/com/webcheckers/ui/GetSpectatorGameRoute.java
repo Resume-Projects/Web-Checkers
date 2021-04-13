@@ -56,6 +56,10 @@ public class GetSpectatorGameRoute implements Route {
         Player spectatedPlayer = playerLobby.getPlayerFromName(request.queryParams("playerSpectated"));
         CheckersGame spectatedGame = gameManager.getPlayersGame(spectatedPlayer);
 
+        if(!gameManager.isPlayerSpectating(currentUser)) {
+            gameManager.addSpectator(spectatedGame.getGameID(), currentUser);
+        }
+
         vm.put("title", "spectating");
         vm.put("currentUser", currentUser);
         vm.put("viewMode", GetGameRoute.playMode.SPECTATOR);

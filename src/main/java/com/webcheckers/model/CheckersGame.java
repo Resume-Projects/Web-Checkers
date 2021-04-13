@@ -585,7 +585,7 @@ public class CheckersGame {
     }
 
     //A game is done if a player resigns or the game ends a normal way
-    public boolean isGameDone() {
+    public boolean getIsGameDone() {
         return state == State.ENDED || state == State.RESIGNED || state == State.OVER;
     }
 }

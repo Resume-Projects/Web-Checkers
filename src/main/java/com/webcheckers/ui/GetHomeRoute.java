@@ -67,7 +67,7 @@ public class GetHomeRoute implements Route {
         if(currentUser != null) {
             CheckersGame playersGame = gameManager.getPlayersGame(currentUser);
             if(playersGame != null) { //If the player was never involved with a game, nothing should happen
-                if(!playersGame.isGameDone()) {
+                if(!playersGame.getIsGameDone()) {
                     response.redirect("/game");
                     return null; //They get sent to the game page
                 } else {

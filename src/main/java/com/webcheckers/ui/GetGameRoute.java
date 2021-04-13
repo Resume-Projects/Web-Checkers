@@ -72,26 +72,23 @@ public class GetGameRoute implements Route {
 
         //If the player is not in a game, then the game just started and a game needs to be made
         if (gameManager.getPlayersGame(currentPlayer) == null) {
-            String whitePlayerName = request.queryParams("whitePlayer");
-            Player whitePlayer = playerLobby.getPlayerFromName(whitePlayerName);
+            Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
             //If the white player is already in a game, send them back to the home page
-            if (gameManager.getPlayersGame(whitePlayer) != null) {
-                checkersGame = gameManager.getPlayersGame(whitePlayer);
-                //request.queryParams("playerSpectated") will give the player name
-                response.redirect("/spectator/game?playerSpectated=" + whitePlayerName);
-                gameManager.addSpectator(checkersGame.getGameID(), currentPlayer);
-                return null;
-            } else if(gameManager.isPlayerSpectating(whitePlayer)){
-                session.attribute("errorMessage", "Player is already spectating");
+            if(gameManager.getPlayersGame(whitePlayer) != null) {
+                session.attribute("errorMessage", "That player is already in a game");
                 response.redirect("/");
-                return null; //They get sent back to the home page
+                return null;
+            } else if(gameManager.isPlayerSpectating(whitePlayer)) {
+                session.attribute("errorMessage", "That player is currently spectating a game");
+                response.redirect("/");
+                return null;
             } else {
                 checkersGame = gameManager.getNewGame(currentPlayer, whitePlayer);
             }
         } else {
             checkersGame = gameManager.getPlayersGame(currentPlayer);
         }
-        if(checkersGame.isGameDone()) {
+        if(checkersGame.getIsGameDone()) {
             modeOptions.put("isGameOver", true);
             vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
             if(checkersGame.isResigned()) {
