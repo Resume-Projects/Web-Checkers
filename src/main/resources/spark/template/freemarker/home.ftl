@@ -54,6 +54,11 @@
             <#else>
                 <p>There are ${numGames} active games.</p>
             </#if>
+            <ol>
+                <#list activeGames as game>
+                <li><a href="/game?${game.gameID}">Game ${game.gameID}</a></li>
+                </#list>
+            </ol>
         <#else>
             <#if numGames == 0>
                 <p>There are no active games.<p>
