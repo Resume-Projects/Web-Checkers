@@ -84,6 +84,7 @@ public class GetGameRoute implements Route {
                 return null;
             } else {
                 checkersGame = gameManager.getNewGame(currentPlayer, whitePlayer);
+                gameManager.gameHasBeenUpdated(checkersGame.getGameID());
             }
         } else {
             checkersGame = gameManager.getPlayersGame(currentPlayer);

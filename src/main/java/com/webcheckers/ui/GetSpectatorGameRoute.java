@@ -52,16 +52,33 @@ public class GetSpectatorGameRoute implements Route {
         //request.queryParams("gameID") will give the game's ID
         HashMap<String, Object> vm = new HashMap<>();
         Player currentUser = request.session().attribute("currentUser");
-        //This should maybe be used
-        //int gameID = Integer.parseInt(request.queryParams("gameID"));
-        Player spectatedPlayer = playerLobby.getPlayerFromName(request.queryParams("playerSpectated"));
-        CheckersGame spectatedGame = gameManager.getPlayersGame(spectatedPlayer);
 
+        Player spectatedPlayer = playerLobby.getPlayerFromName(request.queryParams("playerSpectated"));
+        if(spectatedPlayer == null) {
+            request.session().attribute("errorMessage", "The player you were spectating signed out");
+            response.redirect("/");
+            return null;
+        }
+
+        CheckersGame spectatedGame = gameManager.getPlayersGame(spectatedPlayer);
         if(!gameManager.isPlayerSpectating(currentUser)) {
             gameManager.addSpectator(spectatedGame.getGameID(), currentUser);
         }
 
-        vm.put("title", "spectating");
+        if(gameManager.getGameState(currentUser) != CheckersGame.State.PLAYING) {
+            CheckersGame.State endGameState = gameManager.getGameState(currentUser);
+            if(endGameState == CheckersGame.State.OVER) {
+                request.session().attribute("errorMessage", "A player has captured all the pieces");
+            } else if(endGameState == CheckersGame.State.ENDED) {
+                request.session().attribute("errorMessage", "A player was not able to make any moves");
+            } else {
+                request.session().attribute("errorMessage", "A player has resigned from the game");
+            }
+            response.redirect("/");
+            return null;
+        }
+
+        vm.put("title", "spectating " + spectatedPlayer.getName());
         vm.put("currentUser", currentUser);
         vm.put("viewMode", GetGameRoute.playMode.SPECTATOR);
         //Duplicate lines.........

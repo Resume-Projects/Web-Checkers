@@ -24,7 +24,7 @@ public class CheckersGame {
      */
     public static final int BOARD_SIZE = 8;
 
-    protected enum State {
+    public enum State {
         PLAYING,
         RESIGNED,
         ENDED,
@@ -105,6 +105,10 @@ public class CheckersGame {
         this.loser = null;
         this.state = State.PLAYING;
         this.playerLeft = false;
+    }
+
+    public State getGameState() {
+        return state;
     }
 
     public int getGameID() {

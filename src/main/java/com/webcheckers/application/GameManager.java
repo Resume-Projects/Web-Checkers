@@ -7,7 +7,6 @@ import com.webcheckers.model.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class will store all of the active checkers games. Only one should ever be created. Most classes will
@@ -28,6 +27,9 @@ public class GameManager {
     //The key is a spectator and the value is whether or not the board has been updated
     private final HashMap<Player, Boolean> newBoardState;
 
+    //The key is a spectator and the value is the state of the spectated game
+    private final HashMap<Player, CheckersGame.State> gameStates;
+
     /**
      * Creates the GameManager object that just initialized the list of games. Only one should
      * ever be made
@@ -36,6 +38,11 @@ public class GameManager {
         checkersGames = new HashMap<>();
         spectators = new HashMap<>();
         newBoardState = new HashMap<>();
+        gameStates = new HashMap<>();
+    }
+
+    public CheckersGame.State getGameState(Player player) {
+        return gameStates.get(player);
     }
 
     public HashMap<Integer, CheckersGame> getActiveGames() {
@@ -49,6 +56,7 @@ public class GameManager {
     public void addSpectator(int gameID, Player player) {
         spectators.get(gameID).add(player);
         newBoardState.put(player, false);
+        gameStates.put(player, checkersGames.get(gameID).getGameState());
     }
 
     public boolean hasBoardBeenUpdated(Player player) {
@@ -67,6 +75,7 @@ public class GameManager {
             }
         }
         newBoardState.remove(player);
+        gameStates.remove(player);
     }
 
     public Piece.Color getPlayersColor(Player player) {
@@ -79,18 +88,10 @@ public class GameManager {
         return null;
     }
 
-    public void gameHasBeenUpdated(CheckersGame checkersGame) {
-        int gamesID = -1;
-        for(int i = 0; i < currentID; i++) {
-            if(checkersGames.get(i) == checkersGame) {
-                gamesID = i;
-                break;
-            }
-        }
-        if(gamesID == -1)
-            return; //This should not happen
-        for(Player player : spectators.get(gamesID)) {
+    public void gameHasBeenUpdated(int gameID) {
+        for(Player player : spectators.get(gameID)) {
             newBoardState.put(player, true);
+            gameStates.put(player, checkersGames.get(gameID).getGameState());
         }
     }
 
