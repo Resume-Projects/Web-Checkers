@@ -169,6 +169,10 @@ public class WebServer {
 
         get("/replay/stopWatching", new GetReplayStopRoute());
 
+        post("/replay/nextTurn", new PostNextTurnRoute());
+
+        post("/replay/previousTurn", new PostPreviousTurnRoute());
+
 
 
         LOG.config("WebServer is initialized.");
