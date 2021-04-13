@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.google.gson.Gson;
 import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
@@ -83,4 +84,34 @@ public class GetHomeRouteTest {
         //templateEngineTester.assertViewModelAttribute("message", Message.error("Error Message"));
     }
 
+    @Test
+    public void gameOver_test() {
+        Player redPlayer = mock(Player.class);
+        Player whitePlayer = mock(Player.class);
+        CheckersGame checkersGame = mock(CheckersGame.class);
+        when(request.session().attribute("currentUser")).thenReturn(redPlayer);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
+        when(checkersGame.isGameDone()).thenReturn(true);
+        when(checkersGame.gameEnded()).thenReturn(true);
+        when(checkersGame.getWinner()).thenReturn(redPlayer);
+        when(checkersGame.getLoser()).thenReturn(whitePlayer);
+
+        CuT.handle(request, response);
+    }
+
+    @Test
+    public void playerResigned_test() {
+        Player redPlayer = mock(Player.class);
+        Player whitePlayer = mock(Player.class);
+        CheckersGame checkersGame = mock(CheckersGame.class);
+        when(request.session().attribute("currentUser")).thenReturn(redPlayer);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
+        when(checkersGame.isGameDone()).thenReturn(true);
+        when(checkersGame.gameEnded()).thenReturn(true);
+        when(checkersGame.hasPlayerLeft()).thenReturn(true);
+        when(checkersGame.getWinner()).thenReturn(redPlayer);
+        when(checkersGame.getLoser()).thenReturn(whitePlayer);
+
+        CuT.handle(request, response);
+    }
 }
