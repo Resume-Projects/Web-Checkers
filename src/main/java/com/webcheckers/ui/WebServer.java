@@ -165,6 +165,12 @@ public class WebServer {
 
         post("/resignGame", new PostResignGameRoute(gameManager));
 
+        get("/replay/game", new GetReplayGameRoute());
+
+        get("/replay/stopWatching", new GetReplayStopRoute());
+
+
+
         LOG.config("WebServer is initialized.");
     }
 
