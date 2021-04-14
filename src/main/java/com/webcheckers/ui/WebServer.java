@@ -165,13 +165,11 @@ public class WebServer {
 
         post("/resignGame", new PostResignGameRoute(gameManager));
 
-        get("/replay/game", new GetReplayGameRoute(gameManager, playerLobby, templateEngine, gson));
+        get("/spectator/game", new GetSpectatorGameRoute(playerLobby, gameManager, templateEngine));
 
-        get("/replay/stopWatching", new GetReplayStopRoute(gameManager));
+        get("/spectator/stopWatching", new GetSpectatorStopWatchingRoute(gameManager));
 
-        post("/replay/nextTurn", new PostNextTurnRoute(gameManager, gson));
-
-        post("/replay/previousTurn", new PostPreviousTurnRoute(gameManager, gson));
+        post("/spectator/checkTurn", new PostSpectatorCheckTurnRoute(gameManager));
 
         LOG.config("WebServer is initialized.");
     }

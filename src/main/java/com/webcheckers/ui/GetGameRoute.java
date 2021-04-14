@@ -66,7 +66,7 @@ public class GetGameRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         final Session session = request.session();
         Map<String, Object> vm = new HashMap<>();
-        Map<String, Object> modeOptions = new HashMap<>(2);
+        Map<String, Object> modeOptions = new HashMap<>();
         Player currentPlayer = session.attribute("currentUser");
         CheckersGame checkersGame;
 
@@ -74,17 +74,22 @@ public class GetGameRoute implements Route {
         if (gameManager.getPlayersGame(currentPlayer) == null) {
             Player whitePlayer = playerLobby.getPlayerFromName(request.queryParams("whitePlayer"));
             //If the white player is already in a game, send them back to the home page
-            if (gameManager.getPlayersGame(whitePlayer) != null) {
+            if(gameManager.getPlayersGame(whitePlayer) != null) {
                 session.attribute("errorMessage", "That player is already in a game");
                 response.redirect("/");
-                return null; //They get sent back to the home page
+                return null;
+            } else if(gameManager.isPlayerSpectating(whitePlayer)) {
+                session.attribute("errorMessage", "That player is currently spectating a game");
+                response.redirect("/");
+                return null;
             } else {
                 checkersGame = gameManager.getNewGame(currentPlayer, whitePlayer);
+                gameManager.gameHasBeenUpdated(checkersGame.getGameID());
             }
         } else {
             checkersGame = gameManager.getPlayersGame(currentPlayer);
         }
-        if(checkersGame.isGameDone()) {
+        if(checkersGame.getIsGameDone()) {
             modeOptions.put("isGameOver", true);
             vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
             if(checkersGame.isResigned()) {

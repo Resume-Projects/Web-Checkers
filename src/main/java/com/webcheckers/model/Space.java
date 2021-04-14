@@ -84,6 +84,11 @@ public class Space {
         return piece.getColor();
     }
 
+    /**
+     * Returns the type of the piece on this space
+     *
+     * @return a Piece Type
+     */
     public Piece.Type getPieceType() {
         return piece.getType();
     }

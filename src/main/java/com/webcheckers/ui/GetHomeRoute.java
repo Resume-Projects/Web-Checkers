@@ -67,7 +67,7 @@ public class GetHomeRoute implements Route {
         if(currentUser != null) {
             CheckersGame playersGame = gameManager.getPlayersGame(currentUser);
             if(playersGame != null) { //If the player was never involved with a game, nothing should happen
-                if(!playersGame.isGameDone()) {
+                if(!playersGame.getIsGameDone()) {
                     response.redirect("/game");
                     return null; //They get sent to the game page
                 } else {
@@ -90,10 +90,12 @@ public class GetHomeRoute implements Route {
             vm.put("message", Message.error(request.session().attribute("errorMessage")));
 
         vm.put("numPlayers", playerLobby.getActivePlayers().size());
+        vm.put("numGames", gameManager.getActiveGames().size());
 
         if(currentUser != null) {
             vm.put("currentUser", currentUser);
             vm.put("activePlayers", playerLobby.getActivePlayers().values());
+            vm.put("activeGames", gameManager.getActiveGames().values());
         }
 
         // render the View

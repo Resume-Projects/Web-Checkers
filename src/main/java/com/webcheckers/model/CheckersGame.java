@@ -15,6 +15,7 @@ import java.util.logging.Logger;
  * @author Danny Gardner
  */
 public class CheckersGame {
+
     private static final Logger LOG = Logger.getLogger(CheckersGame.class.getName());
 
     private final Space[][] board;
@@ -24,7 +25,7 @@ public class CheckersGame {
      */
     public static final int BOARD_SIZE = 8;
 
-    protected enum State {
+    public enum State {
         PLAYING,
         RESIGNED,
         ENDED,
@@ -53,8 +54,10 @@ public class CheckersGame {
 
     private boolean playerLeft;
 
-    private String redPlayerName;
-    private String whitePlayerName;
+    private final String redPlayerName;
+    private final String whitePlayerName;
+
+    private final int gameID;
 
     private ArrayList<SavedMove> moves = new ArrayList<>();
 
@@ -64,7 +67,7 @@ public class CheckersGame {
      * @param redPlayer   the player with the red pieces
      * @param whitePlayer the player with the white pieces
      */
-    public CheckersGame(Player redPlayer, Player whitePlayer) {
+    public CheckersGame(Player redPlayer, Player whitePlayer, int gameID) {
         LOG.fine("Game created");
         board = new Space[BOARD_SIZE][BOARD_SIZE];
         movesQueue = new LinkedList<>();
@@ -90,6 +93,7 @@ public class CheckersGame {
                 board[3][col] = new Space(col, Space.State.OPEN);
             }
         }
+        this.gameID = gameID;
         GameController.initializeBoard(board);
         this.justJumped = false;
         this.justKinged = false;
@@ -105,6 +109,14 @@ public class CheckersGame {
         this.state = State.PLAYING;
         this.playerLeft = false;
         addMove();
+    }
+
+    public State getGameState() {
+        return state;
+    }
+
+    public int getGameID() {
+        return gameID;
     }
 
     public boolean hasPlayerLeft() {
@@ -282,7 +294,6 @@ public class CheckersGame {
                         return true;
 
                     boolean canMove;
-                    Position startPos = new Position(row, col);
                     if(board[row][col].getPieceType() == Piece.Type.KING) {
                         canMove =
                                 (row - 1 >= 0 && col - 1 >= 0 && board[row - 1][col - 1].getPiece() == null) ||
@@ -583,7 +594,7 @@ public class CheckersGame {
     }
 
     //A game is done if a player resigns or the game ends a normal way
-    public boolean isGameDone() {
+    public boolean getIsGameDone() {
         return state == State.ENDED || state == State.RESIGNED || state == State.OVER;
     }
 
