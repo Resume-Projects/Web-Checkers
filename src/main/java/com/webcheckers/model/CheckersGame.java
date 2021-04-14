@@ -570,13 +570,18 @@ public class CheckersGame {
 
     /**
      * If a player captures all of the other player's pieces:
+     *
      * @return the gameOver state
      */
     public boolean gameEnded() {
         return state == State.ENDED;
     }
 
-    //A game is done if a player resigns or the game ends a normal way
+    /**
+     * If a game is done
+     *
+     * @return True if the game is done, false otherwise
+     */
     public boolean isGameDone() {
         return state == State.ENDED || state == State.RESIGNED || state == State.OVER;
     }
