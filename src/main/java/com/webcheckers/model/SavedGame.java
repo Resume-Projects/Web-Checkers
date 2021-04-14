@@ -14,4 +14,29 @@ public class SavedGame {
         this.turnNum = 0;
         this.playerWatching = null;
     }
+
+    public void nextTurn() {
+        turnNum++;
+
+    }
+
+    public void previousTurn() {
+        turnNum--;
+    }
+
+    public int getTurnNum() {
+        return turnNum;
+    }
+
+    public void setTurnNum( int turn ) {
+        turnNum += turn;
+    }
+
+    public Player getPlayerWatching() {
+        return playerWatching;
+    }
+
+    public void setPlayerWatching(Player player) {
+        playerWatching = player;
+    }
 }

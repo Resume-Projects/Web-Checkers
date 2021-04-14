@@ -85,4 +85,8 @@ public class GameManager {
     public SavedGame getSavedGame(String gameID) {
         return savedGames.get(gameID);
     }
+
+    public Map<String, SavedGame> getSavedGames() {
+        return savedGames;
+    }
 }

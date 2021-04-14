@@ -5,6 +5,7 @@ import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.SavedGame;
 import com.webcheckers.util.Message;
 import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
@@ -36,8 +37,21 @@ public class GetReplayGameRoute implements Route {
 
 
         vm.put("title", "Game Replay");
-        vm.put("currentUser", currentUser);
-        vm.put("viewMode", GetGameRoute.playMode.REPLAY);
+        if( request.session().attribute("currentUser") != null ) {
+            final Player player = request.session().attribute("currentUser");
+            final String gameID = request.queryParams("gameID");
+            vm.put("currentUser", player);
+            vm.put("viewMode", GetGameRoute.playMode.REPLAY);
+            SavedGame savedGame = gameManager.getSavedGame(gameID);
+            if( savedGame.getPlayerWatching() == null ) {
+                savedGame.setPlayerWatching(player);
+            } else if( !(savedGame.getPlayerWatching().equals(player)) && savedGame.getPlayerWatching() != null ) {
+                request.session().attribute("message", "Error: Game is already being replayed");
+                response.redirect("/replay/game");
+                return null;
+            }
+            // next and previous vm's
+        }
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
 
         // need:

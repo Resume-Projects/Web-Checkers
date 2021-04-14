@@ -104,6 +104,7 @@ public class CheckersGame {
         this.loser = null;
         this.state = State.PLAYING;
         this.playerLeft = false;
+        addMove();
     }
 
     public boolean hasPlayerLeft() {
@@ -256,6 +257,7 @@ public class CheckersGame {
                 loser = whitePlayer;
             }
         }
+        addMove();
 
         return Message.info("Move applied");
     }
@@ -583,6 +585,11 @@ public class CheckersGame {
     //A game is done if a player resigns or the game ends a normal way
     public boolean isGameDone() {
         return state == State.ENDED || state == State.RESIGNED || state == State.OVER;
+    }
+
+    public void addMove() {
+        SavedMove move = new SavedMove(board, getPlayerColor(redPlayer));
+        moves.add(move);
     }
 
     public ArrayList<SavedMove> getMoves() {
