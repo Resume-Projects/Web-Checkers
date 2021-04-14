@@ -165,11 +165,11 @@ public class WebServer {
 
         post("/resignGame", new PostResignGameRoute(gameManager));
 
-        get("/spectator/game", new GetSpectatorGameRoute());
+        get("/spectator/game", new GetSpectatorGameRoute(playerLobby, gameManager, templateEngine));
 
-        get("/spectator/stopWatching", new GetSpectatorStopWatchingRoute());
+        get("/spectator/stopWatching", new GetSpectatorStopWatchingRoute(gameManager));
 
-        post("/spectator/checkTurn", new PostSpectatorCheckTurnRoute());
+        post("/spectator/checkTurn", new PostSpectatorCheckTurnRoute(gameManager));
 
         LOG.config("WebServer is initialized.");
     }

@@ -29,6 +29,7 @@ public class PostResignGameRoute implements Route {
         Player player = request.session().attribute("currentUser");
         CheckersGame playersGame = gameManager.getPlayersGame(player);
         boolean resign = playersGame.resignGame(player);
+        gameManager.gameHasBeenUpdated(playersGame.getGameID());
         if(resign) {
             return new Gson().toJson(Message.info(player.getName() + "has resigned."));
         }

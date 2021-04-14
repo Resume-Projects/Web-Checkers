@@ -2,6 +2,7 @@
 package com.webcheckers.application;
 
 import com.webcheckers.model.CheckersGame;
+import com.webcheckers.model.Piece;
 import com.webcheckers.model.Player;
 
 import java.util.ArrayList;
@@ -13,10 +14,21 @@ import java.util.HashMap;
  */
 public class GameManager {
 
-    private static int staticGameID = 0;
+    //Used to assign ID's to games. Get's incremented every time a new game is made
+    private int currentID = 0;
 
     //Changed to a HashMap so game ID's can be used
+    //The key is the gameID, the value is the game
     private final HashMap<Integer, CheckersGame> checkersGames;
+
+    //The key is the gameID, and the value is the list of people spectating
+    private final HashMap<Integer, ArrayList<Player>> spectators;
+
+    //The key is a spectator and the value is whether or not the board has been updated
+    private final HashMap<Player, Boolean> newBoardState;
+
+    //The key is a spectator and the value is the state of the spectated game
+    private final HashMap<Player, CheckersGame.State> gameStates;
 
     /**
      * Creates the GameManager object that just initialized the list of games. Only one should
@@ -24,6 +36,63 @@ public class GameManager {
      */
     public GameManager() {
         checkersGames = new HashMap<>();
+        spectators = new HashMap<>();
+        newBoardState = new HashMap<>();
+        gameStates = new HashMap<>();
+    }
+
+    public CheckersGame.State getGameState(Player player) {
+        return gameStates.get(player);
+    }
+
+    public HashMap<Integer, CheckersGame> getActiveGames() {
+        return checkersGames;
+    }
+
+    public boolean isPlayerSpectating(Player player) {
+        return newBoardState.containsKey(player);
+    }
+
+    public void addSpectator(int gameID, Player player) {
+        spectators.get(gameID).add(player);
+        newBoardState.put(player, false);
+        gameStates.put(player, checkersGames.get(gameID).getGameState());
+    }
+
+    public boolean hasBoardBeenUpdated(Player player) {
+        if(newBoardState.get(player)) {
+            newBoardState.put(player, false);
+            return true;
+        }
+        return false;
+    }
+
+    public void removeSpectator(Player player) {
+        for(int num : spectators.keySet()) {
+            if(spectators.get(num).contains(player)) {
+                spectators.get(num).remove(player);
+                break;
+            }
+        }
+        newBoardState.remove(player);
+        gameStates.remove(player);
+    }
+
+    public Piece.Color getPlayersColor(Player player) {
+        for(CheckersGame game : checkersGames.values()) {
+            if(game.getRedPlayer() != null && game.getRedPlayer().equals(player))
+                return Piece.Color.RED;
+            else if(game.getWhitePlayer() != null && game.getWhitePlayer().equals(player))
+                return Piece.Color.WHITE;
+        }
+        return null;
+    }
+
+    public void gameHasBeenUpdated(int gameID) {
+        for(Player player : spectators.get(gameID)) {
+            newBoardState.put(player, true);
+            gameStates.put(player, checkersGames.get(gameID).getGameState());
+        }
     }
 
     /**
@@ -48,9 +117,10 @@ public class GameManager {
      * @return the new Checkers game
      */
     public CheckersGame getNewGame(Player redPlayer, Player whitePlayer) {
-        CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer);
-        checkersGames.put(staticGameID, checkersGame);
-        staticGameID++;
+        CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer, currentID);
+        spectators.put(currentID, new ArrayList<>());
+        checkersGames.put(currentID, checkersGame);
+        currentID++;
         return checkersGame;
     }
 

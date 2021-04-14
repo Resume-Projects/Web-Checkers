@@ -20,7 +20,7 @@ public class CheckersGameTest {
     public void setUp() {
         redPlayer = new Player("player 1");
         whitePlayer = new Player("player 2");
-        CuT = new CheckersGame(redPlayer, whitePlayer);
+        CuT = new CheckersGame(redPlayer, whitePlayer, 1);
     }
 
     @Test
