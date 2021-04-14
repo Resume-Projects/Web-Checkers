@@ -50,16 +50,29 @@ public class GetReplayGameRoute implements Route {
                 response.redirect("/replay/game");
                 return null;
             }
-            // next and previous vm's
-        }
-        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+            modeOptions.put("hasNext", savedGame.hasNext());
+            modeOptions.put("hasPrevious", savedGame.hasPrevious());
 
-        // need:
-        //vm.put redPlayer
-        //vm.put whitePlayer
-        //vm.put activeColor
-        //vm.put board
-        vm.put("message", "Viewing Replay of [gameID]"); //modify this to gameID eventually
+            if( !savedGame.hasNext()) {
+                modeOptions.put("isGameOver", true);
+                modeOptions.put("gameOverMessage", "Game Over");
+            }
+            CheckersGame game = gameManager.getPlayersGame(player);
+            vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+            vm.put("redPlayer", game.getRedPlayer());
+            vm.put("whitePlayer", game.getWhitePlayer());
+            vm.put("activeColor", game.getActiveColor());
+            vm.put("board", game.getBoard());
+            vm.put("message", "Viewing Replay of " + gameID);
+        } else {
+            final String gameID = request.queryParams("gameID");
+            SavedGame savedGame = gameManager.getSavedGame(gameID);
+            savedGame.setPlayerWatching(null);
+            response.redirect(WebServer.HOME_URL);
+            return null;
+        }
+
+
 
         return null;
     }

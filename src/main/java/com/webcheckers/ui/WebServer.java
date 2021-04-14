@@ -167,11 +167,11 @@ public class WebServer {
 
         get("/replay/game", new GetReplayGameRoute(gameManager, playerLobby, templateEngine, gson));
 
-        get("/replay/stopWatching", new GetReplayStopRoute());
+        get("/replay/stopWatching", new GetReplayStopRoute(gameManager));
 
-        post("/replay/nextTurn", new PostNextTurnRoute());
+        post("/replay/nextTurn", new PostNextTurnRoute(gameManager, gson));
 
-        post("/replay/previousTurn", new PostPreviousTurnRoute());
+        post("/replay/previousTurn", new PostPreviousTurnRoute(gameManager, gson));
 
         LOG.config("WebServer is initialized.");
     }

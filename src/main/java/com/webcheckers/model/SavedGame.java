@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class SavedGame {
 
-    private ArrayList<SavedMove> savedGame;
+    private ArrayList<SavedMove> savedMoves;
     private int turnNum;
     private Player playerWatching;
 
 
     public SavedGame(ArrayList<SavedMove> moves, CheckersGame game ) {
-        this.savedGame = new ArrayList<>(moves);
+        this.savedMoves = new ArrayList<>(moves);
         this.turnNum = 0;
         this.playerWatching = null;
     }
@@ -38,5 +38,17 @@ public class SavedGame {
 
     public void setPlayerWatching(Player player) {
         playerWatching = player;
+    }
+
+    public boolean hasNext() {
+        return turnNum != savedMoves.size() - 1;
+    }
+
+    public boolean hasPrevious() {
+        return turnNum > 0;
+    }
+
+    public ArrayList<SavedMove> getSavedMoves() {
+        return savedMoves;
     }
 }
