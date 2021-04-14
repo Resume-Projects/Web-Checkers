@@ -4,9 +4,11 @@ package com.webcheckers.application;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Piece;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.SavedGame;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class will store all of the active checkers games. Only one should ever be created. Most classes will
@@ -30,6 +32,8 @@ public class GameManager {
     //The key is a spectator and the value is the state of the spectated game
     private final HashMap<Player, CheckersGame.State> gameStates;
 
+    private final Map<String, SavedGame> savedGames;
+
     /**
      * Creates the GameManager object that just initialized the list of games. Only one should
      * ever be made
@@ -39,6 +43,7 @@ public class GameManager {
         spectators = new HashMap<>();
         newBoardState = new HashMap<>();
         gameStates = new HashMap<>();
+        savedGames = new HashMap<>();
     }
 
     public CheckersGame.State getGameState(Player player) {
@@ -149,5 +154,18 @@ public class GameManager {
                 break; //Stop the loop once we remove the game
             }
         }
+    }
+
+    public void saveGame(String gameID, Player player) {
+        CheckersGame game = getPlayersGame(player);
+        SavedGame savedGame = new SavedGame(game.getMoves(), game);
+    }
+
+    public SavedGame getSavedGame(String gameID) {
+        return savedGames.get(gameID);
+    }
+
+    public Map<String, SavedGame> getSavedGames() {
+        return savedGames;
     }
 }
