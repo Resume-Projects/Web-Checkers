@@ -267,13 +267,11 @@ public class CheckersGameTest {
     public void gameEnded_test() throws NoSuchFieldException {
         FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("state"), CheckersGame.State.ENDED);
         assertTrue(CuT.gameEnded());
-        assertTrue(CuT.isGameDone());
     }
 
     @Test
     public void gameNotEnded_test() {
         assertFalse(CuT.gameEnded());
-        assertFalse(CuT.isGameDone());
     }
 
     @Test

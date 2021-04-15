@@ -22,7 +22,7 @@ public class GameManagerTest {
     }
 
     @Test
-    public void testingEverything() {
+    public void largeTest() {
         Player mockPlayer1 = mock(Player.class);
         Player mockPlayer2 = mock(Player.class);
         assertNotNull(CuT.getNewGame(mockPlayer1, mockPlayer2));
@@ -45,5 +45,67 @@ public class GameManagerTest {
         CuT.deleteGame(player1);
 
         assertNull(CuT.getPlayersGame(player1));
+    }
+
+    @Test
+    public void gameHasBeenUpdated_test() {
+
+    }
+
+    @Test
+    public void getGameState_test() {
+        Player red = new Player("player 1");
+        Player white = new Player("player 2");
+        CuT.getNewGame(red, white);
+
+        assertSame(CuT.getGameState(red), CheckersGame.State.PLAYING);
+    }
+
+    @Test
+    public void getActiveGames_test() {
+        Player red = new Player("player 1");
+        Player white = new Player("player 2");
+        CuT.getNewGame(red, white);
+
+        assertNotNull(CuT.getActiveGames());
+    }
+
+    @Test
+    public void addSpectator_test() {
+        Player red = new Player("player 1");
+        Player white = new Player("player 2");
+        CuT.getNewGame(red, white);
+
+        Player spectator = new Player("player 3");
+        CuT.addSpectator(0, spectator);
+        assertTrue(CuT.isPlayerSpectating(spectator));
+    }
+
+    @Test
+    public void playerNotSpectating_test() {
+        Player red = new Player("player 1");
+        Player white = new Player("player 2");
+        CuT.getNewGame(red, white);
+
+        Player spectator = new Player("player 3");
+        assertFalse(CuT.isPlayerSpectating(spectator));
+    }
+
+    @Test
+    public void removeSpectator_test() {
+        Player red = new Player("player 1");
+        Player white = new Player("player 2");
+        CuT.getNewGame(red, white);
+
+        Player spectator = new Player("player 3");
+        CuT.addSpectator(0, spectator);
+
+        CuT.removeSpectator(spectator);
+        assertFalse(CuT.isPlayerSpectating(spectator));
+    }
+
+    @Test
+    public void hi() {
+
     }
 }
