@@ -93,30 +93,30 @@ public class GetGameRoute implements Route {
             modeOptions.put("isGameOver", true);
             vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
             if(checkersGame.isResigned()) {
-                vm.put("message", Message.info(String.format("%s has resigned, %s has won the game.",
+                vm.put(MESSAGE, Message.info(String.format("%s has resigned, %s has won the game.",
                         checkersGame.getLoser().getName(), checkersGame.getWinner().getName())));
             } else if(checkersGame.gameEnded()) {
-                vm.put("message", Message.info(String.format("%s has captured all of the pieces.",
+                vm.put(MESSAGE, Message.info(String.format("%s has captured all of the pieces.",
                         checkersGame.getWinner().getName())));
             } else { //A player is unable to move
-                vm.put("message", Message.info(String.format("%s is unable to move.",
+                vm.put(MESSAGE, Message.info(String.format("%s is unable to move.",
                         checkersGame.getLoser().getName())));
             }
         }
 
-        vm.put("title", "Game");
+        vm.put("title", TITLE);
         vm.put("currentUser", session.attribute("currentUser"));
         vm.put("viewMode", playMode.PLAY);
         //These make new Players because the players could be null.
         //Getting the players name will never be null
-        vm.put("redPlayer", new Player(checkersGame.getRedPlayerName()));
-        vm.put("whitePlayer", new Player(checkersGame.getWhitePlayerName()));
-        vm.put("activeColor", checkersGame.getActiveColor());
+        vm.put(RED_PLAYER, new Player(checkersGame.getRedPlayerName()));
+        vm.put(WHITE_PLAYER, new Player(checkersGame.getWhitePlayerName()));
+        vm.put(ACTIVE_COLOR, checkersGame.getActiveColor());
 
         if (currentPlayer.equals(checkersGame.getRedPlayer()))
-            vm.put("board", checkersGame.getRedBoardView());
+            vm.put(BOARD, checkersGame.getRedBoardView());
         else
-            vm.put("board", checkersGame.getWhiteBoardView());
+            vm.put(BOARD, checkersGame.getWhiteBoardView());
 
 
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));

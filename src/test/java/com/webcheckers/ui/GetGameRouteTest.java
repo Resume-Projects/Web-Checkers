@@ -48,8 +48,8 @@ public class GetGameRouteTest {
 
     @Test
     public void newGame() throws Exception {
-        redPlayer = mock(Player.class);
-        whitePlayer = mock(Player.class);
+        redPlayer = new Player("player 1");
+        whitePlayer = new Player("player 2");
         checkersGame = new CheckersGame(redPlayer, whitePlayer, 1);
         when(request.session().attribute("currentUser")).thenReturn(redPlayer);
         when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
@@ -60,7 +60,7 @@ public class GetGameRouteTest {
 
         testHelper.assertViewModelExists();
         testHelper.assertViewModelIsaMap();
-        testHelper.assertViewModelAttribute("title", "Game");
+        testHelper.assertViewModelAttribute("title", "Checkers Game");
         testHelper.assertViewModelAttribute("redPlayer", checkersGame.getRedPlayer());
         testHelper.assertViewModelAttribute("whitePlayer", checkersGame.getWhitePlayer());
 
