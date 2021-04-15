@@ -96,13 +96,14 @@ public class GetGameRoute implements Route {
                 vm.put("message", Message.info(String.format("%s has resigned, %s has won the game.",
                         checkersGame.getLoser().getName(), checkersGame.getWinner().getName())));
             } else if(checkersGame.gameEnded()) {
+                gameManager.saveGame(checkersGame.getGameID(), currentPlayer);
                 vm.put("message", Message.info(String.format("%s has captured all of the pieces.",
                         checkersGame.getWinner().getName())));
             } else { //A player is unable to move
+                gameManager.saveGame(checkersGame.getGameID(), currentPlayer);
                 vm.put("message", Message.info(String.format("%s is unable to move.",
                         checkersGame.getLoser().getName())));
             }
-            gameManager.saveGame(request.queryParams("gameID"), currentPlayer);
         }
 
         vm.put("title", "Game");

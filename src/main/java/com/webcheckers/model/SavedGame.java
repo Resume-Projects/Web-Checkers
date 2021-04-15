@@ -7,12 +7,14 @@ public class SavedGame {
     private ArrayList<SavedMove> savedMoves;
     private int turnNum;
     private Player playerWatching;
+    private CheckersGame game;
 
 
-    public SavedGame(ArrayList<SavedMove> moves, CheckersGame game ) {
+    public SavedGame(ArrayList<SavedMove> moves, Player red, Player white, int gameID ) {
         this.savedMoves = new ArrayList<>(moves);
         this.turnNum = 0;
         this.playerWatching = null;
+        this.game = new CheckersGame(red, white, gameID);
     }
 
     public void nextTurn() {
@@ -50,5 +52,9 @@ public class SavedGame {
 
     public ArrayList<SavedMove> getSavedMoves() {
         return savedMoves;
+    }
+
+    public CheckersGame getGame() {
+        return game;
     }
 }

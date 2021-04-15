@@ -53,6 +53,7 @@ public class PostSignOutRoute implements Route {
             request.session().attribute("currentUser", null);
             if(game != null) {
                 game.resignGame(player);
+                gameManager.saveGame(game.getGameID(), player);
             }
         }
 

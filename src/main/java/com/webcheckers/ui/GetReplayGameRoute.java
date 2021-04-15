@@ -57,7 +57,7 @@ public class GetReplayGameRoute implements Route {
                 modeOptions.put("isGameOver", true);
                 modeOptions.put("gameOverMessage", "Game Over");
             }
-            CheckersGame game = gameManager.getPlayersGame(player);
+            CheckersGame game = savedGame.getGame();
             vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
             vm.put("redPlayer", game.getRedPlayer());
             vm.put("whitePlayer", game.getWhitePlayer());

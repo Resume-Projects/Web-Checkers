@@ -85,8 +85,7 @@
                     </#if>
                     <ol>
                         <#list savedGames as game>
-                            <li><a href="/spectator/game?playerSpectated=${game.redPlayer.name}">Game ${game.gameID}: ${game.redPlayer.name}</a></li>
-                            <li><a href="/spectator/game?playerSpectated=${game.whitePlayer.name}">Game ${game.gameID}: ${game.whitePlayer.name}</a></li>
+                        <li><a href="/replay/game?whitePlayer=${game.game.whitePlayer.name}"> vs . ${game.game.whitePlayer.name}</a></li>
                         </#list>
                     </ol>
                 <#else>
