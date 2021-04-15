@@ -267,13 +267,13 @@ public class CheckersGameTest {
     public void gameEnded_test() throws NoSuchFieldException {
         FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("state"), CheckersGame.State.ENDED);
         assertTrue(CuT.gameEnded());
-        assertTrue(CuT.isGameDone());
+        assertTrue(CuT.getIsGameDone());
     }
 
     @Test
     public void gameNotEnded_test() {
         assertFalse(CuT.gameEnded());
-        assertFalse(CuT.isGameDone());
+        assertFalse(CuT.getIsGameDone());
     }
 
     @Test
@@ -302,11 +302,21 @@ public class CheckersGameTest {
     public void getWhitePlayerName_test() {
         assertSame(CuT.getWhitePlayerName(), whitePlayer.getName());
     }
-
-    @Test
+/*
+    @Test TODO: complete this test
     public void redPlayerCantMove_test() throws NoSuchFieldException {
-        //FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("player"), );
+        FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("player"), );
     }
-
-    //TODO: add isGameDone tests
+*/
+    @Test
+    public void isGameDoneTest() throws NoSuchFieldException {
+        FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("state"), CheckersGame.State.ENDED);
+        assertTrue(CuT.getIsGameDone());
+        FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("state"), CheckersGame.State.PLAYING);
+        assertFalse(CuT.getIsGameDone());
+        FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("state"), CheckersGame.State.RESIGNED);
+        assertTrue(CuT.getIsGameDone());
+        FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("state"), CheckersGame.State.OVER);
+        assertTrue(CuT.getIsGameDone());
+    }
 }

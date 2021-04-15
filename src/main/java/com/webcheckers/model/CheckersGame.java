@@ -593,16 +593,27 @@ public class CheckersGame {
         return state == State.ENDED;
     }
 
-    //A game is done if a player resigns or the game ends a normal way
+    /**A game is done if a player resigns or the game ends a normal way
+     *
+     * @return False if state is PLAYING, True otherwise
+     */
     public boolean getIsGameDone() {
         return state == State.ENDED || state == State.RESIGNED || state == State.OVER;
     }
 
+    /**
+     * Adds a move to a player
+     */
     public void addMove() {
         SavedMove move = new SavedMove(board, getPlayerColor(redPlayer));
         moves.add(move);
     }
 
+    /**
+     * Gets a list of moves
+     *
+     * @return the moves
+     */
     public ArrayList<SavedMove> getMoves() {
         return moves;
     }

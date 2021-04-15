@@ -91,7 +91,7 @@ public class GetHomeRouteTest {
         CheckersGame checkersGame = mock(CheckersGame.class);
         when(request.session().attribute("currentUser")).thenReturn(redPlayer);
         when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
-        when(checkersGame.isGameDone()).thenReturn(true);
+        when(checkersGame.getIsGameDone()).thenReturn(true);
         when(checkersGame.gameEnded()).thenReturn(true);
         when(checkersGame.getWinner()).thenReturn(redPlayer);
         when(checkersGame.getLoser()).thenReturn(whitePlayer);
@@ -106,7 +106,7 @@ public class GetHomeRouteTest {
         CheckersGame checkersGame = mock(CheckersGame.class);
         when(request.session().attribute("currentUser")).thenReturn(redPlayer);
         when(gameManager.getPlayersGame(redPlayer)).thenReturn(checkersGame);
-        when(checkersGame.isGameDone()).thenReturn(true);
+        when(checkersGame.getIsGameDone()).thenReturn(true);
         when(checkersGame.gameEnded()).thenReturn(true);
         when(checkersGame.hasPlayerLeft()).thenReturn(true);
         when(checkersGame.getWinner()).thenReturn(redPlayer);
