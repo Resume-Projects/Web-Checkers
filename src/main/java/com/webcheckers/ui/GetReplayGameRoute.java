@@ -34,12 +34,13 @@ public class GetReplayGameRoute implements Route {
         Player currentUser = request.session().attribute("currentUser");
 
         // mode options has next and has previous
-
+        final Player player = request.session().attribute("playerWatching");
+        final int gameID = gameManager.getPlayersGame(player).getGameID();
 
         vm.put("title", "Game Replay");
         if( request.session().attribute("currentUser") != null ) {
-            final Player player = request.session().attribute("playerWatching");
-            final String gameID = request.queryParams("gameID");
+            // final Player player = request.session().attribute("playerWatching");
+            // final int gameID = gameManager.getPlayersGame(player).getGameID();
             vm.put("currentUser", player);
             vm.put("viewMode", GetGameRoute.playMode.REPLAY);
             SavedGame savedGame = gameManager.getSavedGame(gameID);
@@ -65,7 +66,7 @@ public class GetReplayGameRoute implements Route {
             vm.put("board", game.getBoard());
             vm.put("message", "Viewing Replay of " + gameID);
         } else {
-            final String gameID = request.queryParams("gameID");
+            // final int gameID = gameManager.getPlayersGame(player).getGameID();
             SavedGame savedGame = gameManager.getSavedGame(gameID);
             savedGame.setPlayerWatching(null);
             response.redirect(WebServer.HOME_URL);

@@ -209,7 +209,7 @@ public class GameManager {
      * @param gameID the ID of the wanted
      * @return the game with the given ID
      */
-    public SavedGame getSavedGame(String gameID) {
+    public SavedGame getSavedGame(int gameID) {
         return savedGames.get(gameID);
     }
 

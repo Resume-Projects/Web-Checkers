@@ -2,6 +2,7 @@ package com.webcheckers.ui;
 
 import com.google.gson.Gson;
 import com.webcheckers.application.GameManager;
+import com.webcheckers.model.Player;
 import com.webcheckers.model.SavedGame;
 import com.webcheckers.util.Message;
 import spark.*;
@@ -19,7 +20,8 @@ public class PostNextTurnRoute implements Route{
     @Override
     public Object handle(Request request, Response response) throws Exception {
 
-        SavedGame savedGame = gameManager.getSavedGame(request.queryParams("gameID"));
+        Player currentUser = request.session().attribute("playerWatching");
+        SavedGame savedGame = gameManager.getSavedGame(gameManager.getPlayersGame(currentUser).getGameID());
         int currentTurn = savedGame.getTurnNum();
         savedGame.nextTurn();
         if( savedGame.getTurnNum() > savedGame.getSavedMoves().size()) {
