@@ -159,6 +159,7 @@ public class GameManager {
     public void saveGame(String gameID, Player player) {
         CheckersGame game = getPlayersGame(player);
         SavedGame savedGame = new SavedGame(game.getMoves(), game);
+        savedGames.put(gameID, savedGame);
     }
 
     public SavedGame getSavedGame(String gameID) {

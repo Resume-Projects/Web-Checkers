@@ -102,6 +102,7 @@ public class GetGameRoute implements Route {
                 vm.put("message", Message.info(String.format("%s is unable to move.",
                         checkersGame.getLoser().getName())));
             }
+            gameManager.saveGame(request.queryParams("gameID"), currentPlayer);
         }
 
         vm.put("title", "Game");

@@ -74,6 +74,31 @@
             </#if>
         </#if>
 
+        <h2>Replay Games</h2>
+                <#if savedGames??>
+                    <#if numSaved == 0>
+                        <p>There are no saved games.</p>
+                    <#elseif numSaved == 1>
+                        <p>There is one saved game. Click to start viewing that replay</p>
+                    <#else>
+                        <p>There are ${numGames} saved games. Click a name to start spectating that player</p>
+                    </#if>
+                    <ol>
+                        <#list savedGames as game>
+                            <li><a href="/spectator/game?playerSpectated=${game.redPlayer.name}">Game ${game.gameID}: ${game.redPlayer.name}</a></li>
+                            <li><a href="/spectator/game?playerSpectated=${game.whitePlayer.name}">Game ${game.gameID}: ${game.whitePlayer.name}</a></li>
+                        </#list>
+                    </ol>
+                <#else>
+                    <#if numGames == 0>
+                        <p>There are no saved games.<p>
+                    <#elseif numGames == 1>
+                        <p>There is ${numGames} saved game. Sign in to see it</p>
+                    <#else>
+                        <p>There are ${numGames} saved games. Sign in to see them</p>
+                    </#if>
+                </#if>
+
 
     </div>
 

@@ -91,11 +91,13 @@ public class GetHomeRoute implements Route {
 
         vm.put("numPlayers", playerLobby.getActivePlayers().size());
         vm.put("numGames", gameManager.getActiveGames().size());
+        vm.put("numSaved", gameManager.getSavedGames().size());
 
         if(currentUser != null) {
             vm.put("currentUser", currentUser);
             vm.put("activePlayers", playerLobby.getActivePlayers().values());
             vm.put("activeGames", gameManager.getActiveGames().values());
+            vm.put("savedGames", gameManager.getSavedGames().values());
         }
 
         // render the View
