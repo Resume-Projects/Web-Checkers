@@ -2,15 +2,16 @@
 geometry: margin=1in
 ---
 # PROJECT Design Documentation
-
+<!-- comment
 > _The following template provides the headings for your Design
 > Documentation.  As you edit each section make sure you remove these
 > commentary 'block quotes'; the lines that start with a > character
 > and appear in the generated PDF in italics._
+-->
 
 ## Team Information
 * Team name: Something-Cool
-* Team members
+* Team members:
   * Kevin Hlavaty
   * Corey Urbanke
   * Russell Lee
@@ -60,6 +61,7 @@ The player is able to sign in, play a game of checkers against an opponent, and 
 ### MVP Features
 
 The MVP features:
+
 * Sign in/out functionality
 * Making a move
 * "Jumping move" for pieces
@@ -68,8 +70,10 @@ The MVP features:
 ### Roadmap of Enhancements
 
 A list of enhancements that will come to the project are :
-* Player Help - Receive a hint or instructions on how to play the game upon pressing a button
+
+<!-- * Player Help - Receive a hint or instructions on how to play the game upon pressing a button -->
 * Spectator mode - View an ongoing game and be able to watch other people play.
+* Replay mode - be able to watch replays of the past games that were played.
 
 ## Application Domain
 
