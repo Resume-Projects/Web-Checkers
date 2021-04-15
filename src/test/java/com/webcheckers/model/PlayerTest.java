@@ -42,4 +42,9 @@ public class PlayerTest {
         assertEquals(CuT.equals(CuT2),false);
         assertFalse(CuT.equals("Hello"));
     }
+
+    @Test
+    public void hashCode_test() {
+        assertTrue(CuT.hashCode() == CuT.getName().hashCode());
+    }
 }

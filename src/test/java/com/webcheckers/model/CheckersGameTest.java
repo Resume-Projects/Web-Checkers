@@ -306,5 +306,24 @@ public class CheckersGameTest {
         //FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("player"), );
     }
 
-    //TODO: add isGameDone tests
+    @Test
+    public void gameNotDone_test() {
+        assertFalse(CuT.getIsGameDone());
+    }
+
+    @Test
+    public void gameDone_test() {
+        CuT.resignGame(redPlayer);
+        assertTrue(CuT.getIsGameDone());
+    }
+
+    @Test
+    public void getGameState_test() {
+        assertSame(CuT.getGameState(), CheckersGame.State.PLAYING);
+    }
+
+    @Test
+    public void getGameId_test() {
+        assertSame(CuT.getGameID(), 1);
+    }
 }
