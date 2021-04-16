@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import spark.*;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @Tag("UI-Tier")
@@ -38,18 +38,107 @@ public class GetSpectatorGameRouteTest {
 
     @Test
     public void nullGame_test() {
+        Player redPlayer = new Player("Player 1");
         Player spectator = new Player("player 3");
-
         when(request.session().attribute("currentUser")).thenReturn(spectator);
+        when(request.queryParams("playerSpectated")).thenReturn(redPlayer.getName());
 
         assertNull(CuT.handle(request, response));
     }
 
     @Test
-    public void spectateGame_test() {
+    public void alreadySpectating_test() {
         Player redPlayer = new Player("player 1");
         Player whitePlayer = new Player("player 2");
         Player spectator = new Player("player 3");
-        CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer, 1);
+        CheckersGame game = new CheckersGame(redPlayer, whitePlayer, 0);
+        when(gameManager.getNewGame(redPlayer, whitePlayer)).thenReturn(game);
+        when(request.session().attribute("currentUser")).thenReturn(spectator);
+        when(playerLobby.getPlayerFromName(request.queryParams("playerSpectated"))).thenReturn(redPlayer);
+        when(gameManager.isPlayerSpectating(spectator)).thenReturn(true);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(game);
+        when(gameManager.getGameState(spectator)).thenReturn(CheckersGame.State.PLAYING);
+
+        assertNotNull(CuT.handle(request, response));
+    }
+
+    @Test
+    public void spectatingWhite_test() {
+        Player redPlayer = new Player("player 1");
+        Player whitePlayer = new Player("player 2");
+        Player spectator = new Player("player 3");
+        CheckersGame game = new CheckersGame(redPlayer, whitePlayer, 0);
+        when(gameManager.getNewGame(redPlayer, whitePlayer)).thenReturn(game);
+        when(request.session().attribute("currentUser")).thenReturn(spectator);
+        when(playerLobby.getPlayerFromName(request.queryParams("playerSpectated"))).thenReturn(whitePlayer);
+        when(gameManager.isPlayerSpectating(spectator)).thenReturn(true);
+        when(gameManager.getPlayersGame(whitePlayer)).thenReturn(game);
+        when(gameManager.getGameState(spectator)).thenReturn(CheckersGame.State.PLAYING);
+
+        assertNotNull(CuT.handle(request, response));
+    }
+
+    @Test
+    public void addSpectator_test() {
+        Player redPlayer = new Player("player 1");
+        Player whitePlayer = new Player("player 2");
+        Player spectator = new Player("player 3");
+        CheckersGame game = new CheckersGame(redPlayer, whitePlayer, 0);
+        when(gameManager.getNewGame(redPlayer, whitePlayer)).thenReturn(game);
+        when(request.session().attribute("currentUser")).thenReturn(spectator);
+        when(playerLobby.getPlayerFromName(request.queryParams("playerSpectated"))).thenReturn(redPlayer);
+        when(gameManager.isPlayerSpectating(spectator)).thenReturn(false);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(game);
+        when(gameManager.getGameState(spectator)).thenReturn(CheckersGame.State.PLAYING);
+
+        assertNotNull(CuT.handle(request, response));
+    }
+
+    @Test
+    public void stateOver_test() {
+        Player redPlayer = new Player("player 1");
+        Player whitePlayer = new Player("player 2");
+        Player spectator = new Player("player 3");
+        CheckersGame game = new CheckersGame(redPlayer, whitePlayer, 0);
+        when(gameManager.getNewGame(redPlayer, whitePlayer)).thenReturn(game);
+        when(request.session().attribute("currentUser")).thenReturn(spectator);
+        when(playerLobby.getPlayerFromName(request.queryParams("playerSpectated"))).thenReturn(redPlayer);
+        when(gameManager.isPlayerSpectating(spectator)).thenReturn(true);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(game);
+        when(gameManager.getGameState(spectator)).thenReturn(CheckersGame.State.OVER);
+
+        assertNull(CuT.handle(request, response));
+    }
+
+    @Test
+    public void stateEnded_test() {
+        Player redPlayer = new Player("player 1");
+        Player whitePlayer = new Player("player 2");
+        Player spectator = new Player("player 3");
+        CheckersGame game = new CheckersGame(redPlayer, whitePlayer, 0);
+        when(gameManager.getNewGame(redPlayer, whitePlayer)).thenReturn(game);
+        when(request.session().attribute("currentUser")).thenReturn(spectator);
+        when(playerLobby.getPlayerFromName(request.queryParams("playerSpectated"))).thenReturn(redPlayer);
+        when(gameManager.isPlayerSpectating(spectator)).thenReturn(true);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(game);
+        when(gameManager.getGameState(spectator)).thenReturn(CheckersGame.State.ENDED);
+
+        assertNull(CuT.handle(request, response));
+    }
+
+    @Test
+    public void stateResigned_test() {
+        Player redPlayer = new Player("player 1");
+        Player whitePlayer = new Player("player 2");
+        Player spectator = new Player("player 3");
+        CheckersGame game = new CheckersGame(redPlayer, whitePlayer, 0);
+        when(gameManager.getNewGame(redPlayer, whitePlayer)).thenReturn(game);
+        when(request.session().attribute("currentUser")).thenReturn(spectator);
+        when(playerLobby.getPlayerFromName(request.queryParams("playerSpectated"))).thenReturn(redPlayer);
+        when(gameManager.isPlayerSpectating(spectator)).thenReturn(true);
+        when(gameManager.getPlayersGame(redPlayer)).thenReturn(game);
+        when(gameManager.getGameState(spectator)).thenReturn(CheckersGame.State.RESIGNED);
+
+        assertNull(CuT.handle(request, response));
     }
 }
