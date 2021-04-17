@@ -302,11 +302,6 @@ public class CheckersGameTest {
     }
 
     @Test
-    public void redPlayerCantMove_test() throws NoSuchFieldException {
-        //FieldSetter.setField(CuT, CuT.getClass().getDeclaredField("player"), );
-    }
-
-    @Test
     public void gameNotDone_test() {
         assertFalse(CuT.getIsGameDone());
     }
