@@ -85,7 +85,9 @@
                     </#if>
                     <ol>
                         <#list savedGames as game>
-                        <li><a href="/replay/game?whitePlayer=${game.game.whitePlayer.name}"> vs . ${game.game.whitePlayer.name}</a></li>
+                        <li><a href="/replay/game?whitePlayer=${game.game.whitePlayer.name}">
+                        ${game.game.redPlayer.name} vs. ${game.game.whitePlayer.name}</a></li>
+                        ${game.game.gameID}
                         </#list>
                     </ol>
                 <#else>

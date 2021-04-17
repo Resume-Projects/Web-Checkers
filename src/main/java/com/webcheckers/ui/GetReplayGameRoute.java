@@ -35,8 +35,7 @@ public class GetReplayGameRoute implements Route {
 
         // mode options has next and has previous
         final Player player = request.session().attribute("playerWatching");
-        final int gameID = gameManager.getPlayersGame(player).getGameID();
-
+        final int gameID = Integer.parseInt(request.queryParams("gameID"));
         vm.put("title", "Game Replay");
         if( request.session().attribute("currentUser") != null ) {
             // final Player player = request.session().attribute("playerWatching");
