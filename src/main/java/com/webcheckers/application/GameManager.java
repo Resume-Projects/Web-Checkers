@@ -32,7 +32,7 @@ public class GameManager {
     //The key is a spectator and the value is the state of the spectated game
     private final HashMap<Player, CheckersGame.State> gameStates;
 
-    private final Map<Integer, SavedGame> savedGames;
+    private final Map<String, SavedGame> savedGames;
 
     /**
      * Creates the GameManager object that just initialized the list of games. Only one should
@@ -201,7 +201,7 @@ public class GameManager {
     public void saveGame(int gameID, Player player) {
         CheckersGame game = getPlayersGame(player);
         SavedGame savedGame = new SavedGame(game.getMoves(), game.getRedPlayer(), game.getWhitePlayer(), gameID);
-        savedGames.put(gameID, savedGame);
+        savedGames.put(String.valueOf(gameID), savedGame);
     }
 
     /**
@@ -209,7 +209,7 @@ public class GameManager {
      * @param gameID the ID of the wanted
      * @return the game with the given ID
      */
-    public SavedGame getSavedGame(int gameID) {
+    public SavedGame getSavedGame(String gameID) {
         return savedGames.get(gameID);
     }
 
@@ -217,7 +217,7 @@ public class GameManager {
      * Returns all the saved games
      * @return all the saved games
      */
-    public Map<Integer, SavedGame> getSavedGames() {
+    public Map<String, SavedGame> getSavedGames() {
         return savedGames;
     }
 }

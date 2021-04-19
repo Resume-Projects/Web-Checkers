@@ -21,7 +21,7 @@ public class PostPreviousTurnRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
 
         Player currentUser = request.session().attribute("playerWatching");
-        SavedGame savedGame = gameManager.getSavedGame(0);
+        SavedGame savedGame = gameManager.getSavedGame(request.queryParams("gameID"));
         int currentTurn = savedGame.getTurnNum();
         savedGame.setTurnNum(currentTurn - 1);
         savedGame.updateBoard();

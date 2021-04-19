@@ -114,7 +114,6 @@ public class GetGameRoute implements Route {
         vm.put("redPlayer", new Player(checkersGame.getRedPlayerName()));
         vm.put("whitePlayer", new Player(checkersGame.getWhitePlayerName()));
         vm.put("activeColor", checkersGame.getActiveColor());
-        vm.put("gameID", checkersGame.getGameID());
 
         if (currentPlayer.equals(checkersGame.getRedPlayer()))
             vm.put("board", checkersGame.getRedBoardView());

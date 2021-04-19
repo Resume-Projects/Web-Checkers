@@ -14,15 +14,11 @@ import java.util.HashMap;
 
 public class GetReplayGameRoute implements Route {
 
-    private final TemplateEngine templateEngine;
-    private final PlayerLobby playerLobby;
     private final GameManager gameManager;
     private final Gson gson;
 
-    public GetReplayGameRoute(final GameManager gameManager, final PlayerLobby playerLobby, final TemplateEngine templateEngine, final Gson gson) {
+    public GetReplayGameRoute(final GameManager gameManager, final Gson gson) {
         this.gameManager = gameManager;
-        this.templateEngine = templateEngine;
-        this.playerLobby = playerLobby;
         this.gson = gson;
     }
 
@@ -34,10 +30,10 @@ public class GetReplayGameRoute implements Route {
         vm.put("title", "Game Replay");
         if( request.session().attribute("currentUser") != null ) {
             final Player player = request.session().attribute("currentUser");
-            //final int gameID = Integer.parseInt(request.queryParams("gameID"));
+            final String gameID = request.queryParams("gameID");
             vm.put("currentUser", player);
             vm.put("viewMode", GetGameRoute.playMode.REPLAY);
-            SavedGame savedGame = gameManager.getSavedGame(0);
+            SavedGame savedGame = gameManager.getSavedGame(gameID);
             if( savedGame.getPlayerWatching() == null ) {
                 savedGame.setPlayerWatching(player);
             } else if( !(savedGame.getPlayerWatching().equals(player)) && savedGame.getPlayerWatching() != null ) {
@@ -65,7 +61,7 @@ public class GetReplayGameRoute implements Route {
             }
 
         } else {
-            final int gameID = Integer.parseInt(request.queryParams("gameID"));
+            final String gameID = request.queryParams("gameID");
             SavedGame savedGame = gameManager.getSavedGame(gameID);
             savedGame.setPlayerWatching(null);
             response.redirect(WebServer.HOME_URL);

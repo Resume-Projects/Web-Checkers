@@ -45,7 +45,7 @@
         <h2>Active Games</h2>
         <#if activeGames??>
             <#if numGames == 0>
-                <p>There are no active game.</p>
+                <p>There are no active games.</p>
             <#elseif numGames == 1>
                 <p>There is one active game. Click a name to start spectating that player</p>
             <#else>
@@ -76,22 +76,18 @@
                     <#elseif numSaved == 1>
                         <p>There is one saved game. Click to start viewing that replay</p>
                     <#else>
-                        <p>There are ${numGames} saved games. Click a name to start spectating that player</p>
+                        <p>There are ${numSaved} saved games. Click to start viewing that replay</p>
                     </#if>
                     <ol>
-                        <#list savedGames as game>
-                        <li><a href="/replay/game?whitePlayer=${game.game.whitePlayer.name}">
-                        ${game.game.redPlayer.name} vs. ${game.game.whitePlayer.name}</a></li>
+                        <#list savedGames?keys as key>
+                        <form action="/replay/game?" method="GET">
+                        <input type="hidden" name="gameID" value="${key}">
+                        <input type="submit" value="Game ${key}: ${savedGames[key].game.redPlayer.name} v. ${savedGames[key].game.whitePlayer.name}">
+                        </form>
                         </#list>
                     </ol>
                 <#else>
-                    <#if numGames == 0>
-                        <p>There are no saved games.<p>
-                    <#elseif numGames == 1>
-                        <p>There is ${numGames} saved game. Sign in to see it</p>
-                    <#else>
-                        <p>There are ${numGames} saved games. Sign in to see them</p>
-                    </#if>
+                    <p>Sign in to see your saved games</p>
                 </#if>
 
 

@@ -171,7 +171,7 @@ public class WebServer {
 
         post("/spectator/checkTurn", new PostSpectatorCheckTurnRoute(gameManager));
 
-        get("/replay/game", new GetReplayGameRoute(gameManager, playerLobby, templateEngine, gson));
+        get("/replay/game", new GetReplayGameRoute(gameManager, gson));
 
         get("/replay/stopWatching", new GetReplayStopRoute(gameManager));
 

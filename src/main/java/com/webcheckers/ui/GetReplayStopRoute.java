@@ -21,7 +21,7 @@ public class GetReplayStopRoute implements Route {
         HashMap<String, Object> vm = new HashMap<>();
         vm.put("title", "Exit Replay Mode");
         Player currentUser = request.session().attribute("playerWatching");
-        SavedGame savedGame = gameManager.getSavedGame(0);
+        SavedGame savedGame = gameManager.getSavedGame(request.queryParams("gameID"));
         savedGame.setTurnNum(0);
         savedGame.setPlayerWatching(null);
         vm.put("currentUser", currentUser);
