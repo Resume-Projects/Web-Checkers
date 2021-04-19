@@ -9,32 +9,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @Tag("Model-Tier")
 public class SavedMoveTest {
 
-    private Row CuT;
-    private int index;
-    private Space[] spaces;
+    private SavedMove CuT;
 
     @BeforeEach
     public void setUp() {
-        index = 3;
-        spaces = new Space[7];
-        CuT = new Row(index, spaces);
+        CuT = new SavedMove(new Space[8][8], Piece.Color.RED);
     }
 
+    //Everything gets testing in the SavedGameTest
     @Test
-    public void getIndex() {
-        assertSame(CuT.getIndex(), 3);
-    }
+    public void doNothingTest() {
 
-    @Test
-    public void getSpace() {
-        Space space = new Space(0, Space.State.OPEN);
-        spaces[0] = space;
-        //CuT = new Row(index, spaces);
-        assertSame(CuT.getSpace(0), space);
-    }
-
-    @Test
-    public void iterator() {
-        assertNotNull(CuT.iterator());
     }
 }
