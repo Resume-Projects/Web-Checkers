@@ -20,11 +20,6 @@
         <!-- Provide a message to the user, if supplied. -->
         <#include "message.ftl" />
 
-        <!-- TODO: future content on the Home:
-                to start games,
-                spectating active games,
-                or replay archived games
-        -->
         <h2>Players online</h2>
         <#if activePlayers??>
             <#if numPlayers == 2>
@@ -87,7 +82,6 @@
                         <#list savedGames as game>
                         <li><a href="/replay/game?whitePlayer=${game.game.whitePlayer.name}">
                         ${game.game.redPlayer.name} vs. ${game.game.whitePlayer.name}</a></li>
-                        ${game.game.gameID}
                         </#list>
                     </ol>
                 <#else>

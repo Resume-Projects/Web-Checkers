@@ -13,16 +13,18 @@ public class PostPreviousTurnRoute implements Route {
     private Gson gson;
 
     public PostPreviousTurnRoute(GameManager gameManager, Gson gson) {
-
+        this.gameManager = gameManager;
+        this.gson = gson;
     }
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
 
         Player currentUser = request.session().attribute("playerWatching");
-        SavedGame savedGame = gameManager.getSavedGame(gameManager.getPlayersGame(currentUser).getGameID());
+        SavedGame savedGame = gameManager.getSavedGame(0);
         int currentTurn = savedGame.getTurnNum();
-        savedGame.nextTurn();
+        savedGame.setTurnNum(currentTurn - 1);
+        savedGame.updateBoard();
         if( savedGame.getTurnNum() < 0) {
             savedGame.setTurnNum(0);
             return gson.toJson(Message.error("Error in going to previous turn"));

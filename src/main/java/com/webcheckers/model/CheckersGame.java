@@ -655,4 +655,10 @@ public class CheckersGame {
     public ArrayList<SavedMove> getMoves() {
         return moves;
     }
+
+    public void setBoard(Space[][] newBoard) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            board[i] = Arrays.copyOf(newBoard[i], BOARD_SIZE);
+        }
+    }
 }

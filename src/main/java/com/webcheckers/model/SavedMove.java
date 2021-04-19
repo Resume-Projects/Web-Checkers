@@ -13,4 +13,8 @@ public class SavedMove {
             }
         }
     }
+
+    public Space[][] getBoard() {
+        return board;
+    }
 }

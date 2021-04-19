@@ -21,9 +21,10 @@ public class PostNextTurnRoute implements Route{
     public Object handle(Request request, Response response) throws Exception {
 
         Player currentUser = request.session().attribute("playerWatching");
-        SavedGame savedGame = gameManager.getSavedGame(gameManager.getPlayersGame(currentUser).getGameID());
+        SavedGame savedGame = gameManager.getSavedGame(0);
         int currentTurn = savedGame.getTurnNum();
-        savedGame.nextTurn();
+        savedGame.setTurnNum(currentTurn + 1);
+        savedGame.updateBoard();
         if( savedGame.getTurnNum() > savedGame.getSavedMoves().size()) {
             savedGame.setTurnNum(savedGame.getSavedMoves().size() - 1);
             return gson.toJson(Message.error("Error in going to next turn"));

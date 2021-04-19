@@ -31,23 +31,18 @@ public class GetReplayGameRoute implements Route {
 
         HashMap<String, Object> vm = new HashMap<>();
         HashMap<String, Object> modeOptions = new HashMap<>(2);
-        Player currentUser = request.session().attribute("currentUser");
-
-        // mode options has next and has previous
-        final Player player = request.session().attribute("playerWatching");
-        final int gameID = Integer.parseInt(request.queryParams("gameID"));
         vm.put("title", "Game Replay");
         if( request.session().attribute("currentUser") != null ) {
-            // final Player player = request.session().attribute("playerWatching");
-            // final int gameID = gameManager.getPlayersGame(player).getGameID();
+            final Player player = request.session().attribute("currentUser");
+            //final int gameID = Integer.parseInt(request.queryParams("gameID"));
             vm.put("currentUser", player);
             vm.put("viewMode", GetGameRoute.playMode.REPLAY);
-            SavedGame savedGame = gameManager.getSavedGame(gameID);
+            SavedGame savedGame = gameManager.getSavedGame(0);
             if( savedGame.getPlayerWatching() == null ) {
                 savedGame.setPlayerWatching(player);
             } else if( !(savedGame.getPlayerWatching().equals(player)) && savedGame.getPlayerWatching() != null ) {
-                request.session().attribute("message", "Error: Game is already being replayed");
-                response.redirect("/replay/game");
+                request.session().attribute("errorMessage", "Error: Game is already being replayed");
+                response.redirect("/");
                 return null;
             }
             modeOptions.put("hasNext", savedGame.hasNext());
@@ -62,10 +57,15 @@ public class GetReplayGameRoute implements Route {
             vm.put("redPlayer", game.getRedPlayer());
             vm.put("whitePlayer", game.getWhitePlayer());
             vm.put("activeColor", game.getActiveColor());
-            vm.put("board", game.getBoard());
-            vm.put("message", "Viewing Replay of " + gameID);
+            if( savedGame.getPlayerWatching() == game.getRedPlayer()){
+                vm.put("board", game.getRedBoardView());
+            }
+            else {
+                vm.put("board", game.getWhiteBoardView());
+            }
+
         } else {
-            // final int gameID = gameManager.getPlayersGame(player).getGameID();
+            final int gameID = Integer.parseInt(request.queryParams("gameID"));
             SavedGame savedGame = gameManager.getSavedGame(gameID);
             savedGame.setPlayerWatching(null);
             response.redirect(WebServer.HOME_URL);
@@ -74,6 +74,6 @@ public class GetReplayGameRoute implements Route {
 
 
 
-        return null;
+        return new FreeMarkerEngine().render(new ModelAndView(vm, "game.ftl"));
     }
 }

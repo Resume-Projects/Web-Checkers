@@ -17,21 +17,13 @@ public class SavedGame {
         this.game = new CheckersGame(red, white, gameID);
     }
 
-    public void nextTurn() {
-        turnNum++;
-
-    }
-
-    public void previousTurn() {
-        turnNum--;
-    }
 
     public int getTurnNum() {
         return turnNum;
     }
 
     public void setTurnNum( int turn ) {
-        turnNum += turn;
+        turnNum = turn;
     }
 
     public Player getPlayerWatching() {
@@ -56,5 +48,9 @@ public class SavedGame {
 
     public CheckersGame getGame() {
         return game;
+    }
+
+    public void updateBoard() {
+        this.game.setBoard(savedMoves.get(this.turnNum).getBoard());
     }
 }
