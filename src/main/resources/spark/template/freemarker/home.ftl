@@ -20,11 +20,6 @@
         <!-- Provide a message to the user, if supplied. -->
         <#include "message.ftl" />
 
-        <!-- TODO: future content on the Home:
-                to start games,
-                spectating active games,
-                or replay archived games
-        -->
         <h2>Players online</h2>
         <#if activePlayers??>
             <#if numPlayers == 2>
@@ -50,7 +45,7 @@
         <h2>Active Games</h2>
         <#if activeGames??>
             <#if numGames == 0>
-                <p>There are no active game.</p>
+                <p>There are no active games.</p>
             <#elseif numGames == 1>
                 <p>There is one active game. Click a name to start spectating that player</p>
             <#else>
@@ -73,6 +68,27 @@
                 <p>There are ${numGames} active games. Sign in to see them</p>
             </#if>
         </#if>
+
+        <h2>Replay Games</h2>
+                <#if savedGames??>
+                    <#if numSaved == 0>
+                        <p>There are no saved games.</p>
+                    <#elseif numSaved == 1>
+                        <p>There is one saved game. Click to start viewing that replay</p>
+                    <#else>
+                        <p>There are ${numSaved} saved games. Click to start viewing that replay</p>
+                    </#if>
+                    <ol>
+                        <#list savedGames?keys as key>
+                        <form action="/replay/game?" method="GET">
+                        <input type="hidden" name="gameID" value="${key}">
+                        <input type="submit" value="Game ${key}: ${savedGames[key].game.redPlayer.name} v. ${savedGames[key].game.whitePlayer.name}">
+                        </form>
+                        </#list>
+                    </ol>
+                <#else>
+                    <p>Sign in to see your saved games</p>
+                </#if>
 
 
     </div>

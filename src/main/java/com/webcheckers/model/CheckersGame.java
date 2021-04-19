@@ -3,6 +3,7 @@ package com.webcheckers.model;
 import com.webcheckers.application.GameController;
 import com.webcheckers.util.Message;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -58,6 +59,8 @@ public class CheckersGame {
 
     private final int gameID;
 
+    private ArrayList<SavedMove> moves = new ArrayList<>();
+
     /**
      * The CheckersGame data type
      *
@@ -105,20 +108,37 @@ public class CheckersGame {
         this.loser = null;
         this.state = State.PLAYING;
         this.playerLeft = false;
+        addMove();
     }
 
+    /**
+     * Returns the current state of the game
+     * @return the current state of the game
+     */
     public State getGameState() {
         return state;
     }
 
+    /**
+     * Gets the unique ID of this checkers game
+     * @return the unique ID of the checkers game
+     */
     public int getGameID() {
         return gameID;
     }
 
+    /**
+     * Returns whether or not a player has left the game
+     * @return whether or not a player has left the game
+     */
     public boolean hasPlayerLeft() {
         return playerLeft;
     }
 
+    /**
+     * Removes a player from the game
+     * @param player the player to remove from the game
+     */
     public void removePlayer(Player player) {
         if(redPlayer.equals(player)) {
             redPlayer = null;
@@ -175,8 +195,10 @@ public class CheckersGame {
         return redPlayer;
     }
 
-    //Will not return null, unlike getRedPlayer.
-    //If a player left, it returns the old name
+    /**
+     * Returns the name of the red player. This will never return null, unlike getRedPlayer()
+     * @return the name of the red player
+     */
     public String getRedPlayerName() {
         return redPlayerName;
     }
@@ -190,15 +212,28 @@ public class CheckersGame {
         return whitePlayer;
     }
 
+    /**
+     * Returns the name of the white player. This will never return null, unlike getWhitePlayer()
+     * @return the name of the white player
+     */
     public String getWhitePlayerName() {
         return whitePlayerName;
     }
 
+    /**
+     * Returns the color of the active player
+     * @return the color of the active player
+     */
     public Piece.Color getActiveColor() {
         return activeColor;
     }
 
-    //Called from PostValidateMoveRoute (and maybe backup move)
+    /**
+     * Saves an attempted move whenever the player drops a checkers piece on the board.
+     * This should get called from the PostValidateMoveRoute class
+     * @param attemptedMove The move the player wants to make
+     * @return A message (could be info or error) saying if saving the move was successful
+     */
     public Message saveAttemptedMove(Move attemptedMove) {
         Position start = attemptedMove.getStart();
         Position end = attemptedMove.getEnd();
@@ -237,7 +272,10 @@ public class CheckersGame {
         }
     }
 
-    //Called from GameManager when PostSubmitTurnRoute tells it to
+    /**
+     * Applies all the attempted moves to change the state of the board
+     * @return A message (info or error) saying if applying the move was successful
+     */
     public Message applyAttemptedMoves() {
         if (justJumped && jumpCanBeContinued()) {
             return Message.error("You must continue your jump");
@@ -265,10 +303,15 @@ public class CheckersGame {
                 loser = whitePlayer;
             }
         }
+        addMove();
 
         return Message.info("Move applied");
     }
 
+    /**
+     * Removes an attempted move when the user hits the undo button
+     * @return A message (info or error) saying if undoing the move was successful
+     */
     public Message resetAttemptedMove() {
         Move removedMove = movesQueue.remove();
         justKinged = false;
@@ -408,7 +451,7 @@ public class CheckersGame {
      * @return true if it can land, false otherwise
      */
     private boolean jumpCanBeMade(int pieceRow, int pieceCol) {
-        //This code is disgusting but I don't think I can make it much cleaner TODO: clean the code up
+        //This code is disgusting but I don't think I can make it much cleaner
         Piece.Type pieceType = board[pieceRow][pieceCol].getPieceType();
         if (pieceType == Piece.Type.KING) {
             for (int rowOffset : new int[]{-2, 2}) {
@@ -588,8 +631,39 @@ public class CheckersGame {
         return state == State.ENDED;
     }
 
-    //A game is done if a player resigns or the game ends a normal way
+    /**A game is done if a player resigns or the game ends a normal way
+     *
+     * @return False if state is PLAYING, True otherwise
+     */
     public boolean getIsGameDone() {
         return state == State.ENDED || state == State.RESIGNED || state == State.OVER;
+    }
+
+    /**
+     * Adds a move to a player
+     */
+    public void addMove() {
+        SavedMove move = new SavedMove(board, getPlayerColor(redPlayer));
+        moves.add(move);
+    }
+
+    /**
+     * Gets a list of moves
+     *
+     * @return the moves
+     */
+    public ArrayList<SavedMove> getMoves() {
+        return moves;
+    }
+
+    /**
+     * For replay use specifically, this updates the current states of the board when
+     * next/previous turn is clicked
+     * @param newBoard - the state of the board of the turn being updated to
+     */
+    public void setBoard(Space[][] newBoard) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            board[i] = Arrays.copyOf(newBoard[i], BOARD_SIZE);
+        }
     }
 }
