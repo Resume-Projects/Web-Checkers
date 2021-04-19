@@ -451,7 +451,7 @@ public class CheckersGame {
      * @return true if it can land, false otherwise
      */
     private boolean jumpCanBeMade(int pieceRow, int pieceCol) {
-        //This code is disgusting but I don't think I can make it much cleaner TODO: clean the code up
+        //This code is disgusting but I don't think I can make it much cleaner
         Piece.Type pieceType = board[pieceRow][pieceCol].getPieceType();
         if (pieceType == Piece.Type.KING) {
             for (int rowOffset : new int[]{-2, 2}) {
@@ -656,6 +656,11 @@ public class CheckersGame {
         return moves;
     }
 
+    /**
+     * For replay use specifically, this updates the current states of the board when
+     * next/previous turn is clicked
+     * @param newBoard - the state of the board of the turn being updated to
+     */
     public void setBoard(Space[][] newBoard) {
         for (int i = 0; i < BOARD_SIZE; i++) {
             board[i] = Arrays.copyOf(newBoard[i], BOARD_SIZE);
