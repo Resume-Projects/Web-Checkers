@@ -48,7 +48,7 @@ public class SavedGame {
     }
 
     /**
-     * Retrives the current player watching the replay
+     * Retrieves the current player watching the replay
      * @return - the player watching
      */
     public Player getPlayerWatching() {
@@ -80,7 +80,7 @@ public class SavedGame {
     }
 
     /**
-     * Retrives the list of saved moves for the saved game
+     * Retrieves the list of saved moves for the saved game
      * @return - the list of saved moves
      */
     public ArrayList<SavedMove> getSavedMoves() {
