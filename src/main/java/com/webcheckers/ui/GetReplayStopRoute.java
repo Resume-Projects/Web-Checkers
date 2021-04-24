@@ -37,6 +37,7 @@ public class GetReplayStopRoute implements Route {
         SavedGame savedGame = gameManager.getSavedGame(request.queryParams("gameID"));
         savedGame.setTurnNum(0);
         savedGame.setPlayerWatching(null);
+        savedGame.updateBoard();
         vm.put("currentUser", currentUser);
         response.redirect(WebServer.HOME_URL);
         return null;
