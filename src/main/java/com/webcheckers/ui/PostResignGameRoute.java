@@ -28,6 +28,7 @@ public class PostResignGameRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         Player player = request.session().attribute("currentUser");
         CheckersGame playersGame = gameManager.getPlayersGame(player);
+        gameManager.saveGame(playersGame.getGameID(), player);
         boolean resign = playersGame.resignGame(player);
         gameManager.gameHasBeenUpdated(playersGame.getGameID());
         if(resign) {

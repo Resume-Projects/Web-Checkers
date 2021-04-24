@@ -171,6 +171,14 @@ public class WebServer {
 
         post("/spectator/checkTurn", new PostSpectatorCheckTurnRoute(gameManager));
 
+        get("/replay/game", new GetReplayGameRoute(gameManager, gson));
+
+        get("/replay/stopWatching", new GetReplayStopRoute(gameManager));
+
+        post("/replay/nextTurn", new PostNextTurnRoute(gameManager, gson));
+
+        post("/replay/previousTurn", new PostPreviousTurnRoute(gameManager, gson));
+
         LOG.config("WebServer is initialized.");
     }
 
