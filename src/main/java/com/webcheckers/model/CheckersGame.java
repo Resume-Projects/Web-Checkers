@@ -588,7 +588,11 @@ public class CheckersGame {
         return state == State.ENDED;
     }
 
-    //A game is done if a player resigns or the game ends a normal way
+    /**
+     * Finds if a gems is done
+     *
+     * @return True is game is done, False otherwise
+     */
     public boolean getIsGameDone() {
         return state == State.ENDED || state == State.RESIGNED || state == State.OVER;
     }
