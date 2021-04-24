@@ -79,7 +79,7 @@ A list of enhancements that will come to the project are :
 
 This section describes the application domain.
 
-![The WebCheckers Domain Model](domain-model.png)
+![The WebCheckers Domain Model](SWEN Domain Analysis.jpeg)
 
 * A signed-in Player is able to join a match with another signed-in Player who is not already in a game.
 * The two players play a WebCheckers game on a Board until one Player wins and the other loses.
