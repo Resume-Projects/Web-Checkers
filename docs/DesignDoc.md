@@ -116,8 +116,6 @@ Details of the components within these tiers are supplied below.
 This section describes the web interface flow; this is how the user views and interacts
 with the WebCheckers application.
 
-![The WebCheckers Web Interface Statechart](web-interface.png)
-
 Once a connection is established, the user is brought to the Home page where they can click a sign in button.
 To sign in, the user is brought to the Sign In page and, once signed in, brought back to the Home page.
 If a user enters aj invalid name, they are brought back to the sign in page until a valid name is entered.
@@ -151,7 +149,7 @@ game.
 > you describe the design of the three tiers.
 -->
 
-![Full Interface](Swen Sprint 2 State.png)
+![Full Interface](SWEN Sprint 4 Statechart.jpeg)
 
 When the application starts, the application starts up the `WebServer`, connects to `GetHomeRoute`, and renders to the home page. The user can click on a "Sign In" button and `GetSignInRoute` will then take them to the login page where they can enter a username. If the name is invalid or taken, the `PostSignInRoute` will prompt the user to select another name. Otherwise the user will be brought back to the home menu, where they can now select a game.
 
