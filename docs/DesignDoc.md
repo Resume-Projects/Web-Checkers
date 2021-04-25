@@ -79,7 +79,7 @@ A list of enhancements that will come to the project are :
 
 This section describes the application domain.
 
-![The WebCheckers Domain Model](domain-model.png)
+![The WebCheckers Domain Model](SWEN Domain Analysis.png)
 
 * A signed-in Player is able to join a match with another signed-in Player who is not already in a game.
 * The two players play a WebCheckers game on a Board until one Player wins and the other loses.
@@ -118,7 +118,7 @@ with the WebCheckers application.
 
 Once a connection is established, the user is brought to the Home page where they can click a sign in button.
 To sign in, the user is brought to the Sign In page and, once signed in, brought back to the Home page.
-If a user enters aj invalid name, they are brought back to the sign in page until a valid name is entered.
+If a user enters a invalid name, they are brought back to the sign in page until a valid name is entered.
 From the Home page, the user can enter a game with another player, bringing them to the Game page. Finally, when
 the game ends, the user is brought back to the Home page where they are still signed in, able to enter another
 game.
@@ -156,10 +156,15 @@ When the application starts, the application starts up the `WebServer`, connects
 Upon selecting a game (by clicking on a player in the lobby), the game calls `GetGameRoute` and starts a game with the other player. During the game, the program calls `PostCheckTurnRoute` to see whose turn it is. During a players turn, a player can move a piece, and it will call `PostValidateMoveRoute` in order to see if the move is valid. If so, the player can either submit the move (`PostSubmitTurnRoute`) or revert their move (`PostBackupMoveRoute`). After the move is submitted, the other player gets to take their turn.
 
 The game ends in one of two ways. 
+
 * The game ends normally ( after a side has their pieces taken. )
 * A player resigns (calls `PostResignGameRoute`)
 
-In both cases, the player is brought back to the home menu. From there, the player can start another game, or log out (`PostSignOutRoute`).
+In both cases, the player is brought back to the home menu. From there, the player can start another game, or log out (`PostSignOutRoute`). The player also has the ability to watch replays of past games. 
+
+When a player wants to watch a replay of a game, that player calls `GetReplayGameRoute` to start the replay. The player can get the next and previous moves using `PostNextTurnRoute` and `PostPreviousTurnRoute`. When a player wants to stop watching a replay, the program calls `GetSpectatorStopWatchingRoute` and brings them to the home page.
+
+Lastly, A player can also spectate a game. When this occurs, the game calls `GetSpectatorGameRoute` and brings the player to an already active game. Upon each turn, `PostSpectatorCheckTurnRoute` is called, which update the view of the board. When the game ends, the game then calls `GetSpectatorStopWatchingRoute` that redirects the spectator to the homepage.
 
 ### Application Tier
 <!-- Comment
@@ -183,7 +188,7 @@ There are three classes in the application: `PlayerLobby`, `GameManager`, and `G
 
 Upon starting a new game, the Project creates a new `CheckersGame` to two `Player` entities. The `CheckersGame` creates a new board by creating a two dimensional array and filling it with the `Space` Object, then add the `Piece` Object to some of the spaces. 
 
-In between each `Player` turn, `CheckersGame` uses `BoardView` (which uses `Row`) to  render the board to the web. The `Player` can the `Move` the `Piece` to another `Space` on a different `Position` to advance their turn. Pieces can become Kings if they reach the other side of the board, which allows them to move in any direction. If all the opponents pieces are captured, or the opponent resigns, then the player is assigned the winner, and the opponent is assigned the loser. 
+In between each `Player` turn, `CheckersGame` uses `BoardView` (which uses `Row`) to  render the board to the web. The `Player` can the `Move` the `Piece` to another `Space` on a different `Position` to advance their turn. Each `Move` that is submitted then gets added to `SavedMove`  Pieces can become Kings if they reach the other side of the board, which allows them to move in any direction. If all the opponents pieces are captured, or the opponent resigns, then the player is assigned the winner, and the opponent is assigned the loser. The game then becomes a `SavedGame`, which is available to select in the users replay mode.
 
 ### Design Improvements
 <!-- Comment
