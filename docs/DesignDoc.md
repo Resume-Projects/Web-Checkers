@@ -217,7 +217,7 @@ A lot of the code is currently running in `CheckersGame`. One improvement to the
 > have not had any testing yet. Highlight the issues found during
 > acceptance testing and if there are any concerns._
 -->
-Out of the 78 classes that are tested, all 78 of them pass the acceptance criteria test. 
+Out of the 31 classes that are tested, all 31 of them pass the acceptance criteria test. 
 
 
 ### Unit Testing and Code Coverage
@@ -229,4 +229,4 @@ Out of the 78 classes that are tested, all 78 of them pass the acceptance criter
 > those._
 -->
 
-The code testing strategy is to run a unit test for each class in the code. In each unit test, several functions were tested to ensure that they work. For example, the class `BoardView` would get `BoardViewTest`, and in `BoardViewTest`, a test was set on the iterator to make sure it did not return a Null value. These values were selected so that the program does not return an incorrect value, and most of the targets were met. The exceptions were the WebServer and a few lines in CheckersGame.
+The code testing strategy is to run a unit test for each class in the code. In each unit test, several functions were tested to ensure that they work. For example, the class `BoardView` would get `BoardViewTest`, and in `BoardViewTest`, a test was set on the iterator to make sure it did not return a null value. These values were selected so that the program does not return an incorrect value, and most of the targets were met. The exceptions were the Application and a few lines in CheckersGame.
