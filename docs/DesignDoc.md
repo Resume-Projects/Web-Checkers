@@ -230,3 +230,15 @@ Out of the 31 classes that are tested, all 31 of them pass the acceptance criter
 -->
 
 The code testing strategy is to run a unit test for each class in the code. In each unit test, several functions were tested to ensure that they work. For example, the class `BoardView` would get `BoardViewTest`, and in `BoardViewTest`, a test was set on the iterator to make sure it did not return a null value. These values were selected so that the program does not return an incorrect value, and most of the targets were met. The exceptions were the Application and a few lines in CheckersGame.
+
+### Analysis of Code Metrics
+
+There were plenty of clear outliers in the metrics of our project, even after doing some refactoring. In terms of
+in terms of cognitive, essential cyclomatic, design, and cyclomatic complexity, the CheckersGame class, and the new 
+MoveChecker class were the biggest outliers. When looking at the metrics for just the methods, these classes held
+most of the methods that were outliers. For the analysis of Javadoc coverage, there were no outliers since everything
+was consistently and correctly documented. For the lines of code analysis, there was a large variance between all
+the methods and classes. Because of this, nothing was marked as an outlier, even though some classes and methods had
+significantly more lines than others. The CheckersGame class once again had the most lines of code. When looking at the
+packaging metrics, the ui package had by far the least afferent coupling, and the model package had by far the least
+efferent coupling.
