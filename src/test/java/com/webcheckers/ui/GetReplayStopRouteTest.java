@@ -4,9 +4,7 @@ package com.webcheckers.ui;
 import com.google.gson.Gson;
 import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Player;
-import com.webcheckers.model.SavedGame;
+import com.webcheckers.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import spark.*;
@@ -51,7 +49,9 @@ public class GetReplayStopRouteTest {
 
     @Test
     public void doEverything() {
-        when(gameManager.getSavedGame(any())).thenReturn(new SavedGame(new ArrayList<>(), new Player("ASD"), new Player("ASDSA"), 69));
+        ArrayList<SavedMove> savedMoves = new ArrayList<>();
+        savedMoves.add(new SavedMove(new Space[8][8], Piece.Color.RED));
+        when(gameManager.getSavedGame(any())).thenReturn(new SavedGame(savedMoves, new Player("ASD"), new Player("ASDSA"), 69));
         CuT.handle(request, response);
     }
 
