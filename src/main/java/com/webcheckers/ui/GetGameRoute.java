@@ -2,6 +2,7 @@ package com.webcheckers.ui;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 import com.webcheckers.application.GameManager;
@@ -28,6 +29,8 @@ public class GetGameRoute implements Route {
     static final String ACTIVE_COLOR = "activeColor";
     static final String BOARD = "board";
     static final String MESSAGE = "message";
+    private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
+
 
     /**
      * The different play modes that a user can be in
@@ -63,7 +66,7 @@ public class GetGameRoute implements Route {
      * @return the rendered HTML for the Game page
      */
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) {
         final Session session = request.session();
         Map<String, Object> vm = new HashMap<>();
         Map<String, Object> modeOptions = new HashMap<>();
@@ -92,15 +95,20 @@ public class GetGameRoute implements Route {
         if(checkersGame.getIsGameDone()) {
             modeOptions.put("isGameOver", true);
             vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+            //gameManager.saveGame(checkersGame.getGameID(), currentPlayer);
             if(checkersGame.isResigned()) {
                 vm.put(MESSAGE, Message.info(String.format("%s has resigned, %s has won the game.",
                         checkersGame.getLoser().getName(), checkersGame.getWinner().getName())));
             } else if(checkersGame.gameEnded()) {
                 vm.put(MESSAGE, Message.info(String.format("%s has captured all of the pieces.",
                         checkersGame.getWinner().getName())));
+                gameManager.saveGame(checkersGame.getGameID(), currentPlayer);
+                LOG.fine("Successfully saved replay.");
             } else { //A player is unable to move
                 vm.put(MESSAGE, Message.info(String.format("%s is unable to move.",
                         checkersGame.getLoser().getName())));
+                gameManager.saveGame(checkersGame.getGameID(), currentPlayer);
+                LOG.fine("Successfully saved replay.");
             }
         }
 
