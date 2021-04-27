@@ -200,7 +200,7 @@ public class GameManager {
      */
     public void saveGame(int gameID, Player player) {
         CheckersGame game = getPlayersGame(player);
-        SavedGame savedGame = new SavedGame(game.getMoves(), game.getRedPlayer(), game.getWhitePlayer(), gameID);
+        SavedGame savedGame = new SavedGame(game.getSavedMoves(), game.getRedPlayer(), game.getWhitePlayer(), gameID);
         savedGames.put(String.valueOf(gameID), savedGame);
     }
 
