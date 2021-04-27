@@ -79,7 +79,7 @@ A list of enhancements that will come to the project are :
 
 This section describes the application domain.
 
-![The WebCheckers Domain Model](domain-model.png)
+![The WebCheckers Domain Model](SWEN Domain Analysis.png)
 
 * A signed-in Player is able to join a match with another signed-in Player who is not already in a game.
 * The two players play a WebCheckers game on a Board until one Player wins and the other loses.
@@ -116,11 +116,9 @@ Details of the components within these tiers are supplied below.
 This section describes the web interface flow; this is how the user views and interacts
 with the WebCheckers application.
 
-![The WebCheckers Web Interface Statechart](web-interface.png)
-
 Once a connection is established, the user is brought to the Home page where they can click a sign in button.
 To sign in, the user is brought to the Sign In page and, once signed in, brought back to the Home page.
-If a user enters aj invalid name, they are brought back to the sign in page until a valid name is entered.
+If a user enters a invalid name, they are brought back to the sign in page until a valid name is entered.
 From the Home page, the user can enter a game with another player, bringing them to the Game page. Finally, when
 the game ends, the user is brought back to the Home page where they are still signed in, able to enter another
 game.
@@ -151,17 +149,22 @@ game.
 > you describe the design of the three tiers.
 -->
 
-![Full Interface](Swen Sprint 2 State.png)
+![Full Interface](SWEN Sprint 4 Statechart.jpeg)
 
 When the application starts, the application starts up the `WebServer`, connects to `GetHomeRoute`, and renders to the home page. The user can click on a "Sign In" button and `GetSignInRoute` will then take them to the login page where they can enter a username. If the name is invalid or taken, the `PostSignInRoute` will prompt the user to select another name. Otherwise the user will be brought back to the home menu, where they can now select a game.
 
 Upon selecting a game (by clicking on a player in the lobby), the game calls `GetGameRoute` and starts a game with the other player. During the game, the program calls `PostCheckTurnRoute` to see whose turn it is. During a players turn, a player can move a piece, and it will call `PostValidateMoveRoute` in order to see if the move is valid. If so, the player can either submit the move (`PostSubmitTurnRoute`) or revert their move (`PostBackupMoveRoute`). After the move is submitted, the other player gets to take their turn.
 
 The game ends in one of two ways. 
+
 * The game ends normally ( after a side has their pieces taken. )
 * A player resigns (calls `PostResignGameRoute`)
 
-In both cases, the player is brought back to the home menu. From there, the player can start another game, or log out (`PostSignOutRoute`).
+In both cases, the player is brought back to the home menu. From there, the player can start another game, or log out (`PostSignOutRoute`). The player also has the ability to watch replays of past games. 
+
+When a player wants to watch a replay of a game, that player calls `GetReplayGameRoute` to start the replay. The player can get the next and previous moves using `PostNextTurnRoute` and `PostPreviousTurnRoute`. When a player wants to stop watching a replay, the program calls `GetSpectatorStopWatchingRoute` and brings them to the home page.
+
+Lastly, A player can also spectate a game. When this occurs, the game calls `GetSpectatorGameRoute` and brings the player to an already active game. Upon each turn, `PostSpectatorCheckTurnRoute` is called, which update the view of the board. When the game ends, the game then calls `GetSpectatorStopWatchingRoute` that redirects the spectator to the homepage.
 
 ### Application Tier
 <!-- Comment
@@ -185,7 +188,7 @@ There are three classes in the application: `PlayerLobby`, `GameManager`, and `G
 
 Upon starting a new game, the Project creates a new `CheckersGame` to two `Player` entities. The `CheckersGame` creates a new board by creating a two dimensional array and filling it with the `Space` Object, then add the `Piece` Object to some of the spaces. 
 
-In between each `Player` turn, `CheckersGame` uses `BoardView` (which uses `Row`) to  render the board to the web. The `Player` can the `Move` the `Piece` to another `Space` on a different `Position` to advance their turn. Pieces can become Kings if they reach the other side of the board, which allows them to move in any direction. If all the opponents pieces are captured, or the opponent resigns, then the player is assigned the winner, and the opponent is assigned the loser. 
+In between each `Player` turn, `CheckersGame` uses `BoardView` (which uses `Row`) to  render the board to the web. The `Player` can the `Move` the `Piece` to another `Space` on a different `Position` to advance their turn. Each `Move` that is submitted then gets added to `SavedMove`  Pieces can become Kings if they reach the other side of the board, which allows them to move in any direction. If all the opponents pieces are captured, or the opponent resigns, then the player is assigned the winner, and the opponent is assigned the loser. The game then becomes a `SavedGame`, which is available to select in the users replay mode.
 
 ### Design Improvements
 <!-- Comment
@@ -214,7 +217,7 @@ A lot of the code is currently running in `CheckersGame`. One improvement to the
 > have not had any testing yet. Highlight the issues found during
 > acceptance testing and if there are any concerns._
 -->
-Out of the 78 classes that are tested, all 78 of them pass the acceptance criteria test. 
+Out of the 31 classes that are tested, all 31 of them pass the acceptance criteria test. 
 
 
 ### Unit Testing and Code Coverage
@@ -226,4 +229,4 @@ Out of the 78 classes that are tested, all 78 of them pass the acceptance criter
 > those._
 -->
 
-The code testing strategy is to run a unit test for each class in the code. In each unit test, several functions were tested to ensure that they work. For example, the class `BoardView` would get `BoardViewTest`, and in `BoardViewTest`, a test was set on the iterator to make sure it did not return a Null value. These values were selected so that the program does not return an incorrect value, and most of the targets were met. The exceptions were the WebServer and a few lines in CheckersGame.
+The code testing strategy is to run a unit test for each class in the code. In each unit test, several functions were tested to ensure that they work. For example, the class `BoardView` would get `BoardViewTest`, and in `BoardViewTest`, a test was set on the iterator to make sure it did not return a null value. These values were selected so that the program does not return an incorrect value, and most of the targets were met. The exceptions were the Application and a few lines in CheckersGame.
