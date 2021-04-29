@@ -146,7 +146,7 @@ game.
 > you describe the design of the three tiers.
 -->
 
-![Full Interface](SWEN Sprint 4 Statechart.jpeg)
+![Full Interface](SWEN-Sprint-4-Statechart.jpeg)
 
 When the application starts, the application starts up the `WebServer`, connects to `GetHomeRoute`, and renders to the home page. The user can click on a "Sign In" button and `GetSignInRoute` will then take them to the login page where they can enter a username. If the name is invalid or taken, the `PostSignInRoute` will prompt the user to select another name. Otherwise the user will be brought back to the home menu, where they can now select a game.
 
